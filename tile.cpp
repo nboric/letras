@@ -45,7 +45,7 @@ Tile::Tile(std::wstring letter) : letter_(std::move(letter)),
 {
 }
 
-void Tile::draw(sf::RenderWindow& window, const sf::Font& font, sf::Vector2f base_pos) const
+void Tile::draw(sf::RenderWindow& window, const sf::Font& font, const sf::Vector2f base_pos) const
 {
     sf::RectangleShape shape({50.f, 50.f});
     shape.setPosition(base_pos);

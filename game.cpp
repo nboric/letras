@@ -24,7 +24,7 @@ void Game::replenish_all()
     }
 }
 
-void Game::draw(sf::RenderWindow& window, sf::Font& font) const
+void Game::draw(sf::RenderWindow& window, const sf::Font& font) const
 {
     board_.draw(window);
     for (int i = 0; i < players_.size(); i++)

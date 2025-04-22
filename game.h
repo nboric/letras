@@ -25,7 +25,7 @@ public:
     explicit Game(int n_players);
     void replenish_all();
 
-    void draw(sf::RenderWindow& window, sf::Font& font) const;
+    void draw(sf::RenderWindow& window, const sf::Font& font) const;
 };
 
 #endif //GAME_H
