@@ -6,9 +6,6 @@
 
 #include <iostream>
 
-#include "SFML/Graphics/RectangleShape.hpp"
-#include "SFML/Graphics/Text.hpp"
-
 Player::Player()
 {
 

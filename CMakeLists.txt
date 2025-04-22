@@ -12,21 +12,21 @@ FetchContent_Declare(SFML
         SYSTEM)
 FetchContent_MakeAvailable(SFML)
 
-add_executable(letras main.cpp
-        board.h
-        board.cpp
-        tile.h
-        tile.cpp
-        player.cpp
-        player.h
-        square.cpp
-        square.h
-        game.cpp
-        game.h
-        bag.cpp
-        bag.h
-        dict.cpp
-        dict.h
+add_executable(letras src/main.cpp
+        src/board.h
+        src/board.cpp
+        src/tile.h
+        src/tile.cpp
+        src/player.cpp
+        src/player.h
+        src/square.cpp
+        src/square.h
+        src/game.cpp
+        src/game.h
+        src/bag.cpp
+        src/bag.h
+        src/dict.cpp
+        src/dict.h
 )
 
 target_link_libraries(letras PRIVATE SFML::Graphics)
