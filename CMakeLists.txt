@@ -30,3 +30,10 @@ add_executable(letras src/main.cpp
 )
 
 target_link_libraries(letras PRIVATE SFML::Graphics)
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    target_compile_definitions(letras PUBLIC FONT_PATH="/System/Library/Fonts/SFCompact.ttf")
+endif()
+if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    target_compile_definitions(letras PUBLIC FONT_PATH="c:/windows/Fonts/verdana.ttf")
+endif()

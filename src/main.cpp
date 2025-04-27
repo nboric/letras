@@ -7,7 +7,7 @@ int main()
     Game game{2};
     game.replenish_all();
 
-    const sf::Font font("/System/Library/Fonts/SFCompact.ttf");
+    const sf::Font font(FONT_PATH);
 
     auto window = sf::RenderWindow(sf::VideoMode({1080u, 1080u}), "Letras");
 
