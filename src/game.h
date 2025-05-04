@@ -12,9 +12,9 @@
 
 class Game
 {
-    static constexpr int MIN_PLAYERS{2};
-    static constexpr int MAX_PLAYERS{4};
-    std::vector<std::unique_ptr<Player>> players_;
+    static constexpr int MIN_PLAYERS{ 2 };
+    static constexpr int MAX_PLAYERS{ 4 };
+    std::vector<std::unique_ptr<Player> > players_;
 
     Board board_;
     Bag bag_;

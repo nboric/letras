@@ -15,11 +15,9 @@ Dict::Dict(const std::string& path)
     {
         words_.insert(line);
     }
-
 }
 
 bool Dict::is_valid(const std::string& word) const
 {
     return words_.contains(word);
 }
-

@@ -13,8 +13,8 @@
 
 class Player
 {
-    static constexpr int MAX_TILES{7};
-    std::vector<std::unique_ptr<Tile>> tiles_;
+    static constexpr int MAX_TILES{ 7 };
+    std::vector<std::unique_ptr<Tile> > tiles_;
 
 public:
     Player();

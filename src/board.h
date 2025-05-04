@@ -12,12 +12,12 @@
 
 class Board
 {
-    static constexpr int SIZE{15};
-    static constexpr float BORDER{10.f};
+    static constexpr int SIZE{ 15 };
+    static constexpr float BORDER{ 10.f };
 
     static const std::map<std::pair<int, int>, Square> premium_squares_;
 
-    std::vector<std::vector<Square>> squares_;
+    std::vector<std::vector<Square> > squares_;
 
 public:
     Board();

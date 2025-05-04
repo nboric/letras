@@ -8,7 +8,6 @@
 
 Player::Player()
 {
-
 }
 
 void Player::replenish(Bag& bag)
@@ -22,14 +21,13 @@ void Player::replenish(Bag& bag)
     {
         tiles_.push_back(std::move(bag.take_one()));
     }
-
 }
 
 void Player::draw(sf::RenderWindow& window, const sf::Font& font, const sf::Vector2f base_pos) const
 {
     for (int i = 0; i < tiles_.size(); i++)
     {
-        tiles_[i]->draw(window, font, base_pos + sf::Vector2f{i * 50.f, 0});
+        tiles_[i]->draw(window, font, base_pos + sf::Vector2f{ i * 50.f, 0 });
     }
 }
 

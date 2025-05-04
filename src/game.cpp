@@ -4,7 +4,8 @@
 
 #include "game.h"
 
-Game::Game(const int n_players): dict_("res/dict/fise-2.txt")
+Game::Game(const int n_players)
+    : dict_("res/dict/fise-2.txt")
 {
     if (n_players < MIN_PLAYERS || n_players > MAX_PLAYERS)
     {
@@ -30,7 +31,7 @@ void Game::draw(sf::RenderWindow& window, const sf::Font& font) const
     for (int i = 0; i < players_.size(); i++)
     {
         const auto& player = players_[i];
-        player->draw(window, font, {800.f, 100.f + 80 * i});
+        player->draw(window, font, { 800.f, 100.f + 80 * i });
     }
 }
 

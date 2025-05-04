@@ -11,7 +11,7 @@
 class Bag
 {
     static constexpr int SIZE = 10;
-    std::vector<std::unique_ptr<Tile>> tiles_;
+    std::vector<std::unique_ptr<Tile> > tiles_;
 
     static const std::map<std::wstring, int> initial_quantities_;
 
