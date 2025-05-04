@@ -31,5 +31,12 @@ void Player::draw(sf::RenderWindow& window, const sf::Font& font, const sf::Vect
     {
         tiles_[i]->draw(window, font, base_pos + sf::Vector2f{i * 50.f, 0});
     }
+}
 
+void Player::handleClick(const sf::Vector2i pos) const
+{
+    for (const auto& tile : tiles_)
+    {
+        tile->handleClick(pos);
+    }
 }

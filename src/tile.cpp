@@ -45,14 +45,24 @@ Tile::Tile(std::wstring letter) : letter_(std::move(letter)),
 {
 }
 
-void Tile::draw(sf::RenderWindow& window, const sf::Font& font, const sf::Vector2f base_pos) const
+void Tile::draw(sf::RenderWindow& window, const sf::Font& font, const sf::Vector2f base_pos)
 {
     sf::RectangleShape shape({ SIZE, SIZE });
     shape.setPosition(base_pos);
-    shape.setFillColor(sf::Color::White);
+    if (is_selected_)
+    {
+        shape.setFillColor(sf::Color::Yellow);
+    }
+    else
+    {
+        shape.setFillColor(sf::Color::White);
+    }
     shape.setOutlineColor(sf::Color::Black);
     shape.setOutlineThickness(1.f);
 
+    rect_ = shape.getGlobalBounds();
+
+    // TODO: make relative to Tile SIZE
     sf::Text letter(font);
     letter.setString(letter_);
     letter.setFillColor(sf::Color::Black);
@@ -75,4 +85,9 @@ int Tile::base_score() const
     // [] operator modifies map if key is not found
     // therefore can't be used inside const function
     return base_scores_.at(letter_);
+}
+
+void Tile::handleClick(const sf::Vector2i pos)
+{
+    is_selected_ = rect_.contains(sf::Vector2<float>(pos));
 }

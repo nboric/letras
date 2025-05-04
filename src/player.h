@@ -20,6 +20,7 @@ public:
     Player();
     void replenish(Bag& bag);
     void draw(sf::RenderWindow& window, const sf::Font& font, sf::Vector2f base_pos) const;
+    void handleClick(sf::Vector2i pos) const;
 };
 
 #endif //PLAYER_H

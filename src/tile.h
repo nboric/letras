@@ -15,6 +15,9 @@ class Tile
 
     [[nodiscard]] int base_score() const;
 
+    bool is_selected_{false};
+    sf::Rect<float> rect_;
+
 public:
     static constexpr float SIZE{50.f};
     const std::wstring letter_;
@@ -22,7 +25,8 @@ public:
 
     explicit Tile(std::wstring letter);
 
-    void draw(sf::RenderWindow& window, const sf::Font& font, sf::Vector2f base_pos) const;
+    void draw(sf::RenderWindow& window, const sf::Font& font, sf::Vector2f base_pos);
+    void handleClick(sf::Vector2i pos);
 };
 
 #endif //PIECE_H

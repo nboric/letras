@@ -13,13 +13,19 @@ int main()
 
     while (window.isOpen())
     {
-        while (const std::optional event = window.pollEvent())
-        {
-            if (event->is<sf::Event::Closed>())
-            {
+        window.handleEvents(
+	        [&](const sf::Event::Closed&)
+	        {
                 window.close();
+            },
+            [&](const sf::Event::MouseButtonPressed& mouse_event)
+            {
+                if (mouse_event.button == sf::Mouse::Button::Left)
+                {
+                    game.handleClick(mouse_event.position);
+                }
             }
-        }
+        );
 
         window.clear(sf::Color::White);
         game.draw(window, font);

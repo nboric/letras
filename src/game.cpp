@@ -33,3 +33,11 @@ void Game::draw(sf::RenderWindow& window, const sf::Font& font) const
         player->draw(window, font, {800.f, 100.f + 80 * i});
     }
 }
+
+void Game::handleClick(const sf::Vector2i pos) const
+{
+    for (const auto& player : players_)
+    {
+        player->handleClick(pos);
+    }
+}
