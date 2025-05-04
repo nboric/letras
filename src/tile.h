@@ -16,6 +16,7 @@ class Tile
     [[nodiscard]] int base_score() const;
 
 public:
+    static constexpr float SIZE{50.f};
     const std::wstring letter_;
     const int base_score_;
 

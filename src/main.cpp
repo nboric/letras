@@ -9,7 +9,7 @@ int main()
 
     const sf::Font font(FONT_PATH);
 
-    auto window = sf::RenderWindow(sf::VideoMode({1080u, 1080u}), "Letras");
+	auto window = sf::RenderWindow(sf::VideoMode({ 1200u, 800u }), "Letras");
 
     while (window.isOpen())
     {

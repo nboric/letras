@@ -30,6 +30,6 @@ void Game::draw(sf::RenderWindow& window, const sf::Font& font) const
     for (int i = 0; i < players_.size(); i++)
     {
         const auto& player = players_[i];
-        player->draw(window, font, {100.f, 900.f + 80 * i});
+        player->draw(window, font, {800.f, 100.f + 80 * i});
     }
 }

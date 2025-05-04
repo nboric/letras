@@ -5,6 +5,7 @@
 #include "board.h"
 
 #include "square.h"
+#include "tile.h"
 #include "SFML/Graphics/RectangleShape.hpp"
 
 Board::Board()
@@ -33,8 +34,8 @@ void Board::draw(sf::RenderWindow& window) const
         for (int j = 0; j < SIZE; j++)
         {
             auto& square = squares_[i][j];
-            sf::RectangleShape shape({50.f, 50.f});
-            shape.setPosition({100 + j * 50.f, 100 + i * 50.f});
+            sf::RectangleShape shape({Tile::SIZE, Tile::SIZE});
+            shape.setPosition({BORDER + j * Tile::SIZE, BORDER + i * Tile::SIZE});
             sf::Color background;
             switch (square.effect_)
             {

@@ -13,6 +13,7 @@
 class Board
 {
     static constexpr int SIZE{15};
+    static constexpr float BORDER{10.f};
 
     static const std::map<std::pair<int, int>, Square> premium_squares_;
 
