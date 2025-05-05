@@ -27,16 +27,32 @@ void Game::replenish_all()
 
 void Game::draw(sf::RenderWindow& window, const sf::Font& font) const
 {
-    board_.draw(window);
+    board_.draw(window, font);
     for (int i = 0; i < players_.size(); i++)
     {
         const auto& player = players_[i];
-        player->draw(window, font, { 800.f, 100.f + 80 * i });
+        player->draw(window, font, { 800.f, static_cast<float>(100 + 80 * i) });
     }
 }
 
-void Game::handleClick(const sf::Vector2i pos) const
+void Game::handleClick(const sf::Vector2i pos)
 {
+    if (board_.shouldHandleClick(pos))
+    {
+        if (board_.canTakeTile(pos))
+        {
+            // TODO: only current player
+            for (const auto& player : players_)
+            {
+                if (std::unique_ptr<Tile> selected; (selected = player->getSelectedTile()) != nullptr)
+                {
+                    board_.place(pos, selected);
+                }
+            }
+        }
+        return;
+    }
+    // TODO: only current player
     for (const auto& player : players_)
     {
         player->handleClick(pos);

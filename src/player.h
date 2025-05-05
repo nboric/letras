@@ -21,6 +21,7 @@ public:
     void replenish(Bag& bag);
     void draw(sf::RenderWindow& window, const sf::Font& font, sf::Vector2f base_pos) const;
     void handleClick(sf::Vector2i pos) const;
+    std::unique_ptr<Tile> getSelectedTile();
 };
 
 #endif //PLAYER_H

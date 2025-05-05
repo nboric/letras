@@ -90,5 +90,15 @@ int Tile::base_score() const
 
 void Tile::handleClick(const sf::Vector2i pos)
 {
-    is_selected_ = rect_.contains(sf::Vector2<float>(pos));
+    is_selected_ = rect_.contains(sf::Vector2<float>(pos)) && !is_selected_;
+}
+
+bool Tile::isSelected() const
+{
+    return is_selected_;
+}
+
+void Tile::setSelected(const bool selected)
+{
+    is_selected_ = selected;
 }

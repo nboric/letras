@@ -26,7 +26,7 @@ public:
     void replenish_all();
 
     void draw(sf::RenderWindow& window, const sf::Font& font) const;
-    void handleClick(sf::Vector2i pos) const;
+    void handleClick(sf::Vector2i pos);
 };
 
 #endif //GAME_H

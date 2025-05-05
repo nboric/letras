@@ -7,8 +7,7 @@
 #include <iostream>
 
 Player::Player()
-{
-}
+= default;
 
 void Player::replenish(Bag& bag)
 {
@@ -27,7 +26,7 @@ void Player::draw(sf::RenderWindow& window, const sf::Font& font, const sf::Vect
 {
     for (int i = 0; i < tiles_.size(); i++)
     {
-        tiles_[i]->draw(window, font, base_pos + sf::Vector2f{ i * 50.f, 0 });
+        tiles_[i]->draw(window, font, base_pos + sf::Vector2f{ static_cast<float>(i * 50), 0 });
     }
 }
 
@@ -35,6 +34,25 @@ void Player::handleClick(const sf::Vector2i pos) const
 {
     for (const auto& tile : tiles_)
     {
+        /* TODO: if I make the method void and not stop at the first match
+         * we can select two tiles clicking at the border
+         */
         tile->handleClick(pos);
     }
+}
+
+std::unique_ptr<Tile> Player::getSelectedTile()
+{
+    // TODO: don't iterate, save a reference
+    for (int i = 0; i < tiles_.size(); i++)
+    {
+        if (tiles_[i]->isSelected())
+        {
+            std::unique_ptr<Tile> selected = std::move(tiles_[i]);
+            tiles_.erase(tiles_.begin() + i);
+            selected->setSelected(false);
+            return selected;
+        }
+    }
+    return nullptr;
 }
