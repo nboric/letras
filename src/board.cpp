@@ -84,6 +84,22 @@ void Board::place(const sf::Vector2i pos, std::unique_ptr<Tile>& tile)
     squares_[coords.first][coords.second].place(tile);
 }
 
+void Board::getPlacements(std::vector<Placement>& placements) const
+{
+    for (int i = 0; i < SIZE; i++)
+    {
+        for (int j = 0; j < SIZE; j++)
+        {
+            if (squares_[i][j].isOccupied() && squares_[i][j].isTileTemp())
+            {
+                std::wstring letter;
+                squares_[i][j].getLetter(letter);
+                placements.push_back(Placement({ i, j }, letter));
+            }
+        }
+    }
+}
+
 const std::map<std::pair<int, int>, SquareDefinition> Board::premium_squares_ = {
     { { 0, 0 }, SquareDefinition(SquareDefinition::EFFECT::WORD_MULTIPLIER, 3) },
     { { 0, 3 }, SquareDefinition(SquareDefinition::EFFECT::LETTER_MULTIPLIER, 2) },

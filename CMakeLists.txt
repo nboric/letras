@@ -27,6 +27,13 @@ add_executable(letras src/main.cpp
         src/bag.h
         src/dict.cpp
         src/dict.h
+        src/Button.cpp
+        src/Button.h
+        src/restrictions/restriction.h
+        src/restrictions/contiguous.cpp
+        src/restrictions/contiguous.h
+        src/restrictions/dict_check.cpp
+        src/restrictions/dict_check.h
 )
 
 target_link_libraries(letras PRIVATE SFML::Graphics)

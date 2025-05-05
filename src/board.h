@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "square.h"
+#include "restrictions/restriction.h"
 #include "SFML/Graphics/RenderWindow.hpp"
 
 class Board
@@ -28,6 +29,7 @@ public:
     [[nodiscard]] bool shouldHandleClick(sf::Vector2i pos) const;
     [[nodiscard]] bool canTakeTile(sf::Vector2i pos) const;
     void place(sf::Vector2i pos, std::unique_ptr<Tile>& tile);
+    void getPlacements(std::vector<Placement>& placements) const;
 };
 
 #endif //BOARD_H

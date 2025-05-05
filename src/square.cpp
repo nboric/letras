@@ -61,7 +61,24 @@ bool Square::isOccupied() const
     return tile_ != nullptr;
 }
 
+bool Square::isTileTemp() const
+{
+    return tile_ != nullptr && tile_is_temp_;
+}
+
+bool Square::getLetter(std::wstring& letter) const
+{
+    if (tile_ != nullptr)
+    {
+        // a copy
+        letter = tile_->letter_;
+        return true;
+    }
+    return false;
+}
+
 void Square::place(std::unique_ptr<Tile>& tile)
 {
     tile_ = std::move(tile);
+    tile_is_temp_ = true;
 }

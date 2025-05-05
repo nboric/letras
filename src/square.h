@@ -31,11 +31,14 @@ class Square
 {
     std::unique_ptr<Tile> tile_{ nullptr };
     const SquareDefinition definition_;
+    bool tile_is_temp_{ false };
 
 public:
     explicit Square(SquareDefinition definition);
     void draw(sf::RenderWindow& window, const sf::Font& font, sf::Vector2f base_pos) const;
     [[nodiscard]] bool isOccupied() const;
+    [[nodiscard]] bool isTileTemp() const;
+    bool getLetter(std::wstring& letter) const;
     void place(std::unique_ptr<Tile>& tile);
 };
 
