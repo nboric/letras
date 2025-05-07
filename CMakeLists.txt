@@ -34,6 +34,8 @@ add_executable(letras src/main.cpp
         src/restrictions/contiguous.h
         src/restrictions/dict_check.cpp
         src/restrictions/dict_check.h
+        src/score.cpp
+        src/score.h
 )
 
 target_link_libraries(letras PRIVATE SFML::Graphics)

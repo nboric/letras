@@ -18,6 +18,8 @@ class Game
     static constexpr int MAX_PLAYERS{ 4 };
     std::vector<std::unique_ptr<Player> > players_;
 
+    size_t current_player_{ 0 };
+
     Board board_;
     Bag bag_;
     Button play_button_;
@@ -32,6 +34,7 @@ public:
     void replenish_all();
 
     void draw(sf::RenderWindow& window, const sf::Font& font);
+    void nextPlayer();
     void handleClick(sf::Vector2i pos);
 };
 

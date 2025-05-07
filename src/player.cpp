@@ -22,12 +22,17 @@ void Player::replenish(Bag& bag)
     }
 }
 
-void Player::draw(sf::RenderWindow& window, const sf::Font& font, const sf::Vector2f base_pos) const
+void Player::draw(sf::RenderWindow& window, const sf::Font& font, const bool is_active,
+    const sf::Vector2f base_pos) const
 {
-    for (int i = 0; i < tiles_.size(); i++)
+    if (is_active)
     {
-        tiles_[i]->draw(window, font, base_pos + sf::Vector2f{ static_cast<float>(i * 50), 0 });
+        for (int i = 0; i < tiles_.size(); i++)
+        {
+            tiles_[i]->draw(window, font, base_pos + sf::Vector2f{ static_cast<float>(i * Tile::SIZE), 0 });
+        }
     }
+    score_.draw(window, font, base_pos + sf::Vector2f{ 0, Tile::SIZE + 10 });
 }
 
 void Player::handleClick(const sf::Vector2i pos) const

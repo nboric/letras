@@ -28,8 +28,9 @@ public:
     void draw(sf::RenderWindow& window, const sf::Font& font) const;
     [[nodiscard]] bool shouldHandleClick(sf::Vector2i pos) const;
     [[nodiscard]] bool canTakeTile(sf::Vector2i pos) const;
-    void place(sf::Vector2i pos, std::unique_ptr<Tile>& tile);
+    void placeTemp(sf::Vector2i pos, std::unique_ptr<Tile>& tile);
     void getPlacements(std::vector<Placement>& placements) const;
+    void acceptPlacements();
 };
 
 #endif //BOARD_H

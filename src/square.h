@@ -38,6 +38,7 @@ public:
     void draw(sf::RenderWindow& window, const sf::Font& font, sf::Vector2f base_pos) const;
     [[nodiscard]] bool isOccupied() const;
     [[nodiscard]] bool isTileTemp() const;
+    void setTileTemp(bool temp);
     bool getLetter(std::wstring& letter) const;
     void place(std::unique_ptr<Tile>& tile);
 };

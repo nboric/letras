@@ -82,3 +82,8 @@ void Square::place(std::unique_ptr<Tile>& tile)
     tile_ = std::move(tile);
     tile_is_temp_ = true;
 }
+
+void Square::setTileTemp(const bool temp)
+{
+    tile_is_temp_ = temp;
+}

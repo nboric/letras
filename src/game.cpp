@@ -40,7 +40,7 @@ void Game::draw(sf::RenderWindow& window, const sf::Font& font)
     for (int i = 0; i < players_.size(); i++)
     {
         const auto& player = players_[i];
-        player->draw(window, font, { 800.f, static_cast<float>(100 + 80 * i) });
+        player->draw(window, font, i == current_player_, { 800.f, static_cast<float>(100 + 140 * i) });
     }
 }
 
@@ -51,32 +51,38 @@ void Game::handleClick(const sf::Vector2i pos)
         std::vector<Placement> placements;
         board_.getPlacements(placements);
         std::string reason;
+        bool is_valid = true;
         for (const auto& restriction : restrictions_)
         {
             if (!restriction->isValid(placements, dict_, reason))
             {
                 std::cout << "Failed restriction " << restriction->getName() << ", reason: " << reason << std::endl;
+                is_valid = false;
+                break;
             }
+        }
+        if (is_valid)
+        {
+            board_.acceptPlacements();
+            players_[current_player_]->replenish(bag_);
+            nextPlayer();
         }
     }
     if (board_.shouldHandleClick(pos))
     {
         if (board_.canTakeTile(pos))
         {
-            // TODO: only current player
-            for (const auto& player : players_)
+            if (std::unique_ptr<Tile> selected; (selected = players_[current_player_]->getSelectedTile()) != nullptr)
             {
-                if (std::unique_ptr<Tile> selected; (selected = player->getSelectedTile()) != nullptr)
-                {
-                    board_.place(pos, selected);
-                }
+                board_.placeTemp(pos, selected);
             }
         }
         return;
     }
-    // TODO: only current player
-    for (const auto& player : players_)
-    {
-        player->handleClick(pos);
-    }
+    players_[current_player_]->handleClick(pos);
+}
+
+void Game::nextPlayer()
+{
+    current_player_ = (current_player_ + 1) % players_.size();
 }
