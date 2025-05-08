@@ -36,6 +36,11 @@ add_executable(letras src/main.cpp
         src/restrictions/dict_check.h
         src/score.cpp
         src/score.h
+        src/restrictions/first_move.cpp
+        src/restrictions/first_move.h
+        src/basic_types.h
+        src/play.cpp
+        src/play.h
 )
 
 target_link_libraries(letras PRIVATE SFML::Graphics)

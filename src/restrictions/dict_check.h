@@ -11,7 +11,7 @@ class DictCheck final : public Restriction
     static constexpr std::string NAME = "DictCheck";
 
 public:
-    bool isValid(const std::vector<Placement>& placements, Dict& dict, std::string& reason) const override;
+    bool isValid(Play& play, const Board& board, const Dict& dict, std::string& reason) const override;
     [[nodiscard]] const std::string& getName() const override;
 };
 

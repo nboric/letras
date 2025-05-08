@@ -11,31 +11,19 @@ const std::string& Contiguous::getName() const
     return NAME;
 }
 
-bool Contiguous::isValid(const std::vector<Placement>& placements, Dict& dict, std::string& reason) const
+bool Contiguous::isValid(Play& play, const Board& board, const Dict& dict, std::string& reason) const
 {
-    std::set<int> all_i;
-    std::set<int> all_j;
-    for (const auto& [coord_, letter_] : placements)
-    {
-        all_i.insert(coord_.first);
-        all_j.insert(coord_.second);
-    }
-    if (all_i.size() != 1 && all_j.size() != 1)
-    {
-        reason = "Not strictly vertical or horizontal";
-        return false;
-    }
-    std::set<int>& moving_coord = all_j;
-    if (all_j.size() == 1)
-    {
-        moving_coord = all_i;
-    }
-    if (moving_coord.size() == 1)
+    if (play.moving_coords.size() == 1)
     {
         return true;
     }
     int prev = -1;
-    for (auto const& coord : moving_coord)
+    if (play.all_i.size() != 1 && play.all_j.size() != 1)
+    {
+        reason = "Not strictly vertical or horizontal";
+        return false;
+    }
+    for (auto const& coord : play.moving_coords)
     {
         if (prev != -1 && coord != prev + 1)
         {
