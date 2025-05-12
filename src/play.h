@@ -28,10 +28,12 @@ public:
     std::set<int> all_i;
     std::set<int> all_j;
 
-    int fixed_coord{ 0 };
-    std::set<int> moving_coords;
+    int fixed_coord_value{ 0 };
+    std::set<int> moving_coord_values;
+    bool is_first{ false };
 
-    std::map<Coord, std::wstring> placement_map;
+    std::map<Coords, std::wstring> placement_map;
+    std::map<Coords, std::wstring> complete_map;
 };
 
 #endif //PLAY_H

@@ -7,6 +7,7 @@
 #include <iostream>
 
 #include "play.h"
+#include "restrictions/connected.h"
 #include "restrictions/contiguous.h"
 #include "restrictions/dict_check.h"
 #include "restrictions/first_move.h"
@@ -24,6 +25,7 @@ Game::Game(const int n_players)
     }
     restrictions_.push_back(std::make_unique<Contiguous>());
     restrictions_.push_back(std::make_unique<FirstMove>());
+    restrictions_.push_back(std::make_unique<Connected>());
     restrictions_.push_back(std::make_unique<DictCheck>());
 }
 

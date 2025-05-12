@@ -5,12 +5,12 @@
 #ifndef BASIC_TYPES_H
 #define BASIC_TYPES_H
 
-using Coord = std::pair<int, int>;
+using Coords = std::pair<int, int>;
 
 class Placement
 {
 public:
-    Coord coord_;
+    Coords coord_;
     std::wstring letter_;
 };
 

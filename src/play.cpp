@@ -13,6 +13,7 @@ Play::Play(const Board& board)
         all_i.insert(coord_.first);
         all_j.insert(coord_.second);
         placement_map.emplace(coord_, letter_);
+        complete_map.emplace(coord_, letter_);
     }
     if (all_i.size() != 1 && all_j.size() != 1)
     {
@@ -21,16 +22,16 @@ Play::Play(const Board& board)
     if (all_i.size() == 1)
     {
         direction = HORIZONTAL;
-        fixed_coord = *all_i.begin();
+        fixed_coord_value = *all_i.begin();
         // TODO: avoid copy
-        moving_coords = all_j;
+        moving_coord_values = all_j;
     }
     else
     {
         direction = VERTICAL;
-        fixed_coord = *all_j.begin();
+        fixed_coord_value = *all_j.begin();
         // TODO: avoid copy
-        moving_coords = all_i;
+        moving_coord_values = all_i;
     }
     is_valid_ = true;
 }

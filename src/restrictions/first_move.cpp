@@ -17,6 +17,7 @@ bool FirstMove::isValid(Play& play, const Board& board, const Dict& dict, std::s
             reason = "First move must occupy center square";
             return false;
         }
+        play.is_first = true;
     }
     return true;
 }

@@ -13,7 +13,7 @@ const std::string& Contiguous::getName() const
 
 bool Contiguous::isValid(Play& play, const Board& board, const Dict& dict, std::string& reason) const
 {
-    if (play.moving_coords.size() == 1)
+    if (play.moving_coord_values.size() == 1)
     {
         return true;
     }
@@ -23,12 +23,24 @@ bool Contiguous::isValid(Play& play, const Board& board, const Dict& dict, std::
         reason = "Not strictly vertical or horizontal";
         return false;
     }
-    for (auto const& coord : play.moving_coords)
+    for (auto const& coord : play.moving_coord_values)
     {
         if (prev != -1 && coord != prev + 1)
         {
-            reason = "Not contiguous";
-            return false;
+            Coords coords;
+            if (play.direction == Play::VERTICAL)
+            {
+                coords = { prev + 1, play.fixed_coord_value };
+            }
+            else
+            {
+                coords = { play.fixed_coord_value, prev + 1 };
+            }
+            if (board.isTileFree(coords))
+            {
+                reason = "Not contiguous";
+                return false;
+            }
         }
         prev = coord;
     }

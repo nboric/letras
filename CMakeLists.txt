@@ -41,6 +41,8 @@ add_executable(letras src/main.cpp
         src/basic_types.h
         src/play.cpp
         src/play.h
+        src/restrictions/connected.cpp
+        src/restrictions/connected.h
 )
 
 target_link_libraries(letras PRIVATE SFML::Graphics)

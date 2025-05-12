@@ -41,7 +41,7 @@ void Board::draw(sf::RenderWindow& window, const sf::Font& font) const
     }
 }
 
-bool Board::getSquareCoords(const sf::Vector2i pos, Coord& coords)
+bool Board::getSquareCoords(const sf::Vector2i pos, Coords& coords)
 {
     const int i = (pos.y - BORDER) / Tile::SIZE;
     const int j = (pos.x - BORDER) / Tile::SIZE;
@@ -56,7 +56,7 @@ bool Board::getSquareCoords(const sf::Vector2i pos, Coord& coords)
 
 bool Board::shouldHandleClick(const sf::Vector2i pos) const
 {
-    Coord coords;
+    Coords coords;
     if (!getSquareCoords(pos, coords))
     {
         return false;
@@ -66,7 +66,7 @@ bool Board::shouldHandleClick(const sf::Vector2i pos) const
 
 bool Board::canTakeTile(const sf::Vector2i pos) const
 {
-    Coord coords;
+    Coords coords;
     if (!getSquareCoords(pos, coords))
     {
         return false;
@@ -76,7 +76,7 @@ bool Board::canTakeTile(const sf::Vector2i pos) const
 
 void Board::placeTemp(const sf::Vector2i pos, std::unique_ptr<Tile>& tile)
 {
-    Coord coords;
+    Coords coords;
     if (!getSquareCoords(pos, coords))
     {
         return;
@@ -118,17 +118,31 @@ void Board::acceptPlacements()
     }
 }
 
-bool Board::isTileFree(const Coord& coords) const
+bool Board::isTileFree(const Coords& coords) const
 {
     if (coords.first < 0 || coords.first >= SIZE || coords.second < 0 || coords.second >= SIZE)
     {
         return false;
     }
     auto const& square = squares_[coords.first][coords.second];
-    return !square.isOccupied() && !square.isTileTemp();
+    return !square.isOccupied() || square.isTileTemp();
 }
 
-const std::map<Coord, SquareDefinition> Board::premium_squares_ = {
+bool Board::getTileLetter(const Coords& coords, std::wstring& letter) const
+{
+    if (coords.first < 0 || coords.first >= SIZE || coords.second < 0 || coords.second >= SIZE)
+    {
+        return false;
+    }
+    auto const& square = squares_[coords.first][coords.second];
+    if (!square.isOccupied() || square.isTileTemp())
+    {
+        return false;
+    }
+    return square.getLetter(letter);
+}
+
+const std::map<Coords, SquareDefinition> Board::premium_squares_ = {
     { { 0, 0 }, SquareDefinition(SquareDefinition::EFFECT::WORD_MULTIPLIER, 3) },
     { { 0, 3 }, SquareDefinition(SquareDefinition::EFFECT::LETTER_MULTIPLIER, 2) },
     { { 0, 7 }, SquareDefinition(SquareDefinition::EFFECT::WORD_MULTIPLIER, 3) },
