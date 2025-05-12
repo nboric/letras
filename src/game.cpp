@@ -6,11 +6,7 @@
 
 #include <iostream>
 
-#include "play.h"
-#include "restrictions/connected.h"
-#include "restrictions/contiguous.h"
-#include "restrictions/dict_check.h"
-#include "restrictions/first_move.h"
+#include "play_rules/play.h"
 
 Game::Game(const int n_players)
     : play_button_("JUGAR"), cancel_button_("CANCELAR"), dict_("res/dict/fise-2.txt")
@@ -23,10 +19,6 @@ Game::Game(const int n_players)
     {
         players_.push_back(std::make_unique<Player>());
     }
-    restrictions_.push_back(std::make_unique<Contiguous>());
-    restrictions_.push_back(std::make_unique<FirstMove>());
-    restrictions_.push_back(std::make_unique<Connected>());
-    restrictions_.push_back(std::make_unique<DictCheck>());
 }
 
 void Game::replenish_all()
@@ -54,18 +46,12 @@ void Game::handleClick(const sf::Vector2i pos)
     if (play_button_.handleClick(pos))
     {
         Play play(board_);
-        std::string reason;
-        bool is_valid = true;
-        for (const auto& restriction : restrictions_)
+        std::string rule, reason;
+        if (!play_builder_.build(play, board_, dict_, rule, reason))
         {
-            if (!restriction->isValid(play, board_, dict_, reason))
-            {
-                std::cout << "Failed restriction " << restriction->getName() << ", reason: " << reason << std::endl;
-                is_valid = false;
-                break;
-            }
+            std::cout << "Failed rule " << rule << ", reason: " << reason << std::endl;
         }
-        if (is_valid)
+        else
         {
             board_.acceptPlacements();
             players_[current_player_]->replenish(bag_);

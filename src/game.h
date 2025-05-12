@@ -9,7 +9,8 @@
 #include "button.h"
 #include "dict.h"
 #include "player.h"
-#include "restrictions/restriction.h"
+#include "play_rules/play_builder.h"
+#include "play_rules/play_rule.h"
 #include "SFML/Graphics/Font.hpp"
 
 class Game
@@ -27,7 +28,7 @@ class Game
 
     Dict dict_;
 
-    std::vector<std::unique_ptr<Restriction> > restrictions_;
+    PlayBuilder play_builder_;
 
 public:
     explicit Game(int n_players);

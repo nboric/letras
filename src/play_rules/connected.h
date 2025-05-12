@@ -4,9 +4,9 @@
 
 #ifndef CONNECTED_H
 #define CONNECTED_H
-#include "restriction.h"
+#include "play_rule.h"
 
-class Connected final : public Restriction
+class Connected final : public PlayRule
 {
     static constexpr std::string NAME = "Connected";
 

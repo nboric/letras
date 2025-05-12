@@ -4,9 +4,9 @@
 
 #ifndef FIRST_MOVE_H
 #define FIRST_MOVE_H
-#include "restriction.h"
+#include "play_rule.h"
 
-class FirstMove final : public Restriction
+class FirstMove final : public PlayRule
 {
     static constexpr std::string NAME = "FirstMove";
 

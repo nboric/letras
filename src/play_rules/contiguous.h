@@ -2,17 +2,17 @@
 // Created by Neven Boric on 5/4/25.
 //
 
-#ifndef DICT_CHECK_H
-#define DICT_CHECK_H
-#include "restriction.h"
+#ifndef CONTIGUOUS_H
+#define CONTIGUOUS_H
+#include "play_rule.h"
 
-class DictCheck final : public Restriction
+class Contiguous final : public PlayRule
 {
-    static constexpr std::string NAME = "DictCheck";
+    static constexpr std::string NAME = "Contiguous";
 
 public:
     bool isValid(Play& play, const Board& board, const Dict& dict, std::string& reason) const override;
     [[nodiscard]] const std::string& getName() const override;
 };
 
-#endif //DICT_CHECK_H
+#endif //CONTIGUOUS_H

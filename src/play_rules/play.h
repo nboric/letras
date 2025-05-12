@@ -8,8 +8,8 @@
 #include <set>
 #include <map>
 
-#include "basic_types.h"
-#include "board.h"
+#include "../basic_types.h"
+#include "../board.h"
 
 class Play
 {

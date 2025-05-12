@@ -1,4 +1,3 @@
 - Better way to implement Restriction::getName
-- Restrictions are no longer just that and are instead building the Play
 - Separate UI and models, MVC style
 - Unit tests

@@ -29,20 +29,22 @@ add_executable(letras src/main.cpp
         src/dict.h
         src/Button.cpp
         src/Button.h
-        src/restrictions/restriction.h
-        src/restrictions/contiguous.cpp
-        src/restrictions/contiguous.h
-        src/restrictions/dict_check.cpp
-        src/restrictions/dict_check.h
+        src/play_rules/play_rule.h
+        src/play_rules/contiguous.cpp
+        src/play_rules/contiguous.h
+        src/play_rules/dict_check.cpp
+        src/play_rules/dict_check.h
         src/score.cpp
         src/score.h
-        src/restrictions/first_move.cpp
-        src/restrictions/first_move.h
+        src/play_rules/first_move.cpp
+        src/play_rules/first_move.h
         src/basic_types.h
-        src/play.cpp
-        src/play.h
-        src/restrictions/connected.cpp
-        src/restrictions/connected.h
+        src/play_rules/play.cpp
+        src/play_rules/play.h
+        src/play_rules/connected.cpp
+        src/play_rules/connected.h
+        src/play_rules/play_builder.cpp
+        src/play_rules/play_builder.h
 )
 
 target_link_libraries(letras PRIVATE SFML::Graphics)

@@ -7,12 +7,12 @@
 
 #include "../dict.h"
 #include "../board.h"
-#include "../play.h"
+#include "play.h"
 
-class Restriction
+class PlayRule
 {
 public:
-    virtual ~Restriction() = default;
+    virtual ~PlayRule() = default;
 
     /* Note that placements is not guaranteed any order, since we're just now checking for restrictions
      * player could've placed tiles in any invalid positions, so sorting doesn't yet make much sense
