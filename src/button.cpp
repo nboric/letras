@@ -4,8 +4,6 @@
 
 #include "button.h"
 
-#include <utility>
-
 #include "SFML/Graphics/RectangleShape.hpp"
 #include "SFML/Graphics/Text.hpp"
 
@@ -14,11 +12,11 @@ Button::Button(std::string text)
 {
 }
 
-bool Button::handleClick(const sf::Vector2i pos)
+bool Button::handleClick(const sf::Vector2i pos, const ClickEvent event)
 {
     if (rect_.contains(sf::Vector2<float>(pos)))
     {
-        is_pressed_ = true;
+        is_pressed_ = event == CLICK_START;
         return true;
     }
     return false;

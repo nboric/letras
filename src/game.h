@@ -36,7 +36,7 @@ public:
 
     void draw(sf::RenderWindow& window, const sf::Font& font);
     void nextPlayer();
-    void handleClick(sf::Vector2i pos);
+    void handleClick(sf::Vector2i pos, ClickEvent event);
 };
 
 #endif //GAME_H

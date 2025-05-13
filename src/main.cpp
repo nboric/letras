@@ -22,7 +22,14 @@ int main()
             {
                 if (mouse_event.button == sf::Mouse::Button::Left)
                 {
-                    game.handleClick(mouse_event.position);
+                    game.handleClick(mouse_event.position, CLICK_START);
+                }
+            },
+            [&](const sf::Event::MouseButtonReleased& mouse_event)
+            {
+                if (mouse_event.button == sf::Mouse::Button::Left)
+                {
+                    game.handleClick(mouse_event.position, CLICK_END);
                 }
             }
         );

@@ -41,35 +41,42 @@ void Game::draw(sf::RenderWindow& window, const sf::Font& font)
     }
 }
 
-void Game::handleClick(const sf::Vector2i pos)
+void Game::handleClick(const sf::Vector2i pos, const ClickEvent event)
 {
-    if (play_button_.handleClick(pos))
+    if (play_button_.handleClick(pos, event))
     {
-        Play play(board_);
-        std::string rule, reason;
-        if (!play_builder_.build(play, board_, dict_, rule, reason))
+        if (event == CLICK_END)
         {
-            std::cout << "Failed rule " << rule << ", reason: " << reason << std::endl;
-        }
-        else
-        {
-            board_.acceptPlacements();
-            players_[current_player_]->replenish(bag_);
-            nextPlayer();
-        }
-    }
-    if (board_.shouldHandleClick(pos))
-    {
-        if (board_.canTakeTile(pos))
-        {
-            if (std::unique_ptr<Tile> selected; (selected = players_[current_player_]->getSelectedTile()) != nullptr)
+            Play play(board_);
+            std::string rule, reason;
+            if (!play_builder_.build(play, board_, dict_, rule, reason))
             {
-                board_.placeTemp(pos, selected);
+                std::cout << "Failed rule " << rule << ", reason: " << reason << std::endl;
+            }
+            else
+            {
+                board_.acceptPlacements();
+                players_[current_player_]->replenish(bag_);
+                nextPlayer();
             }
         }
-        return;
     }
-    players_[current_player_]->handleClick(pos);
+    if (event == CLICK_START)
+    {
+        if (board_.shouldHandleClick(pos))
+        {
+            if (board_.canTakeTile(pos))
+            {
+                if (std::unique_ptr<Tile> selected;
+                    (selected = players_[current_player_]->getSelectedTile()) != nullptr)
+                {
+                    board_.placeTemp(pos, selected);
+                }
+            }
+            return;
+        }
+        players_[current_player_]->handleClick(pos);
+    }
 }
 
 void Game::nextPlayer()

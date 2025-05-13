@@ -4,6 +4,7 @@
 
 #ifndef BUTTON_H
 #define BUTTON_H
+#include "basic_types.h"
 #include "SFML/Graphics/Font.hpp"
 #include "SFML/Graphics/Rect.hpp"
 #include "SFML/Graphics/RenderWindow.hpp"
@@ -22,7 +23,7 @@ class Button
 public:
     explicit Button(std::string text);
     void draw(sf::RenderWindow& window, const sf::Font& font, sf::Vector2f base_pos);
-    bool handleClick(sf::Vector2i pos);
+    bool handleClick(sf::Vector2i pos, ClickEvent event);
 };
 
 #endif //BUTTON_H

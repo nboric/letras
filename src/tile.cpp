@@ -3,8 +3,6 @@
 //
 #include "tile.h"
 
-#include <utility>
-
 #include "SFML/Graphics/RectangleShape.hpp"
 #include "SFML/Graphics/Text.hpp"
 
