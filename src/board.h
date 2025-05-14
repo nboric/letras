@@ -33,8 +33,10 @@ public:
     void placeTemp(sf::Vector2i pos, std::unique_ptr<Tile>& tile);
     void getPlacements(std::vector<Placement>& placements) const;
     void acceptPlacements();
-    [[nodiscard]] bool isTileFree(const Coords& coords) const;
+    [[nodiscard]] bool isSquareFree(const Coords& coords) const;
     bool getTileLetter(const Coords& coords, std::wstring& letter) const;
+    bool getTileBaseScore(const Coords& coords, int& score) const;
+    [[nodiscard]] std::optional<const SquareDefinition> getSquareDefinition(const Coords& coords) const;
 };
 
 #endif //BOARD_H

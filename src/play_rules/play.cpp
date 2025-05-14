@@ -8,12 +8,12 @@ Play::Play(const Board& board)
 {
     board.getPlacements(placements);
     // set is ordered, we use it to form word in right order
-    for (const auto& [coord_, letter_] : placements)
+    for (const auto& [coords, letter] : placements)
     {
-        all_i.insert(coord_.first);
-        all_j.insert(coord_.second);
-        placement_map.emplace(coord_, letter_);
-        complete_map.emplace(coord_, letter_);
+        all_i.insert(coords.first);
+        all_j.insert(coords.second);
+        placement_map.emplace(coords, letter);
+        complete_map.emplace(coords, letter);
     }
     if (all_i.size() != 1 && all_j.size() != 1)
     {

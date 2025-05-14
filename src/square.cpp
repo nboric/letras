@@ -87,3 +87,13 @@ void Square::setTileTemp(const bool temp)
 {
     tile_is_temp_ = temp;
 }
+
+bool Square::getTileBaseScore(int& score) const
+{
+    if (tile_ == nullptr)
+    {
+        return false;
+    }
+    score = tile_->base_score_;
+    return true;
+}

@@ -118,7 +118,7 @@ void Board::acceptPlacements()
     }
 }
 
-bool Board::isTileFree(const Coords& coords) const
+bool Board::isSquareFree(const Coords& coords) const
 {
     if (coords.first < 0 || coords.first >= SIZE || coords.second < 0 || coords.second >= SIZE)
     {
@@ -140,6 +140,30 @@ bool Board::getTileLetter(const Coords& coords, std::wstring& letter) const
         return false;
     }
     return square.getLetter(letter);
+}
+
+bool Board::getTileBaseScore(const Coords& coords, int& score) const
+{
+    if (coords.first < 0 || coords.first >= SIZE || coords.second < 0 || coords.second >= SIZE)
+    {
+        return false;
+    }
+    auto const& square = squares_[coords.first][coords.second];
+    return square.getTileBaseScore(score);
+}
+
+std::optional<const SquareDefinition> Board::getSquareDefinition(const Coords& coords) const
+{
+    if (coords.first < 0 || coords.first >= SIZE || coords.second < 0 || coords.second >= SIZE)
+    {
+        // chose signature to return std::optional to handle error case
+        // Can't just pass a SquareDefinition by reference as output, as it's const in Square
+        // Can't create a copy assignment operator to copy to the output,
+        // since fields inside SquareDefinition are const
+        return std::nullopt;
+    }
+    auto const& square = squares_[coords.first][coords.second];
+    return square.definition_;
 }
 
 const std::map<Coords, SquareDefinition> Board::premium_squares_ = {

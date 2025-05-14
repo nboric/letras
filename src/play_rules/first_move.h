@@ -11,7 +11,7 @@ class FirstMove final : public PlayRule
     static constexpr std::string NAME = "FirstMove";
 
 public:
-    bool isValid(Play& play, const Board& board, const Dict& dict, std::string& reason) const override;
+    bool isValid(Play& play, const Board& board, std::string& reason) const override;
     [[nodiscard]] const std::string& getName() const override;
 };
 

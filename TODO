@@ -1,3 +1,8 @@
 - Better way to implement Restriction::getName
+- Calc score
+- Dict is failing to check wstring
+- Cancel play
+- Change tiles
+- Wildcard
 - Separate UI and models, MVC style
 - Unit tests

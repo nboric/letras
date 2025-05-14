@@ -9,7 +9,10 @@
 #include "play_rules/play.h"
 
 Game::Game(const int n_players)
-    : play_button_("JUGAR"), cancel_button_("CANCELAR"), dict_("res/dict/fise-2.txt")
+    : play_button_("JUGAR"),
+      cancel_button_("CANCELAR"),
+      dict_("res/dict/fise-2.txt"),
+      play_builder_(dict_)
 {
     if (n_players < MIN_PLAYERS || n_players > MAX_PLAYERS)
     {
@@ -49,13 +52,14 @@ void Game::handleClick(const sf::Vector2i pos, const ClickEvent event)
         {
             Play play(board_);
             std::string rule, reason;
-            if (!play_builder_.build(play, board_, dict_, rule, reason))
+            if (!play_builder_.build(play, board_, rule, reason))
             {
                 std::cout << "Failed rule " << rule << ", reason: " << reason << std::endl;
             }
             else
             {
                 board_.acceptPlacements();
+                players_[current_player_]->addScore(play.score);
                 players_[current_player_]->replenish(bag_);
                 nextPlayer();
             }

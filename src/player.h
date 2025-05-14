@@ -24,6 +24,7 @@ public:
     void draw(sf::RenderWindow& window, const sf::Font& font, bool is_active, sf::Vector2f base_pos) const;
     void handleClick(sf::Vector2i pos) const;
     std::unique_ptr<Tile> getSelectedTile();
+    void addScore(int score);
 };
 
 #endif //PLAYER_H

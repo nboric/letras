@@ -61,3 +61,8 @@ std::unique_ptr<Tile> Player::getSelectedTile()
     }
     return nullptr;
 }
+
+void Player::addScore(const int score)
+{
+    score_.addScore(score);
+}

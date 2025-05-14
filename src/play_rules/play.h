@@ -13,7 +13,6 @@
 
 class Play
 {
-    std::vector<Placement> placements;
     bool is_valid_{ false };
 
 public:
@@ -31,7 +30,9 @@ public:
     int fixed_coord_value{ 0 };
     std::set<int> moving_coord_values;
     bool is_first{ false };
+    int score { 0 };
 
+    std::vector<Placement> placements;
     std::map<Coords, std::wstring> placement_map;
     std::map<Coords, std::wstring> complete_map;
 };

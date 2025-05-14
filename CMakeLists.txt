@@ -45,6 +45,8 @@ add_executable(letras src/main.cpp
         src/play_rules/connected.h
         src/play_rules/play_builder.cpp
         src/play_rules/play_builder.h
+        src/play_rules/calc_score.cpp
+        src/play_rules/calc_score.h
 )
 
 target_link_libraries(letras PRIVATE SFML::Graphics)

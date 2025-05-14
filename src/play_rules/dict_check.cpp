@@ -14,7 +14,12 @@ const std::string& DictCheck::getName() const
     return NAME;
 }
 
-bool DictCheck::isValid(Play& play, const Board& board, const Dict& dict, std::string& reason) const
+DictCheck::DictCheck(const Dict& dict)
+    : dict_(dict)
+{
+}
+
+bool DictCheck::isValid(Play& play, const Board& board, std::string& reason) const
 {
     std::string word;
     const int min = *play.moving_coord_values.begin() - 1;
@@ -42,7 +47,7 @@ bool DictCheck::isValid(Play& play, const Board& board, const Dict& dict, std::s
     std::ranges::transform(word, word.begin(),
         [](const unsigned char c) { return std::tolower(c); });
     // TODO: must exclude CH, LL, RR made with two Tiles
-    if (!dict.is_valid(word))
+    if (!dict_.is_valid(word))
     {
         reason = "Word " + word + " not found in dictionary";
         return false;

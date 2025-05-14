@@ -30,7 +30,6 @@ public:
 class Square
 {
     std::unique_ptr<Tile> tile_{ nullptr };
-    const SquareDefinition definition_;
     bool tile_is_temp_{ false };
 
 public:
@@ -41,6 +40,8 @@ public:
     void setTileTemp(bool temp);
     bool getLetter(std::wstring& letter) const;
     void place(std::unique_ptr<Tile>& tile);
+    bool getTileBaseScore(int& score) const;
+    const SquareDefinition definition_;
 };
 
 #endif //SQUARE_H

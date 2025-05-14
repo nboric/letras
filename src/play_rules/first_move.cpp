@@ -8,9 +8,9 @@ const std::string& FirstMove::getName() const
     return NAME;
 }
 
-bool FirstMove::isValid(Play& play, const Board& board, const Dict& dict, std::string& reason) const
+bool FirstMove::isValid(Play& play, const Board& board, std::string& reason) const
 {
-    if (board.isTileFree(Board::center_coords_))
+    if (board.isSquareFree(Board::center_coords_))
     {
         if (!play.placement_map.contains(Board::center_coords_))
         {

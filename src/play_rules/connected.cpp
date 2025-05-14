@@ -9,7 +9,7 @@ const std::string& Connected::getName() const
     return NAME;
 }
 
-bool Connected::isValid(Play& play, const Board& board, const Dict& dict, std::string& reason) const
+bool Connected::isValid(Play& play, const Board& board, std::string& reason) const
 {
     if (play.is_first)
     {

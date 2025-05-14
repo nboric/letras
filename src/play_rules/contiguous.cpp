@@ -11,7 +11,7 @@ const std::string& Contiguous::getName() const
     return NAME;
 }
 
-bool Contiguous::isValid(Play& play, const Board& board, const Dict& dict, std::string& reason) const
+bool Contiguous::isValid(Play& play, const Board& board, std::string& reason) const
 {
     if (play.moving_coord_values.size() == 1)
     {
@@ -36,7 +36,7 @@ bool Contiguous::isValid(Play& play, const Board& board, const Dict& dict, std::
             {
                 coords = { play.fixed_coord_value, prev + 1 };
             }
-            if (board.isTileFree(coords))
+            if (board.isSquareFree(coords))
             {
                 reason = "Not contiguous";
                 return false;
