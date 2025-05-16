@@ -7,6 +7,7 @@
 #include "../src/play_rules/play.h"
 #include "../src/play_rules/contiguous.h"
 #include "../src/play_rules/first_move.h"
+#include "../src/play_rules/connected.h"
 #include "gtest/gtest.h"
 
 class PlayRulesTest : public testing::Test
@@ -246,4 +247,166 @@ TEST_F(PlayRulesTest, FirstMoveNotCenterInvalid)
     FirstMove first_move;
 
     EXPECT_FALSE(first_move.isValid(play, board_, reason_));
+}
+
+TEST_F(PlayRulesTest, ConnectedStartValid)
+{
+    EXPECT_CALL(board_, getPlacements)
+        .Times(1)
+        .WillOnce([](std::vector<Placement>& placements)
+        {
+            placements.push_back(Placement({ 8, 7 }, L"O"));
+            placements.push_back(Placement({ 8, 7 }, L"L"));
+            placements.push_back(Placement({ 8, 9 }, L"A"));
+        });
+
+    const Coords coords = { 8, 6 };
+    // Order is important here, setting the broader expectation first
+    EXPECT_CALL(board_, getTileLetter(testing::_, testing::_))
+        .WillRepeatedly(testing::Return(false));
+
+    EXPECT_CALL(board_, getTileLetter(coords, testing::_))
+        .Times(1)
+        .WillRepeatedly(testing::DoAll(testing::SetArgReferee<1>(L"H"), testing::Return(true)));
+
+    Play play(board_);
+    play.is_first = false;
+    Connected connected;
+
+    EXPECT_TRUE(connected.isValid(play, board_, reason_));
+    EXPECT_TRUE(play.complete_map.contains(coords));
+    EXPECT_EQ(play.complete_map.at(coords), L"H");
+}
+
+TEST_F(PlayRulesTest, ConnectedEndValid)
+{
+    EXPECT_CALL(board_, getPlacements)
+        .Times(1)
+        .WillOnce([](std::vector<Placement>& placements)
+        {
+            placements.push_back(Placement({ 8, 6 }, L"H"));
+            placements.push_back(Placement({ 8, 7 }, L"O"));
+            placements.push_back(Placement({ 8, 8 }, L"L"));
+        });
+
+    const Coords coords = { 8, 9 };
+    // Order is important here, setting the broader expectation first
+    EXPECT_CALL(board_, getTileLetter(testing::_, testing::_))
+        .WillRepeatedly(testing::Return(false));
+
+    EXPECT_CALL(board_, getTileLetter(coords, testing::_))
+        .Times(1)
+        .WillRepeatedly(testing::DoAll(testing::SetArgReferee<1>(L"A"), testing::Return(true)));
+
+    Play play(board_);
+    play.is_first = false;
+    Connected connected;
+
+    EXPECT_TRUE(connected.isValid(play, board_, reason_));
+    EXPECT_TRUE(play.complete_map.contains(coords));
+    EXPECT_EQ(play.complete_map.at(coords), L"A");
+}
+
+TEST_F(PlayRulesTest, ConnectedMiddleValid)
+{
+    EXPECT_CALL(board_, getPlacements)
+        .Times(1)
+        .WillOnce([](std::vector<Placement>& placements)
+        {
+            placements.push_back(Placement({ 8, 6 }, L"H"));
+            placements.push_back(Placement({ 8, 7 }, L"O"));
+            placements.push_back(Placement({ 8, 9 }, L"A"));
+        });
+
+    const Coords coords = { 8, 8 };
+    // Order is important here, setting the broader expectation first
+    EXPECT_CALL(board_, getTileLetter(testing::_, testing::_))
+        .WillRepeatedly(testing::Return(false));
+
+    // Called twice, once looking forward and another looking back
+    EXPECT_CALL(board_, getTileLetter(coords, testing::_))
+        .Times(2)
+        .WillRepeatedly(testing::DoAll(testing::SetArgReferee<1>(L"L"), testing::Return(true)));
+
+    Play play(board_);
+    play.is_first = false;
+    Connected connected;
+
+    EXPECT_TRUE(connected.isValid(play, board_, reason_));
+    EXPECT_TRUE(play.complete_map.contains(coords));
+    EXPECT_EQ(play.complete_map.at(coords), L"L");
+}
+
+TEST_F(PlayRulesTest, ConnectedMiddleVerticalValid)
+{
+    EXPECT_CALL(board_, getPlacements)
+        .Times(1)
+        .WillOnce([](std::vector<Placement>& placements)
+        {
+            placements.push_back(Placement({ 6, 8 }, L"H"));
+            placements.push_back(Placement({ 7, 8 }, L"O"));
+            placements.push_back(Placement({ 9, 8 }, L"A"));
+        });
+
+    const Coords coords = { 8, 8 };
+    // Order is important here, setting the broader expectation first
+    EXPECT_CALL(board_, getTileLetter(testing::_, testing::_))
+        .WillRepeatedly(testing::Return(false));
+
+    // Called twice, once looking forward and another looking back
+    EXPECT_CALL(board_, getTileLetter(coords, testing::_))
+        .Times(2)
+        .WillRepeatedly(testing::DoAll(testing::SetArgReferee<1>(L"L"), testing::Return(true)));
+
+    Play play(board_);
+    play.is_first = false;
+    Connected connected;
+
+    EXPECT_TRUE(connected.isValid(play, board_, reason_));
+    EXPECT_TRUE(play.complete_map.contains(coords));
+    EXPECT_EQ(play.complete_map.at(coords), L"L");
+}
+
+TEST_F(PlayRulesTest, ConnectedInValid)
+{
+    EXPECT_CALL(board_, getPlacements)
+        .Times(1)
+        .WillOnce([](std::vector<Placement>& placements)
+        {
+            placements.push_back(Placement({ 8, 6 }, L"H"));
+            placements.push_back(Placement({ 8, 7 }, L"O"));
+            placements.push_back(Placement({ 8, 8 }, L"L"));
+            placements.push_back(Placement({ 8, 9 }, L"A"));
+        });
+
+    EXPECT_CALL(board_, getTileLetter(testing::_, testing::_))
+        .WillRepeatedly(testing::Return(false));
+
+    Play play(board_);
+    play.is_first = false;
+    Connected connected;
+
+    EXPECT_FALSE(connected.isValid(play, board_, reason_));
+}
+
+TEST_F(PlayRulesTest, ConnectedFirstPlayValid)
+{
+    EXPECT_CALL(board_, getPlacements)
+        .Times(1)
+        .WillOnce([](std::vector<Placement>& placements)
+        {
+            placements.push_back(Placement({ 8, 6 }, L"H"));
+            placements.push_back(Placement({ 8, 7 }, L"O"));
+            placements.push_back(Placement({ 8, 8 }, L"L"));
+            placements.push_back(Placement({ 8, 9 }, L"A"));
+        });
+
+    EXPECT_CALL(board_, getTileLetter(testing::_, testing::_))
+        .WillRepeatedly(testing::Return(false));
+
+    Play play(board_);
+    play.is_first = true;
+    Connected connected;
+
+    EXPECT_TRUE(connected.isValid(play, board_, reason_));
 }
