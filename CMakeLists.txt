@@ -49,7 +49,7 @@ add_executable(letras src/main.cpp
         src/play_rules/calc_score.h
 )
 
-target_link_libraries(letras PRIVATE SFML::Graphics)
+target_link_libraries(letras PRIVATE SFML::Graphics gtest_main)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     target_compile_definitions(letras PUBLIC FONT_PATH="/System/Library/Fonts/SFCompact.ttf")
@@ -57,3 +57,20 @@ endif()
 if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     target_compile_definitions(letras PUBLIC FONT_PATH="c:/windows/Fonts/verdana.ttf")
 endif()
+
+FetchContent_Declare(
+        googletest
+        # Specify the commit you depend on and update it regularly.
+        URL https://github.com/google/googletest/archive/5376968f6948923e2411081fd9372e71a59d8e77.zip
+)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+
+add_executable(letras_tests
+        src/dict.cpp
+        src/dict.h
+        test/dict_tests.cpp
+)
+
+target_link_libraries(letras_tests PRIVATE SFML::Graphics gtest gtest_main)
