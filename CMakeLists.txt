@@ -49,7 +49,7 @@ add_executable(letras src/main.cpp
         src/play_rules/calc_score.h
 )
 
-target_link_libraries(letras PRIVATE SFML::Graphics gtest_main)
+target_link_libraries(letras PRIVATE SFML::Graphics)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     target_compile_definitions(letras PUBLIC FONT_PATH="/System/Library/Fonts/SFCompact.ttf")
@@ -70,7 +70,19 @@ FetchContent_MakeAvailable(googletest)
 add_executable(letras_tests
         src/dict.cpp
         src/dict.h
+        src/square.cpp
+        src/square.h
+        src/tile.h
+        src/tile.cpp
+        src/board.h
+        src/board.cpp
+        src/play_rules/play.cpp
+        src/play_rules/play.h
+        src/play_rules/contiguous.cpp
+        src/play_rules/contiguous.h
         test/dict_tests.cpp
+        test/play_rules_tests.cpp
+        test/mocks.h
 )
 
-target_link_libraries(letras_tests PRIVATE SFML::Graphics gtest gtest_main)
+target_link_libraries(letras_tests PRIVATE SFML::Graphics gmock gtest gtest_main)

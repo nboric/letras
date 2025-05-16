@@ -21,7 +21,7 @@ class Game
 
     size_t current_player_{ 0 };
 
-    Board board_;
+    BoardImpl board_;
     Bag bag_;
     Button play_button_;
     Button cancel_button_;

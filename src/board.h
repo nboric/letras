@@ -13,6 +13,23 @@
 
 class Board
 {
+public:
+    virtual ~Board() = default;
+
+    virtual void draw(sf::RenderWindow& window, const sf::Font& font) const = 0;
+    [[nodiscard]] virtual bool shouldHandleClick(sf::Vector2i pos) const = 0;
+    [[nodiscard]] virtual bool canTakeTile(sf::Vector2i pos) const = 0;
+    virtual void placeTemp(sf::Vector2i pos, std::unique_ptr<Tile>& tile) = 0;
+    virtual void getPlacements(std::vector<Placement>& placements) const = 0;
+    virtual void acceptPlacements() = 0;
+    [[nodiscard]] virtual bool isSquareFree(const Coords& coords) const = 0;
+    virtual bool getTileLetter(const Coords& coords, std::wstring& letter) const = 0;
+    virtual bool getTileBaseScore(const Coords& coords, int& score) const = 0;
+    [[nodiscard]] virtual std::optional<const SquareDefinition> getSquareDefinition(const Coords& coords) const = 0;
+};
+
+class BoardImpl : public Board
+{
     static constexpr int SIZE{ 15 };
     static constexpr int BORDER{ 20 };
 
@@ -23,20 +40,20 @@ class Board
     static bool getSquareCoords(sf::Vector2i pos, Coords& coords);
 
 public:
-    Board();
+    BoardImpl();
 
     static constexpr Coords center_coords_{ SIZE / 2, SIZE / 2 };
 
-    void draw(sf::RenderWindow& window, const sf::Font& font) const;
-    [[nodiscard]] bool shouldHandleClick(sf::Vector2i pos) const;
-    [[nodiscard]] bool canTakeTile(sf::Vector2i pos) const;
-    void placeTemp(sf::Vector2i pos, std::unique_ptr<Tile>& tile);
-    void getPlacements(std::vector<Placement>& placements) const;
-    void acceptPlacements();
-    [[nodiscard]] bool isSquareFree(const Coords& coords) const;
-    bool getTileLetter(const Coords& coords, std::wstring& letter) const;
-    bool getTileBaseScore(const Coords& coords, int& score) const;
-    [[nodiscard]] std::optional<const SquareDefinition> getSquareDefinition(const Coords& coords) const;
+    void draw(sf::RenderWindow& window, const sf::Font& font) const override;
+    [[nodiscard]] bool shouldHandleClick(sf::Vector2i pos) const override;
+    [[nodiscard]] bool canTakeTile(sf::Vector2i pos) const override;
+    void placeTemp(sf::Vector2i pos, std::unique_ptr<Tile>& tile) override;
+    void getPlacements(std::vector<Placement>& placements) const override;
+    void acceptPlacements() override;
+    [[nodiscard]] bool isSquareFree(const Coords& coords) const override;
+    bool getTileLetter(const Coords& coords, std::wstring& letter) const override;
+    bool getTileBaseScore(const Coords& coords, int& score) const override;
+    [[nodiscard]] std::optional<const SquareDefinition> getSquareDefinition(const Coords& coords) const override;
 };
 
 #endif //BOARD_H

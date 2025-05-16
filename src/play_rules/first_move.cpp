@@ -10,9 +10,9 @@ const std::string& FirstMove::getName() const
 
 bool FirstMove::isValid(Play& play, const Board& board, std::string& reason) const
 {
-    if (board.isSquareFree(Board::center_coords_))
+    if (board.isSquareFree(BoardImpl::center_coords_))
     {
-        if (!play.placement_map.contains(Board::center_coords_))
+        if (!play.placement_map.contains(BoardImpl::center_coords_))
         {
             reason = "First move must occupy center square";
             return false;

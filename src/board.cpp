@@ -8,7 +8,7 @@
 #include "tile.h"
 #include "SFML/Graphics/RectangleShape.hpp"
 
-Board::Board()
+BoardImpl::BoardImpl()
 {
     squares_.resize(SIZE);
     for (int i = 0; i < SIZE; i++)
@@ -27,7 +27,7 @@ Board::Board()
     }
 }
 
-void Board::draw(sf::RenderWindow& window, const sf::Font& font) const
+void BoardImpl::draw(sf::RenderWindow& window, const sf::Font& font) const
 {
     for (int i = 0; i < SIZE; i++)
     {
@@ -41,7 +41,7 @@ void Board::draw(sf::RenderWindow& window, const sf::Font& font) const
     }
 }
 
-bool Board::getSquareCoords(const sf::Vector2i pos, Coords& coords)
+bool BoardImpl::getSquareCoords(const sf::Vector2i pos, Coords& coords)
 {
     const int i = (pos.y - BORDER) / Tile::SIZE;
     const int j = (pos.x - BORDER) / Tile::SIZE;
@@ -54,7 +54,7 @@ bool Board::getSquareCoords(const sf::Vector2i pos, Coords& coords)
     return false;
 }
 
-bool Board::shouldHandleClick(const sf::Vector2i pos) const
+bool BoardImpl::shouldHandleClick(const sf::Vector2i pos) const
 {
     Coords coords;
     if (!getSquareCoords(pos, coords))
@@ -64,7 +64,7 @@ bool Board::shouldHandleClick(const sf::Vector2i pos) const
     return !squares_[coords.first][coords.second].isOccupied();
 }
 
-bool Board::canTakeTile(const sf::Vector2i pos) const
+bool BoardImpl::canTakeTile(const sf::Vector2i pos) const
 {
     Coords coords;
     if (!getSquareCoords(pos, coords))
@@ -74,7 +74,7 @@ bool Board::canTakeTile(const sf::Vector2i pos) const
     return !squares_[coords.first][coords.second].isOccupied();
 }
 
-void Board::placeTemp(const sf::Vector2i pos, std::unique_ptr<Tile>& tile)
+void BoardImpl::placeTemp(const sf::Vector2i pos, std::unique_ptr<Tile>& tile)
 {
     Coords coords;
     if (!getSquareCoords(pos, coords))
@@ -84,7 +84,7 @@ void Board::placeTemp(const sf::Vector2i pos, std::unique_ptr<Tile>& tile)
     squares_[coords.first][coords.second].place(tile);
 }
 
-void Board::getPlacements(std::vector<Placement>& placements) const
+void BoardImpl::getPlacements(std::vector<Placement>& placements) const
 {
     for (int i = 0; i < SIZE; i++)
     {
@@ -94,13 +94,13 @@ void Board::getPlacements(std::vector<Placement>& placements) const
             {
                 std::wstring letter;
                 squares_[i][j].getLetter(letter);
-                placements.push_back(Placement({ i, j }, letter));
+                placements.emplace_back(Placement({ i, j }, letter));
             }
         }
     }
 }
 
-void Board::acceptPlacements()
+void BoardImpl::acceptPlacements()
 {
     for (int i = 0; i < SIZE; i++)
     {
@@ -118,7 +118,7 @@ void Board::acceptPlacements()
     }
 }
 
-bool Board::isSquareFree(const Coords& coords) const
+bool BoardImpl::isSquareFree(const Coords& coords) const
 {
     if (coords.first < 0 || coords.first >= SIZE || coords.second < 0 || coords.second >= SIZE)
     {
@@ -128,7 +128,7 @@ bool Board::isSquareFree(const Coords& coords) const
     return !square.isOccupied() || square.isTileTemp();
 }
 
-bool Board::getTileLetter(const Coords& coords, std::wstring& letter) const
+bool BoardImpl::getTileLetter(const Coords& coords, std::wstring& letter) const
 {
     if (coords.first < 0 || coords.first >= SIZE || coords.second < 0 || coords.second >= SIZE)
     {
@@ -142,7 +142,7 @@ bool Board::getTileLetter(const Coords& coords, std::wstring& letter) const
     return square.getLetter(letter);
 }
 
-bool Board::getTileBaseScore(const Coords& coords, int& score) const
+bool BoardImpl::getTileBaseScore(const Coords& coords, int& score) const
 {
     if (coords.first < 0 || coords.first >= SIZE || coords.second < 0 || coords.second >= SIZE)
     {
@@ -152,7 +152,7 @@ bool Board::getTileBaseScore(const Coords& coords, int& score) const
     return square.getTileBaseScore(score);
 }
 
-std::optional<const SquareDefinition> Board::getSquareDefinition(const Coords& coords) const
+std::optional<const SquareDefinition> BoardImpl::getSquareDefinition(const Coords& coords) const
 {
     if (coords.first < 0 || coords.first >= SIZE || coords.second < 0 || coords.second >= SIZE)
     {
@@ -166,7 +166,7 @@ std::optional<const SquareDefinition> Board::getSquareDefinition(const Coords& c
     return square.definition_;
 }
 
-const std::map<Coords, SquareDefinition> Board::premium_squares_ = {
+const std::map<Coords, SquareDefinition> BoardImpl::premium_squares_ = {
     { { 0, 0 }, SquareDefinition(SquareDefinition::EFFECT::WORD_MULTIPLIER, 3) },
     { { 0, 3 }, SquareDefinition(SquareDefinition::EFFECT::LETTER_MULTIPLIER, 2) },
     { { 0, 7 }, SquareDefinition(SquareDefinition::EFFECT::WORD_MULTIPLIER, 3) },
