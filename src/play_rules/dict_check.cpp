@@ -23,7 +23,7 @@ bool DictCheck::isValid(Play& play, const Board& board, std::string& reason) con
 {
     std::string word;
     const int min = *play.moving_coord_values.begin() - 1;
-    const int max = *play.moving_coord_values.end() + 1;
+    const int max = *play.moving_coord_values.rbegin() + 1;
     for (int moving_coord = min; moving_coord <= max; moving_coord++)
     {
         Coords coord;
@@ -40,8 +40,16 @@ bool DictCheck::isValid(Play& play, const Board& board, std::string& reason) con
             auto& letter = play.complete_map.at(coord);
             /* letter is wstring only to support displaying Ñ correctly in SFML, we don't allow any other wide chars
              * this also handles adding CH, LL, and RR, since we've always treated as a string of two letters
+             * Although still need special handling since tolower below is not working for Ñ
              */
-            word.append(std::string(letter.begin(), letter.end()));
+            if (letter == L"Ñ")
+            {
+                word.append("ñ");
+            }
+            else
+            {
+                word.append(std::string(letter.begin(), letter.end()));
+            }
         }
     }
     std::ranges::transform(word, word.begin(),

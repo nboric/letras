@@ -8,6 +8,7 @@
 #include "../src/play_rules/contiguous.h"
 #include "../src/play_rules/first_move.h"
 #include "../src/play_rules/connected.h"
+#include "../src/play_rules/dict_check.h"
 #include "gtest/gtest.h"
 
 class PlayRulesTest : public testing::Test
@@ -409,4 +410,74 @@ TEST_F(PlayRulesTest, ConnectedFirstPlayValid)
     Connected connected;
 
     EXPECT_TRUE(connected.isValid(play, board_, reason_));
+}
+
+TEST_F(PlayRulesTest, DictCheckSimpleValid)
+{
+    EXPECT_CALL(board_, getPlacements)
+        .Times(1)
+        .WillOnce([](std::vector<Placement>& placements)
+        {
+            placements.push_back(Placement({ 8, 6 }, L"H"));
+            placements.push_back(Placement({ 8, 7 }, L"O"));
+            placements.push_back(Placement({ 8, 8 }, L"L"));
+            placements.push_back(Placement({ 8, 9 }, L"A"));
+        });
+
+    Play play(board_);
+    play.is_first = true;
+
+    // I could (should?) mock Dict, but I actually prefer to check that the word is passed
+    // in a format that matches how Dict reads the file
+    Dict dict("res/dict/fise-2.txt");
+    DictCheck dict_check(dict);
+
+    EXPECT_TRUE(dict_check.isValid(play, board_, reason_));
+}
+
+TEST_F(PlayRulesTest, DictCheckSimpleConnectedValid)
+{
+    EXPECT_CALL(board_, getPlacements)
+        .Times(1)
+        .WillOnce([](std::vector<Placement>& placements)
+        {
+            placements.push_back(Placement({ 8, 6 }, L"H"));
+            placements.push_back(Placement({ 8, 7 }, L"O"));
+            placements.push_back(Placement({ 8, 9 }, L"A"));
+        });
+
+    Play play(board_);
+    play.is_first = true;
+
+    play.complete_map.emplace(Coords{ 8, 8 }, L"L");
+
+    // I could (should?) mock Dict, but I actually prefer to check that the word is passed
+    // in a format that matches how Dict reads the file
+    Dict dict("res/dict/fise-2.txt");
+    DictCheck dict_check(dict);
+
+    EXPECT_TRUE(dict_check.isValid(play, board_, reason_));
+}
+
+TEST_F(PlayRulesTest, DictCheckWideValid)
+{
+    EXPECT_CALL(board_, getPlacements)
+        .Times(1)
+        .WillOnce([](std::vector<Placement>& placements)
+        {
+            placements.push_back(Placement({ 8, 6 }, L"N"));
+            placements.push_back(Placement({ 8, 7 }, L"I"));
+            placements.push_back(Placement({ 8, 8 }, L"Ñ"));
+            placements.push_back(Placement({ 8, 9 }, L"O"));
+        });
+
+    Play play(board_);
+    play.is_first = true;
+
+    // I could (should?) mock Dict, but I actually prefer to check that the word is passed
+    // in a format that matches how Dict reads the file
+    Dict dict("res/dict/fise-2.txt");
+    DictCheck dict_check(dict);
+
+    EXPECT_TRUE(dict_check.isValid(play, board_, reason_));
 }

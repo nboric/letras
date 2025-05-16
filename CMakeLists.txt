@@ -84,6 +84,8 @@ add_executable(letras_tests
         src/play_rules/first_move.h
         src/play_rules/connected.cpp
         src/play_rules/connected.h
+        src/play_rules/dict_check.cpp
+        src/play_rules/dict_check.h
         test/dict_tests.cpp
         test/play_rules_tests.cpp
         test/mocks.h
