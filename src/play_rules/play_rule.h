@@ -19,6 +19,20 @@ public:
      */
     [[nodiscard]] virtual bool isValid(Play& play, const Board& board, std::string& reason) const = 0;
     [[nodiscard]] virtual const std::string& getName() const = 0;
+
+    static Coords buildCoords(Play& play, int moving_coord_value)
+    {
+        Coords coords;
+        if (play.direction == Play::VERTICAL)
+        {
+            coords = { moving_coord_value, play.fixed_coord_value };
+        }
+        else
+        {
+            coords = { play.fixed_coord_value, moving_coord_value };
+        }
+        return coords;
+    }
 };
 
 #endif //RESTRICTION_H

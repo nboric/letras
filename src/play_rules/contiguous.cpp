@@ -27,15 +27,7 @@ bool Contiguous::isValid(Play& play, const Board& board, std::string& reason) co
     {
         if (prev != -1 && coord != prev + 1)
         {
-            Coords coords;
-            if (play.direction == Play::VERTICAL)
-            {
-                coords = { prev + 1, play.fixed_coord_value };
-            }
-            else
-            {
-                coords = { play.fixed_coord_value, prev + 1 };
-            }
+            Coords coords = buildCoords(play, prev + 1);
             if (board.isSquareFree(coords))
             {
                 reason = "Not contiguous";

@@ -21,18 +21,10 @@ bool Connected::isValid(Play& play, const Board& board, std::string& reason) con
         for (const auto dir : { -1, 1 })
         {
             std::wstring letter;
-            Coords coord;
-            if (play.direction == Play::VERTICAL)
+            Coords coords = buildCoords(play, moving_coord + dir);
+            if (board.getTileLetter(coords, letter))
             {
-                coord = { moving_coord + dir, play.fixed_coord_value };
-            }
-            else
-            {
-                coord = { play.fixed_coord_value, moving_coord + dir };
-            }
-            if (board.getTileLetter(coord, letter))
-            {
-                play.complete_map.emplace(coord, letter);
+                play.complete_map.emplace(coords, letter);
                 is_connected = true;
             }
         }
