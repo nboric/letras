@@ -80,6 +80,8 @@ add_executable(letras_tests
         src/play_rules/play.h
         src/play_rules/contiguous.cpp
         src/play_rules/contiguous.h
+        src/play_rules/first_move.cpp
+        src/play_rules/first_move.h
         test/dict_tests.cpp
         test/play_rules_tests.cpp
         test/mocks.h

@@ -6,6 +6,7 @@
 #include "../src/board.h"
 #include "../src/play_rules/play.h"
 #include "../src/play_rules/contiguous.h"
+#include "../src/play_rules/first_move.h"
 #include "gtest/gtest.h"
 
 class PlayRulesTest : public testing::Test
@@ -179,4 +180,70 @@ TEST_F(PlayRulesTest, ContiguousAllOverInvalid)
     Contiguous contiguous;
 
     EXPECT_FALSE(contiguous.isValid(play, board_, reason_));
+}
+
+TEST_F(PlayRulesTest, FirstMoveCenterValid)
+{
+    EXPECT_CALL(board_, getPlacements)
+        .Times(1)
+        .WillOnce([](std::vector<Placement>& placements)
+        {
+            placements.push_back(Placement({ 7, 6 }, L"H"));
+            placements.push_back(Placement({ 7, 7 }, L"O"));
+            placements.push_back(Placement({ 7, 8 }, L"L"));
+            placements.push_back(Placement({ 7, 9 }, L"A"));
+        });
+
+    EXPECT_CALL(board_, isSquareFree(BoardImpl::center_coords_))
+        .Times(1)
+        .WillOnce(testing::Return(true));
+
+    Play play(board_);
+    FirstMove first_move;
+
+    EXPECT_TRUE(first_move.isValid(play, board_, reason_));
+}
+
+TEST_F(PlayRulesTest, FirstMoveNotCenterValid)
+{
+    EXPECT_CALL(board_, getPlacements)
+        .Times(1)
+        .WillOnce([](std::vector<Placement>& placements)
+        {
+            placements.push_back(Placement({ 8, 6 }, L"H"));
+            placements.push_back(Placement({ 8, 7 }, L"O"));
+            placements.push_back(Placement({ 8, 8 }, L"L"));
+            placements.push_back(Placement({ 8, 9 }, L"A"));
+        });
+
+    EXPECT_CALL(board_, isSquareFree(BoardImpl::center_coords_))
+        .Times(1)
+        .WillOnce(testing::Return(false));
+
+    Play play(board_);
+    FirstMove first_move;
+
+    EXPECT_TRUE(first_move.isValid(play, board_, reason_));
+}
+
+TEST_F(PlayRulesTest, FirstMoveNotCenterInvalid)
+{
+    EXPECT_CALL(board_, getPlacements)
+        .Times(1)
+        .WillOnce([](std::vector<Placement>& placements)
+        {
+            placements.push_back(Placement({ 8, 6 }, L"H"));
+            placements.push_back(Placement({ 8, 7 }, L"O"));
+            placements.push_back(Placement({ 8, 8 }, L"L"));
+            placements.push_back(Placement({ 8, 9 }, L"A"));
+        });
+
+    EXPECT_CALL(board_, isSquareFree(BoardImpl::center_coords_))
+        .Times(1)
+        .WillOnce(testing::Return(true));
+
+    Play play(board_);
+    FirstMove first_move;
+
+    EXPECT_FALSE(first_move.isValid(play, board_, reason_));
 }
