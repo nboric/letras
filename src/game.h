@@ -20,11 +20,13 @@ class Game
     std::vector<std::unique_ptr<Player> > players_;
 
     size_t current_player_{ 0 };
+    bool is_exchanging_{ false };
 
     BoardImpl board_;
     Bag bag_;
     Button play_button_;
     Button cancel_button_;
+    Button exchange_start_button_;
 
     Dict dict_;
 

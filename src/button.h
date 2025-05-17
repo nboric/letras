@@ -22,7 +22,7 @@ class Button
 
 public:
     explicit Button(std::string text);
-    void draw(sf::RenderWindow& window, const sf::Font& font, sf::Vector2f base_pos);
+    void draw(sf::RenderWindow& window, const sf::Font& font, sf::Vector2f base_pos, bool is_selected);
     bool handleClick(sf::Vector2i pos, ClickEvent event);
 };
 

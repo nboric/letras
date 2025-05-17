@@ -11,6 +11,7 @@
 Game::Game(const int n_players)
     : play_button_("JUGAR"),
       cancel_button_("CANCELAR"),
+      exchange_start_button_("CAMBIAR"),
       dict_("res/dict/fise-2.txt"),
       play_builder_(dict_)
 {
@@ -35,8 +36,10 @@ void Game::replenish_all()
 void Game::draw(sf::RenderWindow& window, const sf::Font& font)
 {
     board_.draw(window, font);
-    play_button_.draw(window, font, { 800.f, 600.f });
-    cancel_button_.draw(window, font, { 950.f, 600.f });
+    play_button_.draw(window, font, { 800.f, 600.f }, false);
+    cancel_button_.draw(window, font, { 950.f, 600.f }, false);
+    exchange_start_button_.draw(window, font, { 800.f, 680.f }, is_exchanging_);
+    bag_.draw(window, font, { 950.f, 680.f });
     for (int i = 0; i < players_.size(); i++)
     {
         const auto& player = players_[i];
@@ -46,7 +49,7 @@ void Game::draw(sf::RenderWindow& window, const sf::Font& font)
 
 void Game::handleClick(const sf::Vector2i pos, const ClickEvent event)
 {
-    if (play_button_.handleClick(pos, event))
+    if (!is_exchanging_ && play_button_.handleClick(pos, event))
     {
         if (event == CLICK_END)
         {
@@ -65,18 +68,38 @@ void Game::handleClick(const sf::Vector2i pos, const ClickEvent event)
             }
         }
     }
+    if (exchange_start_button_.handleClick(pos, event))
+    {
+        if (event == CLICK_END)
+        {
+            if (is_exchanging_)
+            {
+                players_[current_player_]->exchange(bag_);
+                nextPlayer();
+            }
+            is_exchanging_ = !is_exchanging_;
+        }
+    }
     if (cancel_button_.handleClick(pos, event))
     {
         if (event == CLICK_END)
         {
-            std::vector<std::unique_ptr<Tile> > tiles;
-            board_.returnPlacements(tiles);
-            players_[current_player_]->takeAll(tiles);
+            if (is_exchanging_)
+            {
+                is_exchanging_ = false;
+                players_[current_player_]->unselectAll();
+            }
+            else
+            {
+                std::vector<std::unique_ptr<Tile> > tiles;
+                board_.returnPlacements(tiles);
+                players_[current_player_]->takeAll(tiles);
+            }
         }
     }
     if (event == CLICK_START)
     {
-        if (board_.shouldHandleClick(pos))
+        if (!is_exchanging_ && board_.shouldHandleClick(pos))
         {
             if (board_.canTakeTile(pos))
             {
@@ -88,7 +111,7 @@ void Game::handleClick(const sf::Vector2i pos, const ClickEvent event)
             }
             return;
         }
-        players_[current_player_]->handleClick(pos);
+        players_[current_player_]->handleClick(pos, is_exchanging_);
     }
 }
 

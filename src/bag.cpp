@@ -6,6 +6,9 @@
 
 #include <random>
 
+#include "SFML/Graphics/RectangleShape.hpp"
+#include "SFML/Graphics/Text.hpp"
+
 const std::map<std::wstring, int> Bag::initial_quantities_ = {
     { L"", 2 },
     { L"A", 12 },
@@ -49,7 +52,7 @@ Bag::Bag()
     }
 }
 
-std::unique_ptr<Tile> Bag::take_one()
+std::unique_ptr<Tile> Bag::takeOne()
 {
     std::random_device random_device;
     std::mt19937 engine{ random_device() };
@@ -59,4 +62,27 @@ std::unique_ptr<Tile> Bag::take_one()
     auto random_element = std::move(tiles_.back());
     tiles_.pop_back();
     return random_element;
+}
+
+void Bag::putBack(std::unique_ptr<Tile>& tile)
+{
+    tiles_.push_back(std::move(tile));
+}
+
+void Bag::draw(sf::RenderWindow& window, const sf::Font& font, const sf::Vector2f base_pos) const
+{
+    sf::Text score(font);
+    score.setString("Bolsa: " + std::to_string(tiles_.size()));
+    score.setFillColor(sf::Color::Black);
+    score.setCharacterSize(24);
+    score.setPosition(base_pos + sf::Vector2f{ 10.f, 10.f });
+
+    sf::RectangleShape shape({ score.getLocalBounds().size.x + 30, HEIGHT });
+    shape.setPosition(base_pos);
+    shape.setFillColor(sf::Color::White);
+    shape.setOutlineColor(sf::Color::Black);
+    shape.setOutlineThickness(1.f);
+
+    window.draw(shape);
+    window.draw(score);
 }

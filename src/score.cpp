@@ -10,7 +10,7 @@
 void Score::draw(sf::RenderWindow& window, const sf::Font& font, const sf::Vector2f base_pos) const
 {
     sf::Text score(font);
-    score.setString("Puntaje: " + std::to_string(+score_));
+    score.setString("Puntaje: " + std::to_string(score_));
     score.setFillColor(sf::Color::Black);
     score.setCharacterSize(24);
     score.setPosition(base_pos + sf::Vector2f{ 10.f, 10.f });

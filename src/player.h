@@ -22,10 +22,12 @@ public:
     Player();
     void replenish(Bag& bag);
     void draw(sf::RenderWindow& window, const sf::Font& font, bool is_active, sf::Vector2f base_pos) const;
-    void handleClick(sf::Vector2i pos) const;
+    void handleClick(sf::Vector2i pos, bool is_exchanging) const;
     std::unique_ptr<Tile> getSelectedTile();
     void addScore(int score);
     void takeAll(std::vector<std::unique_ptr<Tile> >& tiles);
+    void unselectAll() const;
+    void exchange(Bag& bag);
 };
 
 #endif //PLAYER_H

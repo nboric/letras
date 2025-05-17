@@ -22,7 +22,7 @@ bool Button::handleClick(const sf::Vector2i pos, const ClickEvent event)
     return false;
 }
 
-void Button::draw(sf::RenderWindow& window, const sf::Font& font, const sf::Vector2f base_pos)
+void Button::draw(sf::RenderWindow& window, const sf::Font& font, const sf::Vector2f base_pos, const bool is_selected)
 {
     // TODO: make relative to Button SIZE
     sf::Text text(font);
@@ -33,7 +33,7 @@ void Button::draw(sf::RenderWindow& window, const sf::Font& font, const sf::Vect
 
     sf::RectangleShape shape({ text.getLocalBounds().size.x + 30, HEIGHT });
     shape.setPosition(base_pos);
-    if (is_pressed_)
+    if (is_pressed_ || is_selected)
     {
         shape.setFillColor(sf::Color::Yellow);
     }

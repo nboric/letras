@@ -86,9 +86,16 @@ int Tile::base_score() const
     return base_scores_.at(letter_);
 }
 
-void Tile::handleClick(const sf::Vector2i pos)
+void Tile::handleClick(const sf::Vector2i pos, const bool allow_multiple)
 {
-    is_selected_ = rect_.contains(sf::Vector2<float>(pos)) && !is_selected_;
+    if (rect_.contains(sf::Vector2<float>(pos)))
+    {
+        is_selected_ = !is_selected_;
+    }
+    else if (!allow_multiple)
+    {
+        is_selected_ = false;
+    }
 }
 
 bool Tile::isSelected() const

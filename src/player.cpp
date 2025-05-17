@@ -18,7 +18,7 @@ void Player::replenish(Bag& bag)
     }
     for (int i = 0; i < needed; i++)
     {
-        tiles_.push_back(std::move(bag.take_one()));
+        tiles_.push_back(std::move(bag.takeOne()));
     }
 }
 
@@ -35,14 +35,14 @@ void Player::draw(sf::RenderWindow& window, const sf::Font& font, const bool is_
     score_.draw(window, font, base_pos + sf::Vector2f{ 0, Tile::SIZE + 10 });
 }
 
-void Player::handleClick(const sf::Vector2i pos) const
+void Player::handleClick(const sf::Vector2i pos, const bool is_exchanging) const
 {
     for (const auto& tile : tiles_)
     {
         /* TODO: if I make the method void and not stop at the first match
          * we can select two tiles clicking at the border
          */
-        tile->handleClick(pos);
+        tile->handleClick(pos, is_exchanging);
     }
 }
 
@@ -73,5 +73,29 @@ void Player::takeAll(std::vector<std::unique_ptr<Tile> >& tiles)
     {
         tiles_.push_back(std::move(tiles.back()));
         tiles.pop_back();
+    }
+}
+
+void Player::unselectAll() const
+{
+    for (const auto& tile : tiles_)
+    {
+        tile->setSelected(false);
+    }
+}
+
+void Player::exchange(Bag& bag)
+{
+    for (int i = 0; i < tiles_.size(); i++)
+    {
+        // TODO: check enough available
+        if (tiles_[i]->isSelected())
+        {
+            std::swap(tiles_[i], tiles_.back());
+            std::unique_ptr<Tile> selected = std::move(tiles_.back());
+            tiles_.pop_back();
+            tiles_.push_back(std::move(bag.takeOne()));
+            bag.putBack(selected);
+        }
     }
 }

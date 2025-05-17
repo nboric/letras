@@ -32,7 +32,7 @@ public:
      */
     void draw(sf::RenderWindow& window, const sf::Font& font,
         sf::Vector2f base_pos);
-    void handleClick(sf::Vector2i pos);
+    void handleClick(sf::Vector2i pos, bool allow_multiple);
     [[nodiscard]] bool isSelected() const;
     void setSelected(bool selected);
 };
