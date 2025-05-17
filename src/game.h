@@ -9,6 +9,7 @@
 #include "button.h"
 #include "dict.h"
 #include "player.h"
+#include "wildcard_picker.h"
 #include "play_rules/play_builder.h"
 #include "play_rules/play_rule.h"
 #include "SFML/Graphics/Font.hpp"
@@ -21,6 +22,8 @@ class Game
 
     size_t current_player_{ 0 };
     bool is_exchanging_{ false };
+    bool is_picking_wildcard_{ false };
+    std::optional<Coords> pending_wildcard_;
 
     BoardImpl board_;
     Bag bag_;
@@ -31,6 +34,8 @@ class Game
     Dict dict_;
 
     PlayBuilder play_builder_;
+
+    WildcardPicker wildcard_picker_;
 
 public:
     explicit Game(int n_players);

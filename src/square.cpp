@@ -52,7 +52,7 @@ void Square::draw(sf::RenderWindow& window, const sf::Font& font, const sf::Vect
 
     if (tile_ != nullptr)
     {
-        tile_->draw(window, font, base_pos);
+        tile_->draw(window, font, base_pos, true);
     }
 }
 
@@ -70,8 +70,7 @@ bool Square::getLetter(std::wstring& letter) const
 {
     if (tile_ != nullptr)
     {
-        // a copy
-        letter = tile_->letter_;
+        tile_->getLetter(letter);
         return true;
     }
     return false;
@@ -101,4 +100,17 @@ bool Square::getTileBaseScore(int& score) const
 std::unique_ptr<Tile> Square::removeTile()
 {
     return { std::move(tile_) };
+}
+
+void Square::setTileAssumedLetter(const std::wstring& letter) const
+{
+    if (tile_ == nullptr)
+    {
+        return;
+    }
+    if (!tile_->isWildcard())
+    {
+        return;
+    }
+    tile_->setAssumedLetter(letter);
 }

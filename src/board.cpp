@@ -54,14 +54,18 @@ bool BoardImpl::getSquareCoords(const sf::Vector2i pos, Coords& coords)
     return false;
 }
 
-bool BoardImpl::shouldHandleClick(const sf::Vector2i pos) const
+std::optional<Coords> BoardImpl::shouldHandleClick(const sf::Vector2i pos) const
 {
     Coords coords;
     if (!getSquareCoords(pos, coords))
     {
-        return false;
+        return std::nullopt;
     }
-    return !squares_[coords.first][coords.second].isOccupied();
+    if (squares_[coords.first][coords.second].isOccupied())
+    {
+        return std::nullopt;
+    }
+    return coords;
 }
 
 bool BoardImpl::canTakeTile(const sf::Vector2i pos) const
@@ -174,10 +178,21 @@ void BoardImpl::returnPlacements(std::vector<std::unique_ptr<Tile> >& tiles)
         {
             if (squares_[i][j].isOccupied() && squares_[i][j].isTileTemp())
             {
+                squares_[i][j].setTileAssumedLetter(L"");
                 tiles.push_back(std::move(squares_[i][j].removeTile()));
             }
         }
     }
+}
+
+void BoardImpl::assumeLetter(const Coords& coords, const std::wstring& letter)
+{
+    if (coords.first < 0 || coords.first >= SIZE || coords.second < 0 || coords.second >= SIZE)
+    {
+        return;
+    }
+    auto const& square = squares_[coords.first][coords.second];
+    square.setTileAssumedLetter(letter);
 }
 
 const std::map<Coords, SquareDefinition> BoardImpl::premium_squares_ = {

@@ -17,14 +17,14 @@ class Bag
     static constexpr int HEIGHT{ 50 };
     std::vector<std::unique_ptr<Tile> > tiles_;
 
-    static const std::map<std::wstring, int> initial_quantities_;
-
 public:
     Bag();
     std::unique_ptr<Tile> takeOne();
     void putBack(std::unique_ptr<Tile>& tile);
 
     void draw(sf::RenderWindow& window, const sf::Font& font, sf::Vector2f base_pos) const;
+
+    static const std::map<std::wstring, int> initial_quantities_;
 };
 
 #endif //BAG_H

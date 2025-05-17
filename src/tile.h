@@ -17,6 +17,7 @@ class Tile
 
     bool is_selected_{ false };
     sf::Rect<float> rect_;
+    std::wstring assumed_letter_;
 
 public:
     static constexpr int SIZE{ 50 };
@@ -30,11 +31,13 @@ public:
      * That area is not going to change with every draw, so we should
      * set it somewhere else and get draw method back to const
      */
-    void draw(sf::RenderWindow& window, const sf::Font& font,
-        sf::Vector2f base_pos);
-    void handleClick(sf::Vector2i pos, bool allow_multiple);
+    void draw(sf::RenderWindow& window, const sf::Font& font, sf::Vector2f base_pos, bool show_score);
+    bool handleClick(sf::Vector2i pos, bool allow_multiple);
     [[nodiscard]] bool isSelected() const;
     void setSelected(bool selected);
+    [[nodiscard]] bool isWildcard() const;
+    void setAssumedLetter(const std::wstring& letter);
+    void getLetter(std::wstring& letter) const;
 };
 
 #endif // PIECE_H

@@ -45,6 +45,10 @@ void Game::draw(sf::RenderWindow& window, const sf::Font& font)
         const auto& player = players_[i];
         player->draw(window, font, i == current_player_, { 800.f, static_cast<float>(100 + 140 * i) });
     }
+    if (is_picking_wildcard_)
+    {
+        wildcard_picker_.draw(window, font, { 400.f, 300.f });
+    }
 }
 
 void Game::handleClick(const sf::Vector2i pos, const ClickEvent event)
@@ -99,17 +103,36 @@ void Game::handleClick(const sf::Vector2i pos, const ClickEvent event)
     }
     if (event == CLICK_START)
     {
-        if (!is_exchanging_ && board_.shouldHandleClick(pos))
+        if (is_picking_wildcard_ && wildcard_picker_.handleClick(pos, event))
         {
-            if (board_.canTakeTile(pos))
+            if (const auto letter = wildcard_picker_.handleClick(pos, event); letter.has_value())
             {
-                if (std::unique_ptr<Tile> selected;
-                    (selected = players_[current_player_]->getSelectedTile()) != nullptr)
-                {
-                    board_.placeTemp(pos, selected);
-                }
+                board_.assumeLetter(pending_wildcard_.value(), letter.value());
+                pending_wildcard_.reset();
+                is_picking_wildcard_ = false;
+                return;
             }
-            return;
+        }
+        if (!is_exchanging_)
+        {
+            if (const auto coords = board_.shouldHandleClick(pos); coords.has_value())
+            {
+                if (board_.canTakeTile(pos))
+                {
+                    if (std::unique_ptr<Tile> selected;
+                        (selected = players_[current_player_]->getSelectedTile()) != nullptr)
+                    {
+                        const bool is_wildcard = selected->isWildcard();
+                        board_.placeTemp(pos, selected);
+                        if (is_wildcard)
+                        {
+                            pending_wildcard_ = coords;
+                            is_picking_wildcard_ = true;
+                        }
+                    }
+                }
+                return;
+            }
         }
         players_[current_player_]->handleClick(pos, is_exchanging_);
     }

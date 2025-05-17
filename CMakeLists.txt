@@ -47,6 +47,8 @@ add_executable(letras src/main.cpp
         src/play_rules/play_builder.h
         src/play_rules/calc_score.cpp
         src/play_rules/calc_score.h
+        src/wildcard_picker.cpp
+        src/wildcard_picker.h
 )
 
 target_link_libraries(letras PRIVATE SFML::Graphics)

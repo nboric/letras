@@ -29,7 +29,7 @@ void Player::draw(sf::RenderWindow& window, const sf::Font& font, const bool is_
     {
         for (int i = 0; i < tiles_.size(); i++)
         {
-            tiles_[i]->draw(window, font, base_pos + sf::Vector2f{ static_cast<float>(i * Tile::SIZE), 0 });
+            tiles_[i]->draw(window, font, base_pos + sf::Vector2f{ static_cast<float>(i * Tile::SIZE), 0 }, true);
         }
     }
     score_.draw(window, font, base_pos + sf::Vector2f{ 0, Tile::SIZE + 10 });
