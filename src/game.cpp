@@ -65,6 +65,15 @@ void Game::handleClick(const sf::Vector2i pos, const ClickEvent event)
             }
         }
     }
+    if (cancel_button_.handleClick(pos, event))
+    {
+        if (event == CLICK_END)
+        {
+            std::vector<std::unique_ptr<Tile> > tiles;
+            board_.returnPlacements(tiles);
+            players_[current_player_]->takeAll(tiles);
+        }
+    }
     if (event == CLICK_START)
     {
         if (board_.shouldHandleClick(pos))

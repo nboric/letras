@@ -25,6 +25,7 @@ public:
     void handleClick(sf::Vector2i pos) const;
     std::unique_ptr<Tile> getSelectedTile();
     void addScore(int score);
+    void takeAll(std::vector<std::unique_ptr<Tile> >& tiles);
 };
 
 #endif //PLAYER_H

@@ -41,6 +41,8 @@ public:
     bool getLetter(std::wstring& letter) const;
     void place(std::unique_ptr<Tile>& tile);
     bool getTileBaseScore(int& score) const;
+    std::unique_ptr<Tile> removeTile();
+
     const SquareDefinition definition_;
 };
 

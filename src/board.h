@@ -26,9 +26,10 @@ public:
     virtual bool getTileLetter(const Coords& coords, std::wstring& letter) const = 0;
     virtual bool getTileBaseScore(const Coords& coords, int& score) const = 0;
     [[nodiscard]] virtual std::optional<const SquareDefinition> getSquareDefinition(const Coords& coords) const = 0;
+    virtual void returnPlacements(std::vector<std::unique_ptr<Tile>>& tiles) = 0;
 };
 
-class BoardImpl : public Board
+class BoardImpl final : public Board
 {
     static constexpr int SIZE{ 15 };
     static constexpr int BORDER{ 20 };
@@ -54,6 +55,7 @@ public:
     bool getTileLetter(const Coords& coords, std::wstring& letter) const override;
     bool getTileBaseScore(const Coords& coords, int& score) const override;
     [[nodiscard]] std::optional<const SquareDefinition> getSquareDefinition(const Coords& coords) const override;
+    void returnPlacements(std::vector<std::unique_ptr<Tile>>& tiles) override;
 };
 
 #endif //BOARD_H

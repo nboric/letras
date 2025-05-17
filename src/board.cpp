@@ -166,6 +166,20 @@ std::optional<const SquareDefinition> BoardImpl::getSquareDefinition(const Coord
     return square.definition_;
 }
 
+void BoardImpl::returnPlacements(std::vector<std::unique_ptr<Tile> >& tiles)
+{
+    for (int i = 0; i < SIZE; i++)
+    {
+        for (int j = 0; j < SIZE; j++)
+        {
+            if (squares_[i][j].isOccupied() && squares_[i][j].isTileTemp())
+            {
+                tiles.push_back(std::move(squares_[i][j].removeTile()));
+            }
+        }
+    }
+}
+
 const std::map<Coords, SquareDefinition> BoardImpl::premium_squares_ = {
     { { 0, 0 }, SquareDefinition(SquareDefinition::EFFECT::WORD_MULTIPLIER, 3) },
     { { 0, 3 }, SquareDefinition(SquareDefinition::EFFECT::LETTER_MULTIPLIER, 2) },

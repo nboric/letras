@@ -97,3 +97,8 @@ bool Square::getTileBaseScore(int& score) const
     score = tile_->base_score_;
     return true;
 }
+
+std::unique_ptr<Tile> Square::removeTile()
+{
+    return { std::move(tile_) };
+}

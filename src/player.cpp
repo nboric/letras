@@ -66,3 +66,12 @@ void Player::addScore(const int score)
 {
     score_.addScore(score);
 }
+
+void Player::takeAll(std::vector<std::unique_ptr<Tile> >& tiles)
+{
+    while (!tiles.empty())
+    {
+        tiles_.push_back(std::move(tiles.back()));
+        tiles.pop_back();
+    }
+}
