@@ -1,4 +1,3 @@
 - Better way to implement Restriction::getName
-- Change tiles
-- Wildcard
+- Check available when exchanging tile
 - Separate UI and models, MVC style

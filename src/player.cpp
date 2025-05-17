@@ -86,17 +86,25 @@ void Player::unselectAll() const
 
 void Player::exchange(Bag& bag)
 {
+    std::vector<std::unique_ptr<Tile> > to_exchange;
     for (int i = 0; i < tiles_.size(); i++)
     {
         // TODO: check enough available
         if (tiles_[i]->isSelected())
         {
             std::swap(tiles_[i], tiles_.back());
-            std::unique_ptr<Tile> selected = std::move(tiles_.back());
-            selected->setSelected(false);
+            std::unique_ptr<Tile> tile = std::move(tiles_.back());
+            tile->setSelected(false);
             tiles_.pop_back();
             tiles_.push_back(std::move(bag.takeOne()));
-            bag.putBack(selected);
+            to_exchange.push_back(std::move(tile));
         }
+    }
+    for (int i = 0; i < to_exchange.size(); i++)
+    {
+        std::swap(to_exchange[i], to_exchange.back());
+        std::unique_ptr<Tile> tile = std::move(to_exchange.back());
+        to_exchange.pop_back();
+        bag.putBack(tile);
     }
 }
