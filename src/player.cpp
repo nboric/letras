@@ -93,6 +93,7 @@ void Player::exchange(Bag& bag)
         {
             std::swap(tiles_[i], tiles_.back());
             std::unique_ptr<Tile> selected = std::move(tiles_.back());
+            selected->setSelected(false);
             tiles_.pop_back();
             tiles_.push_back(std::move(bag.takeOne()));
             bag.putBack(selected);
