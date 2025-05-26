@@ -79,26 +79,20 @@ FetchContent_MakeAvailable(googletest)
 
 add_executable(letras_tests
         src/dict.cpp
-        src/dict.h
         src/square.cpp
-        src/square.h
-        src/tile.h
         src/tile.cpp
-        src/board.h
         src/board.cpp
+        src/player.cpp
+        src/bag.cpp
+        src/score.cpp
         src/play_rules/play.cpp
-        src/play_rules/play.h
         src/play_rules/contiguous.cpp
-        src/play_rules/contiguous.h
         src/play_rules/first_move.cpp
-        src/play_rules/first_move.h
         src/play_rules/connected.cpp
-        src/play_rules/connected.h
         src/play_rules/dict_check.cpp
-        src/play_rules/dict_check.h
         test/dict_tests.cpp
         test/play_rules_tests.cpp
-        test/mocks.h
+        test/player_tests.cpp
 )
 
 target_link_libraries(letras_tests PRIVATE SFML::Graphics gmock gtest gtest_main)

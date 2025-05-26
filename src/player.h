@@ -18,6 +18,8 @@ class Player
     std::vector<std::unique_ptr<Tile> > tiles_;
     Score score_;
 
+    friend class PlayerTest;
+
 public:
     Player();
     void replenish(Bag& bag);
