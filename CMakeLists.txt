@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.31)
+cmake_minimum_required(VERSION 3.28.3)
 project(letras)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -58,6 +58,10 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
 endif()
 if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     target_compile_definitions(letras PUBLIC FONT_PATH="c:/windows/Fonts/verdana.ttf")
+endif()
+# TODO: pick a standard font
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    target_compile_definitions(letras PUBLIC FONT_PATH="/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf")
 endif()
 
 FetchContent_Declare(
