@@ -19,7 +19,7 @@ class WildcardPicker
 public:
     WildcardPicker();
     void draw(sf::RenderWindow& window, const sf::Font& font, sf::Vector2f base_pos) const;
-    std::optional<std::wstring> handleClick(sf::Vector2i pos, ClickEvent event) const;
+    [[nodiscard]] std::optional<std::wstring> handleClick(sf::Vector2i pos, ClickEvent event) const;
 };
 
 #endif //WILDCARD_PICKER_H

@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "play_rule.h"
+#include "../dict.h"
 
 class PlayBuilder
 {

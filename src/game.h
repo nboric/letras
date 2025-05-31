@@ -11,7 +11,6 @@
 #include "player.h"
 #include "wildcard_picker.h"
 #include "play_rules/play_builder.h"
-#include "play_rules/play_rule.h"
 #include "SFML/Graphics/Font.hpp"
 
 class Game

@@ -5,6 +5,7 @@
 #ifndef DICT_CHECK_H
 #define DICT_CHECK_H
 #include "play_rule.h"
+#include "../dict.h"
 
 class DictCheck final : public PlayRule
 {

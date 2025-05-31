@@ -5,7 +5,6 @@
 #ifndef RESTRICTION_H
 #define RESTRICTION_H
 
-#include "../dict.h"
 #include "../board.h"
 #include "play.h"
 
