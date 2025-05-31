@@ -64,6 +64,10 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     target_compile_definitions(letras PUBLIC FONT_PATH="/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf")
 endif()
 
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/res
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
+)
+
 FetchContent_Declare(
         googletest
         # Specify the commit you depend on and update it regularly.
