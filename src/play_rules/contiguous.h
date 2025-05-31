@@ -8,11 +8,11 @@
 
 class Contiguous final : public PlayRule
 {
-    static constexpr std::string NAME = "Contiguous";
+    static constexpr std::string_view NAME = "Contiguous";
 
 public:
     bool isValid(Play& play, const Board& board, std::string& reason) const override;
-    [[nodiscard]] const std::string& getName() const override;
+    [[nodiscard]] const std::string_view& getName() const override;
 };
 
 #endif //CONTIGUOUS_H

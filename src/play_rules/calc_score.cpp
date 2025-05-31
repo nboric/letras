@@ -6,7 +6,7 @@
 
 #include "calc_score.h"
 
-const std::string& CalcScore::getName() const
+const std::string_view& CalcScore::getName() const
 {
     return NAME;
 }

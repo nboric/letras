@@ -8,11 +8,11 @@
 
 class CalcScore final : public PlayRule
 {
-    static constexpr std::string NAME = "CalcScore";
+    static constexpr std::string_view NAME = "CalcScore";
 
 public:
     [[nodiscard]] bool isValid(Play& play, const Board& board, std::string& reason) const override;
-    [[nodiscard]] const std::string& getName() const override;
+    [[nodiscard]] const std::string_view& getName() const override;
 };
 
 #endif //CALC_SCORE_H

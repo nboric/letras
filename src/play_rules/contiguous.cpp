@@ -6,7 +6,7 @@
 
 #include <set>
 
-const std::string& Contiguous::getName() const
+const std::string_view& Contiguous::getName() const
 {
     return NAME;
 }

@@ -10,7 +10,7 @@
 
 #include "../dict.h"
 
-const std::string& DictCheck::getName() const
+const std::string_view& DictCheck::getName() const
 {
     return NAME;
 }

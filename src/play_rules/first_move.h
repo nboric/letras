@@ -8,11 +8,11 @@
 
 class FirstMove final : public PlayRule
 {
-    static constexpr std::string NAME = "FirstMove";
+    static constexpr std::string_view NAME = "FirstMove";
 
 public:
     bool isValid(Play& play, const Board& board, std::string& reason) const override;
-    [[nodiscard]] const std::string& getName() const override;
+    [[nodiscard]] const std::string_view& getName() const override;
 };
 
 #endif //FIRST_MOVE_H

@@ -18,7 +18,7 @@ public:
      * player could've placed tiles in any invalid positions, so sorting doesn't yet make much sense
      */
     [[nodiscard]] virtual bool isValid(Play& play, const Board& board, std::string& reason) const = 0;
-    [[nodiscard]] virtual const std::string& getName() const = 0;
+    [[nodiscard]] virtual const std::string_view& getName() const = 0;
 
     static Coords buildCoords(Play& play, int moving_coord_value)
     {

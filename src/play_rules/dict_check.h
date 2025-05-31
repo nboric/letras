@@ -8,14 +8,14 @@
 
 class DictCheck final : public PlayRule
 {
-    static constexpr std::string NAME = "DictCheck";
+    static constexpr std::string_view NAME = "DictCheck";
     const Dict& dict_;
 
 public:
     explicit DictCheck(const Dict& dict);
 
     bool isValid(Play& play, const Board& board, std::string& reason) const override;
-    [[nodiscard]] const std::string& getName() const override;
+    [[nodiscard]] const std::string_view& getName() const override;
 };
 
 #endif //DICT_CHECK_H

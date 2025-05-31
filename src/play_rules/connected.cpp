@@ -4,7 +4,7 @@
 
 #include "connected.h"
 
-const std::string& Connected::getName() const
+const std::string_view& Connected::getName() const
 {
     return NAME;
 }

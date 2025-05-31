@@ -3,7 +3,7 @@
 //
 
 #include "first_move.h"
-const std::string& FirstMove::getName() const
+const std::string_view& FirstMove::getName() const
 {
     return NAME;
 }
