@@ -22,7 +22,7 @@ protected:
         return Player::MAX_TILES;
     }
 
-    int getScore()
+    [[nodiscard]] int getScore() const
     {
         return player_.score_.score_;
     }
@@ -33,6 +33,7 @@ protected:
     }
 
     Player player_;
+    // TODO: mock bag
     Bag bag_;
 };
 

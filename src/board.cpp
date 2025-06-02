@@ -43,13 +43,19 @@ void BoardImpl::draw(sf::RenderWindow& window, const sf::Font& font) const
 
 bool BoardImpl::getSquareCoords(const sf::Vector2i pos, Coords& coords)
 {
-    const int i = (pos.y - BORDER) / Tile::SIZE;
-    const int j = (pos.x - BORDER) / Tile::SIZE;
-
-    if (i >= 0 && i < SIZE && j >= 0 && j < SIZE)
+    if (pos.x >= BORDER && pos.x < BORDER + SIZE * Tile::SIZE)
     {
-        coords = { i, j };
-        return true;
+        if (pos.y >= BORDER && pos.y < BORDER + SIZE * Tile::SIZE)
+        {
+            const int i = (pos.y - BORDER) / Tile::SIZE;
+            const int j = (pos.x - BORDER) / Tile::SIZE;
+
+            if (i >= 0 && i < SIZE && j >= 0 && j < SIZE)
+            {
+                coords = { i, j };
+                return true;
+            }
+        }
     }
     return false;
 }
@@ -122,9 +128,19 @@ void BoardImpl::acceptPlacements()
     }
 }
 
-bool BoardImpl::isSquareFree(const Coords& coords) const
+bool BoardImpl::areCoordsValid(const Coords& coords)
 {
     if (coords.first < 0 || coords.first >= SIZE || coords.second < 0 || coords.second >= SIZE)
+    {
+        return false;
+    }
+    return true;
+}
+
+
+bool BoardImpl::isSquareFree(const Coords& coords) const
+{
+    if (!areCoordsValid(coords))
     {
         return false;
     }
@@ -134,21 +150,17 @@ bool BoardImpl::isSquareFree(const Coords& coords) const
 
 bool BoardImpl::getTileLetter(const Coords& coords, std::wstring& letter) const
 {
-    if (coords.first < 0 || coords.first >= SIZE || coords.second < 0 || coords.second >= SIZE)
+    if (!areCoordsValid(coords) || isSquareFree(coords))
     {
         return false;
     }
     auto const& square = squares_[coords.first][coords.second];
-    if (!square.isOccupied() || square.isTileTemp())
-    {
-        return false;
-    }
     return square.getLetter(letter);
 }
 
 bool BoardImpl::getTileBaseScore(const Coords& coords, int& score) const
 {
-    if (coords.first < 0 || coords.first >= SIZE || coords.second < 0 || coords.second >= SIZE)
+    if (!areCoordsValid(coords))
     {
         return false;
     }
@@ -158,7 +170,7 @@ bool BoardImpl::getTileBaseScore(const Coords& coords, int& score) const
 
 std::optional<const SquareDefinition> BoardImpl::getSquareDefinition(const Coords& coords) const
 {
-    if (coords.first < 0 || coords.first >= SIZE || coords.second < 0 || coords.second >= SIZE)
+    if (!areCoordsValid(coords))
     {
         // chose signature to return std::optional to handle error case
         // Can't just pass a SquareDefinition by reference as output, as it's const in Square
@@ -187,7 +199,7 @@ void BoardImpl::returnPlacements(std::vector<std::unique_ptr<Tile> >& tiles)
 
 void BoardImpl::assumeLetter(const Coords& coords, const std::wstring& letter)
 {
-    if (coords.first < 0 || coords.first >= SIZE || coords.second < 0 || coords.second >= SIZE)
+    if (!areCoordsValid(coords))
     {
         return;
     }

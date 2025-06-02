@@ -93,6 +93,7 @@ add_executable(letras_tests
         test/dict_tests.cpp
         test/play_rules_tests.cpp
         test/player_tests.cpp
+        test/board_tests.cpp
 )
 
 target_link_libraries(letras_tests PRIVATE SFML::Graphics gmock gtest gtest_main)

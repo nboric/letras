@@ -41,6 +41,10 @@ class BoardImpl final : public Board
 
     static bool getSquareCoords(sf::Vector2i pos, Coords& coords);
 
+    friend class BoardTest;
+
+    static inline bool areCoordsValid(const Coords& coords);
+
 public:
     BoardImpl();
 
