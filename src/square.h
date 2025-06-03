@@ -25,6 +25,8 @@ public:
     } effect_;
 
     const int effect_value_;
+
+    bool operator==(const SquareDefinition& other) const = default;
 };
 
 class Square
