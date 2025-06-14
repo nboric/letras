@@ -17,7 +17,6 @@ add_executable(letras src/main.cpp
         src/board.cpp
         src/tile.h
         src/tile.cpp
-        src/player.cpp
         src/player.h
         src/square.cpp
         src/square.h
@@ -49,6 +48,12 @@ add_executable(letras src/main.cpp
         src/play_rules/calc_score.h
         src/wildcard_picker.cpp
         src/wildcard_picker.h
+        src/action.h
+        src/player.cpp
+        src/human_player.cpp
+        src/human_player.h
+        src/cpu_player.cpp
+        src/cpu_player.h
 )
 
 target_link_libraries(letras PRIVATE SFML::Graphics)
@@ -83,6 +88,7 @@ add_executable(letras_tests
         src/tile.cpp
         src/board.cpp
         src/player.cpp
+        src/human_player.cpp
         src/bag.cpp
         src/score.cpp
         src/play_rules/play.cpp

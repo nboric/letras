@@ -6,6 +6,7 @@
 
 #include <iostream>
 
+#include "human_player.h"
 #include "play_rules/play.h"
 
 Game::Game(const int n_players)
@@ -21,7 +22,7 @@ Game::Game(const int n_players)
     }
     for (int i = 0; i < n_players; i++)
     {
-        players_.push_back(std::make_unique<Player>());
+        players_.push_back(std::make_unique<HumanPlayer>());
     }
 }
 
@@ -53,92 +54,104 @@ void Game::draw(sf::RenderWindow& window, const sf::Font& font)
 
 void Game::handleClick(const sf::Vector2i pos, const ClickEvent event)
 {
-    if (!is_exchanging_ && play_button_.handleClick(pos, event))
+    if (players_[current_player_]->isInteractive())
     {
-        if (event == CLICK_END)
+        if (!is_exchanging_ && play_button_.handleClick(pos, event))
         {
-            Play play(board_);
-            std::string rule, reason;
-            if (!play_builder_.build(play, board_, rule, reason))
+            if (event == CLICK_END)
             {
-                std::cout << "Failed rule " << rule << ", reason: " << reason << std::endl;
-            }
-            else
-            {
-                board_.acceptPlacements();
-                players_[current_player_]->addScore(play.score);
-                players_[current_player_]->replenish(bag_);
-                nextPlayer();
-            }
-        }
-    }
-    if (exchange_start_button_.handleClick(pos, event))
-    {
-        if (event == CLICK_END)
-        {
-            if (is_exchanging_)
-            {
-                players_[current_player_]->exchange(bag_);
-                nextPlayer();
-            }
-            is_exchanging_ = !is_exchanging_;
-        }
-    }
-    if (cancel_button_.handleClick(pos, event))
-    {
-        if (event == CLICK_END)
-        {
-            if (is_exchanging_)
-            {
-                is_exchanging_ = false;
-                players_[current_player_]->unselectAll();
-            }
-            else
-            {
-                std::vector<std::unique_ptr<Tile> > tiles;
-                board_.returnPlacements(tiles);
-                players_[current_player_]->takeAll(tiles);
-            }
-        }
-    }
-    if (event == CLICK_START)
-    {
-        if (is_picking_wildcard_ && wildcard_picker_.handleClick(pos, event))
-        {
-            if (const auto letter = wildcard_picker_.handleClick(pos, event); letter.has_value())
-            {
-                board_.assumeLetter(pending_wildcard_.value(), letter.value());
-                pending_wildcard_.reset();
-                is_picking_wildcard_ = false;
-                return;
-            }
-        }
-        if (!is_exchanging_)
-        {
-            if (const auto coords = board_.shouldHandleClick(pos); coords.has_value())
-            {
-                if (board_.canTakeTile(pos))
+                Play play(board_);
+                std::string rule, reason;
+                if (!play_builder_.build(play, board_, rule, reason))
                 {
-                    if (std::unique_ptr<Tile> selected;
-                        (selected = players_[current_player_]->getSelectedTile()) != nullptr)
+                    std::cout << "Failed rule " << rule << ", reason: " << reason << std::endl;
+                }
+                else
+                {
+                    board_.acceptPlacements();
+                    players_[current_player_]->addScore(play.score);
+                    players_[current_player_]->replenish(bag_);
+                    nextPlayer();
+                }
+            }
+        }
+        if (exchange_start_button_.handleClick(pos, event))
+        {
+            if (event == CLICK_END)
+            {
+                if (is_exchanging_)
+                {
+                    players_[current_player_]->exchange(bag_);
+                    nextPlayer();
+                }
+                is_exchanging_ = !is_exchanging_;
+            }
+        }
+        if (cancel_button_.handleClick(pos, event))
+        {
+            if (event == CLICK_END)
+            {
+                if (is_exchanging_)
+                {
+                    is_exchanging_ = false;
+                    players_[current_player_]->unselectAll();
+                }
+                else
+                {
+                    std::vector<std::unique_ptr<Tile> > tiles;
+                    board_.returnPlacements(tiles);
+                    players_[current_player_]->takeAll(tiles);
+                }
+            }
+        }
+        if (event == CLICK_START)
+        {
+            if (is_picking_wildcard_ && wildcard_picker_.handleClick(pos, event))
+            {
+                if (const auto letter = wildcard_picker_.handleClick(pos, event); letter.has_value())
+                {
+                    board_.assumeLetter(pending_wildcard_.value(), letter.value());
+                    pending_wildcard_.reset();
+                    is_picking_wildcard_ = false;
+                    return;
+                }
+            }
+            if (!is_exchanging_)
+            {
+                if (const auto coords = board_.shouldHandleClick(pos); coords.has_value())
+                {
+                    if (board_.canTakeTile(pos))
                     {
-                        const bool is_wildcard = selected->isWildcard();
-                        board_.placeTemp(pos, selected);
-                        if (is_wildcard)
+                        if (std::unique_ptr<Tile> selected;
+                            (selected = players_[current_player_]->getSelectedTile()) != nullptr)
                         {
-                            pending_wildcard_ = coords;
-                            is_picking_wildcard_ = true;
+                            const bool is_wildcard = selected->isWildcard();
+                            board_.placeTemp(pos, selected);
+                            if (is_wildcard)
+                            {
+                                pending_wildcard_ = coords;
+                                is_picking_wildcard_ = true;
+                            }
                         }
                     }
+                    return;
                 }
-                return;
             }
+            players_[current_player_]->handleClick(pos, is_exchanging_);
         }
-        players_[current_player_]->handleClick(pos, is_exchanging_);
+    }
+    else
+    {
+        switch (players_[current_player_]->getAction(board_))
+        {
+        default: ;
+        }
     }
 }
 
 void Game::nextPlayer()
 {
     current_player_ = (current_player_ + 1) % players_.size();
+    is_exchanging_ = is_picking_wildcard_ = false;
+    pending_wildcard_.reset();
 }

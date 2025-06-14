@@ -2,7 +2,7 @@
 // Created by Neven Boric on 5/25/25.
 //
 
-#include "../src/player.h"
+#include "../src/human_player.h"
 #include "../src/bag.h"
 #include "gtest/gtest.h"
 
@@ -32,7 +32,7 @@ protected:
         player_.score_.score_ = score;
     }
 
-    Player player_;
+    HumanPlayer player_;
     // TODO: mock bag
     Bag bag_;
 };
