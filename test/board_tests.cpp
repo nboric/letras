@@ -55,7 +55,7 @@ TEST_F(BoardTest, PlaceTempValid)
 {
     auto& squares = getSquares();
     auto tile = bag_.takeOne();
-    board_.placeTemp({ getBorder() + 1, getBorder() + 1 }, tile);
+    board_.placeTemp(sf::Vector2i{ getBorder() + 1, getBorder() + 1 }, tile);
     EXPECT_TRUE(squares[0][0].isOccupied());
     EXPECT_TRUE(squares[0][0].isTileTemp());
 }
@@ -64,7 +64,7 @@ TEST_F(BoardTest, PlaceTempInvalid)
 {
     auto& squares = getSquares();
     auto tile = bag_.takeOne();
-    board_.placeTemp({ getBorder() + -1, getBorder() + 1 }, tile);
+    board_.placeTemp(sf::Vector2i{ getBorder() + -1, getBorder() + 1 }, tile);
     const auto occupied = std::ranges::find_if(squares, [](auto& square_row)
     {
         return std::find_if(square_row.begin(), square_row.end(), [](auto& square)

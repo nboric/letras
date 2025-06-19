@@ -10,7 +10,7 @@
 #include "dict_check.h"
 #include "first_move.h"
 
-PlayBuilder::PlayBuilder(const Dict& dict)
+PlayBuilder::PlayBuilder(const std::shared_ptr<const Dict>& dict)
 {
     rules_.push_back(std::make_unique<Contiguous>());
     rules_.push_back(std::make_unique<FirstMove>());
@@ -19,7 +19,7 @@ PlayBuilder::PlayBuilder(const Dict& dict)
     rules_.push_back(std::make_unique<CalcScore>());
 }
 
-bool PlayBuilder::build(Play& play, const Board& board, std::string& rule_name, std::string& reason) const
+bool PlayBuilder::build(Play& play, const Board& board, std::optional<std::string>& rule_name, std::optional<std::string>& reason) const
 {
     for (const auto& rule : rules_)
     {

@@ -11,7 +11,7 @@ class Connected final : public PlayRule
     static constexpr std::string_view NAME = "Connected";
 
 public:
-    [[nodiscard]] bool isValid(Play& play, const Board& board, std::string& reason) const override;
+    [[nodiscard]] bool isValid(Play& play, const Board& board, std::optional<std::string>& reason) const override;
     [[nodiscard]] const std::string_view& getName() const override;
 };
 

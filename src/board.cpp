@@ -91,16 +91,25 @@ void BoardImpl::placeTemp(const sf::Vector2i pos, std::unique_ptr<Tile>& tile)
     {
         return;
     }
-    squares_[coords.first][coords.second].place(tile);
+    placeTemp(coords, tile);
 }
 
-void BoardImpl::getPlacements(std::vector<Placement>& placements) const
+void BoardImpl::placeTemp(const Coords coords, std::unique_ptr<Tile>& tile)
+{
+    if (areCoordsValid(coords))
+    {
+        squares_[coords.first][coords.second].place(tile);
+    }
+}
+
+
+void BoardImpl::getOccupied(std::vector<Placement>& placements, const bool temp) const
 {
     for (int i = 0; i < SIZE; i++)
     {
         for (int j = 0; j < SIZE; j++)
         {
-            if (squares_[i][j].isOccupied() && squares_[i][j].isTileTemp())
+            if (squares_[i][j].isOccupied() && squares_[i][j].isTileTemp() == temp)
             {
                 std::wstring letter;
                 squares_[i][j].getLetter(letter);
@@ -109,6 +118,17 @@ void BoardImpl::getPlacements(std::vector<Placement>& placements) const
         }
     }
 }
+
+void BoardImpl::getPlacements(std::vector<Placement>& placements) const
+{
+    getOccupied(placements, true);
+}
+
+void BoardImpl::getOccupied(std::vector<Placement>& placements) const
+{
+    getOccupied(placements, false);
+}
+
 
 void BoardImpl::acceptPlacements()
 {

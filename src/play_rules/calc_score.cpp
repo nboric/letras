@@ -11,7 +11,7 @@ const std::string_view& CalcScore::getName() const
     return NAME;
 }
 
-bool CalcScore::isValid(Play& play, const Board& board, std::string& reason) const
+bool CalcScore::isValid(Play& play, const Board& board, std::optional<std::string>& reason) const
 {
     int score = 0;
     int word_multiplier = 1;

@@ -11,7 +11,7 @@ const std::string_view& Contiguous::getName() const
     return NAME;
 }
 
-bool Contiguous::isValid(Play& play, const Board& board, std::string& reason) const
+bool Contiguous::isValid(Play& play, const Board& board, std::optional<std::string>& reason) const
 {
     if (play.moving_coord_values.size() == 1)
     {
@@ -20,7 +20,10 @@ bool Contiguous::isValid(Play& play, const Board& board, std::string& reason) co
     int prev = -1;
     if (play.all_i.size() != 1 && play.all_j.size() != 1)
     {
-        reason = "Not strictly vertical or horizontal";
+        if (reason)
+        {
+            *reason = "Not strictly vertical or horizontal";
+        }
         return false;
     }
     for (auto const& coord : play.moving_coord_values)

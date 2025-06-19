@@ -13,7 +13,7 @@ using Coords = std::pair<int, int>;
 class Placement
 {
 public:
-    Coords coord_;
+    Coords coords_;
     std::wstring letter_;
 };
 
@@ -21,6 +21,20 @@ enum ClickEvent
 {
     CLICK_START,
     CLICK_END
+};
+
+enum Action
+{
+    NONE,
+    PLAY,
+    EXCHANGE,
+    PASS,
+};
+
+enum Direction
+{
+    VERTICAL,
+    HORIZONTAL
 };
 
 #endif //BASIC_TYPES_H

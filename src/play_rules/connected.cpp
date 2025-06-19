@@ -9,7 +9,7 @@ const std::string_view& Connected::getName() const
     return NAME;
 }
 
-bool Connected::isValid(Play& play, const Board& board, std::string& reason) const
+bool Connected::isValid(Play& play, const Board& board, std::optional<std::string>& reason) const
 {
     if (play.is_first)
     {
@@ -29,9 +29,9 @@ bool Connected::isValid(Play& play, const Board& board, std::string& reason) con
             }
         }
     }
-    if (!is_connected)
+    if (!is_connected && reason)
     {
-        reason = "Play doesn't use existing tiles";
+        *reason = "Play doesn't use existing tiles";
     }
     return is_connected;
 }

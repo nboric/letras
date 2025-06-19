@@ -14,8 +14,8 @@ class PlayBuilder
     std::vector<std::unique_ptr<PlayRule> > rules_;
 
 public:
-    explicit PlayBuilder(const Dict& dict);
-    bool build(Play& play, const Board& board, std::string& rule_name, std::string& reason) const;
+    explicit PlayBuilder(const std::shared_ptr<const Dict>& dict);
+    bool build(Play& play, const Board& board, std::optional<std::string>& rule_name, std::optional<std::string>& reason) const;
 };
 
 #endif //PLAY_BUILDER_H

@@ -48,12 +48,13 @@ add_executable(letras src/main.cpp
         src/play_rules/calc_score.h
         src/wildcard_picker.cpp
         src/wildcard_picker.h
-        src/action.h
         src/player.cpp
         src/human_player.cpp
         src/human_player.h
-        src/cpu_player.cpp
-        src/cpu_player.h
+        src/cpu/cpu_player.cpp
+        src/cpu/cpu_player.h
+        src/cpu/algorithm.cpp
+        src/cpu/algorithm.h
 )
 
 target_link_libraries(letras PRIVATE SFML::Graphics)
@@ -96,10 +97,14 @@ add_executable(letras_tests
         src/play_rules/first_move.cpp
         src/play_rules/connected.cpp
         src/play_rules/dict_check.cpp
+        src/play_rules/calc_score.cpp
+        src/play_rules/play_builder.cpp
+        src/cpu/algorithm.cpp
         test/dict_tests.cpp
         test/play_rules_tests.cpp
         test/player_tests.cpp
         test/board_tests.cpp
+        test/algorithm_tests.cpp
 )
 
 target_link_libraries(letras_tests PRIVATE SFML::Graphics gmock gtest gtest_main)

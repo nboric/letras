@@ -18,11 +18,7 @@ class Play
 public:
     explicit Play(const Board& board);
 
-    enum
-    {
-        VERTICAL,
-        HORIZONTAL
-    } direction{ HORIZONTAL };
+    Direction direction{ HORIZONTAL };
 
     std::set<int> all_i;
     std::set<int> all_j;

@@ -6,7 +6,7 @@
 #define PLAYER_H
 #include <vector>
 
-#include "action.h"
+#include "basic_types.h"
 #include "board.h"
 #include "bag.h"
 #include "score.h"
@@ -31,7 +31,7 @@ public:
     virtual void takeAll(std::vector<std::unique_ptr<Tile> >& tiles);
     virtual void unselectAll() const = 0;
     virtual void exchange(Bag& bag) = 0;
-    [[nodiscard]] Action getAction(const Board& board) const { return NONE; }
+    [[nodiscard]] virtual Action getAction(const Board& board) const { return NONE; }
     [[nodiscard]] virtual bool isInteractive() const = 0;
 };
 

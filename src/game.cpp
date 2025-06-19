@@ -13,7 +13,7 @@ Game::Game(const int n_players)
     : play_button_("JUGAR"),
       cancel_button_("CANCELAR"),
       exchange_start_button_("CAMBIAR"),
-      dict_("res/dict/fise-2.txt"),
+      dict_(std::make_shared<Dict>("res/dict/fise-2.txt")),
       play_builder_(dict_)
 {
     if (n_players < MIN_PLAYERS || n_players > MAX_PLAYERS)
@@ -61,10 +61,11 @@ void Game::handleClick(const sf::Vector2i pos, const ClickEvent event)
             if (event == CLICK_END)
             {
                 Play play(board_);
-                std::string rule, reason;
+                std::optional<std::string> rule{""};
+                std::optional<std::string> reason{""};
                 if (!play_builder_.build(play, board_, rule, reason))
                 {
-                    std::cout << "Failed rule " << rule << ", reason: " << reason << std::endl;
+                    std::cout << "Failed rule " << *rule << ", reason: " << *reason << std::endl;
                 }
                 else
                 {

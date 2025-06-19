@@ -20,7 +20,9 @@ public:
     [[nodiscard]] virtual std::optional<Coords> shouldHandleClick(sf::Vector2i pos) const = 0;
     [[nodiscard]] virtual bool canTakeTile(sf::Vector2i pos) const = 0;
     virtual void placeTemp(sf::Vector2i pos, std::unique_ptr<Tile>& tile) = 0;
+    virtual void placeTemp(Coords coords, std::unique_ptr<Tile>& tile) = 0;
     virtual void getPlacements(std::vector<Placement>& placements) const = 0;
+    virtual void getOccupied(std::vector<Placement>& vector) const = 0;
     virtual void acceptPlacements() = 0;
     [[nodiscard]] virtual bool isSquareFree(const Coords& coords) const = 0;
     virtual bool getTileLetter(const Coords& coords, std::wstring& letter) const = 0;
@@ -44,6 +46,7 @@ class BoardImpl final : public Board
     friend class BoardTest;
 
     static inline bool areCoordsValid(const Coords& coords);
+    void getOccupied(std::vector<Placement>& placements, bool temp) const;
 
 public:
     BoardImpl();
@@ -54,7 +57,9 @@ public:
     [[nodiscard]] std::optional<Coords> shouldHandleClick(sf::Vector2i pos) const override;
     [[nodiscard]] bool canTakeTile(sf::Vector2i pos) const override;
     void placeTemp(sf::Vector2i pos, std::unique_ptr<Tile>& tile) override;
+    void placeTemp(Coords coords, std::unique_ptr<Tile>& tile) override;
     void getPlacements(std::vector<Placement>& placements) const override;
+    void getOccupied(std::vector<Placement>& placements) const override;
     void acceptPlacements() override;
     [[nodiscard]] bool isSquareFree(const Coords& coords) const override;
     bool getTileLetter(const Coords& coords, std::wstring& letter) const override;

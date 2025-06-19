@@ -10,12 +10,12 @@
 class DictCheck final : public PlayRule
 {
     static constexpr std::string_view NAME = "DictCheck";
-    const Dict& dict_;
+    std::shared_ptr<const Dict> dict_;
 
 public:
-    explicit DictCheck(const Dict& dict);
+    explicit DictCheck(std::shared_ptr<const Dict> dict);
 
-    bool isValid(Play& play, const Board& board, std::string& reason) const override;
+    bool isValid(Play& play, const Board& board, std::optional<std::string>& reason) const override;
     [[nodiscard]] const std::string_view& getName() const override;
 };
 

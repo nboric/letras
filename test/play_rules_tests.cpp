@@ -15,7 +15,7 @@ class PlayRulesTest : public testing::Test
 {
 protected:
     BoardMock board_;
-    std::string reason_;
+    std::optional<std::string> reason_{""};
 
     PlayRulesTest()
     {
@@ -35,7 +35,7 @@ TEST_F(PlayRulesTest, BasePlayHorizontalBuild)
         });
     Play play(board_);
 
-    EXPECT_EQ(play.direction, Play::HORIZONTAL);
+    EXPECT_EQ(play.direction, HORIZONTAL);
     EXPECT_EQ(play.fixed_coord_value, 0);
     EXPECT_TRUE(play.moving_coord_values.contains(0));
     EXPECT_TRUE(play.moving_coord_values.contains(1));
@@ -62,7 +62,7 @@ TEST_F(PlayRulesTest, BasePlayVerticalBuild)
         });
     Play play(board_);
 
-    EXPECT_EQ(play.direction, Play::VERTICAL);
+    EXPECT_EQ(play.direction, VERTICAL);
     EXPECT_EQ(play.fixed_coord_value, 0);
     EXPECT_TRUE(play.moving_coord_values.contains(0));
     EXPECT_TRUE(play.moving_coord_values.contains(1));
@@ -429,8 +429,7 @@ TEST_F(PlayRulesTest, DictCheckSimpleValid)
 
     // I could (should?) mock Dict, but I actually prefer to check that the word is passed
     // in a format that matches how Dict reads the file
-    Dict dict("res/dict/fise-2.txt");
-    DictCheck dict_check(dict);
+    DictCheck dict_check(std::make_shared<Dict>("res/dict/fise-2.txt"));
 
     EXPECT_TRUE(dict_check.isValid(play, board_, reason_));
 }
@@ -453,8 +452,7 @@ TEST_F(PlayRulesTest, DictCheckSimpleConnectedValid)
 
     // I could (should?) mock Dict, but I actually prefer to check that the word is passed
     // in a format that matches how Dict reads the file
-    Dict dict("res/dict/fise-2.txt");
-    DictCheck dict_check(dict);
+    DictCheck dict_check(std::make_shared<Dict>("res/dict/fise-2.txt"));
 
     EXPECT_TRUE(dict_check.isValid(play, board_, reason_));
 }
@@ -476,8 +474,7 @@ TEST_F(PlayRulesTest, DictCheckWideValid)
 
     // I could (should?) mock Dict, but I actually prefer to check that the word is passed
     // in a format that matches how Dict reads the file
-    Dict dict("res/dict/fise-2.txt");
-    DictCheck dict_check(dict);
+    DictCheck dict_check(std::make_shared<Dict>("res/dict/fise-2.txt"));
 
     EXPECT_TRUE(dict_check.isValid(play, board_, reason_));
 }

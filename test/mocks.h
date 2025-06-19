@@ -15,7 +15,9 @@ public:
     MOCK_METHOD(std::optional<Coords>, shouldHandleClick, (sf::Vector2i pos), (const, override));
     MOCK_METHOD(bool, canTakeTile, (sf::Vector2i pos), (const, override));
     MOCK_METHOD(void, placeTemp, (sf::Vector2i pos, std::unique_ptr<Tile>& tile), (override));
+    MOCK_METHOD(void, placeTemp, (Coords coords, std::unique_ptr<Tile>& tile), (override));
     MOCK_METHOD(void, getPlacements, (std::vector<Placement>& placements), (const, override));
+    MOCK_METHOD(void, getOccupied, (std::vector<Placement>& placements), (const, override));
     MOCK_METHOD(void, acceptPlacements, (), (override));
     MOCK_METHOD(bool, isSquareFree, (const Coords& coords), (const, override));
     MOCK_METHOD(bool, getTileLetter, (const Coords& coords, std::wstring& letter), (const, override));
