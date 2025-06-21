@@ -19,7 +19,7 @@ protected:
 
     static int getMaxTiles()
     {
-        return Player::MAX_TILES;
+        return HumanPlayer::MAX_TILES;
     }
 
     [[nodiscard]] int getScore() const
