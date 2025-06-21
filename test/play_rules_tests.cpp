@@ -15,7 +15,7 @@ class PlayRulesTest : public testing::Test
 {
 protected:
     BoardMock board_;
-    std::optional<std::string> reason_{""};
+    std::optional<std::string> reason_{ "" };
 
     PlayRulesTest()
     {
@@ -28,10 +28,10 @@ TEST_F(PlayRulesTest, BasePlayHorizontalBuild)
         .Times(1)
         .WillOnce([](std::vector<Placement>& placements)
         {
-            placements.push_back(Placement({ 0, 0 }, L"H"));
-            placements.push_back(Placement({ 0, 1 }, L"O"));
-            placements.push_back(Placement({ 0, 2 }, L"L"));
-            placements.push_back(Placement({ 0, 3 }, L"A"));
+            placements.push_back(Placement({ 0, 0 }, "h"));
+            placements.push_back(Placement({ 0, 1 }, "o"));
+            placements.push_back(Placement({ 0, 2 }, "l"));
+            placements.push_back(Placement({ 0, 3 }, "a"));
         });
     Play play(board_);
 
@@ -46,7 +46,7 @@ TEST_F(PlayRulesTest, BasePlayHorizontalBuild)
     EXPECT_EQ(play.all_j, play.moving_coord_values);
     EXPECT_EQ(play.placement_map, play.complete_map);
     EXPECT_TRUE(play.placement_map.contains({0, 1}));
-    EXPECT_EQ(play.placement_map.at({0, 1}), L"O");
+    EXPECT_EQ(play.placement_map.at({0, 1}), "o");
 }
 
 TEST_F(PlayRulesTest, BasePlayVerticalBuild)
@@ -55,10 +55,10 @@ TEST_F(PlayRulesTest, BasePlayVerticalBuild)
         .Times(1)
         .WillOnce([](std::vector<Placement>& placements)
         {
-            placements.push_back(Placement({ 0, 0 }, L"H"));
-            placements.push_back(Placement({ 1, 0 }, L"O"));
-            placements.push_back(Placement({ 2, 0 }, L"L"));
-            placements.push_back(Placement({ 3, 0 }, L"A"));
+            placements.push_back(Placement({ 0, 0 }, "h"));
+            placements.push_back(Placement({ 1, 0 }, "o"));
+            placements.push_back(Placement({ 2, 0 }, "l"));
+            placements.push_back(Placement({ 3, 0 }, "a"));
         });
     Play play(board_);
 
@@ -73,7 +73,7 @@ TEST_F(PlayRulesTest, BasePlayVerticalBuild)
     EXPECT_EQ(play.all_i, play.moving_coord_values);
     EXPECT_EQ(play.placement_map, play.complete_map);
     EXPECT_TRUE(play.placement_map.contains({1, 0}));
-    EXPECT_EQ(play.placement_map.at({1, 0}), L"O");
+    EXPECT_EQ(play.placement_map.at({1, 0}), "o");
 }
 
 TEST_F(PlayRulesTest, ContiguousSingleTileValid)
@@ -82,7 +82,7 @@ TEST_F(PlayRulesTest, ContiguousSingleTileValid)
         .Times(1)
         .WillOnce([](std::vector<Placement>& placements)
         {
-            placements.push_back(Placement({ 0, 0 }, L"H"));
+            placements.push_back(Placement({ 0, 0 }, "h"));
         });
     Play play(board_);
     Contiguous contiguous;
@@ -96,10 +96,10 @@ TEST_F(PlayRulesTest, ContiguousHorizontalValid)
         .Times(1)
         .WillOnce([](std::vector<Placement>& placements)
         {
-            placements.push_back(Placement({ 0, 0 }, L"H"));
-            placements.push_back(Placement({ 0, 1 }, L"O"));
-            placements.push_back(Placement({ 0, 2 }, L"L"));
-            placements.push_back(Placement({ 0, 3 }, L"A"));
+            placements.push_back(Placement({ 0, 0 }, "h"));
+            placements.push_back(Placement({ 0, 1 }, "o"));
+            placements.push_back(Placement({ 0, 2 }, "l"));
+            placements.push_back(Placement({ 0, 3 }, "a"));
         });
     Play play(board_);
     Contiguous contiguous;
@@ -113,10 +113,10 @@ TEST_F(PlayRulesTest, ContiguousVerticalValid)
         .Times(1)
         .WillOnce([](std::vector<Placement>& placements)
         {
-            placements.push_back(Placement({ 0, 0 }, L"H"));
-            placements.push_back(Placement({ 1, 0 }, L"O"));
-            placements.push_back(Placement({ 2, 0 }, L"L"));
-            placements.push_back(Placement({ 3, 0 }, L"A"));
+            placements.push_back(Placement({ 0, 0 }, "h"));
+            placements.push_back(Placement({ 1, 0 }, "o"));
+            placements.push_back(Placement({ 2, 0 }, "l"));
+            placements.push_back(Placement({ 3, 0 }, "a"));
         });
     Play play(board_);
     Contiguous contiguous;
@@ -130,10 +130,10 @@ TEST_F(PlayRulesTest, ContiguousHorizontalInvalid)
         .Times(1)
         .WillOnce([](std::vector<Placement>& placements)
         {
-            placements.push_back(Placement({ 0, 0 }, L"H"));
-            placements.push_back(Placement({ 0, 1 }, L"O"));
-            placements.push_back(Placement({ 0, 2 }, L"L"));
-            placements.push_back(Placement({ 0, 5 }, L"A"));
+            placements.push_back(Placement({ 0, 0 }, "h"));
+            placements.push_back(Placement({ 0, 1 }, "o"));
+            placements.push_back(Placement({ 0, 2 }, "l"));
+            placements.push_back(Placement({ 0, 5 }, "a"));
         });
     EXPECT_CALL(board_, isSquareFree)
         .Times(1)
@@ -151,10 +151,10 @@ TEST_F(PlayRulesTest, ContiguousVerticalInvalid)
         .Times(1)
         .WillOnce([](std::vector<Placement>& placements)
         {
-            placements.push_back(Placement({ 0, 0 }, L"H"));
-            placements.push_back(Placement({ 1, 0 }, L"O"));
-            placements.push_back(Placement({ 2, 0 }, L"L"));
-            placements.push_back(Placement({ 5, 0 }, L"A"));
+            placements.push_back(Placement({ 0, 0 }, "h"));
+            placements.push_back(Placement({ 1, 0 }, "o"));
+            placements.push_back(Placement({ 2, 0 }, "l"));
+            placements.push_back(Placement({ 5, 0 }, "a"));
         });
     EXPECT_CALL(board_, isSquareFree)
         .Times(1)
@@ -172,10 +172,10 @@ TEST_F(PlayRulesTest, ContiguousAllOverInvalid)
         .Times(1)
         .WillOnce([](std::vector<Placement>& placements)
         {
-            placements.push_back(Placement({ 0, 0 }, L"H"));
-            placements.push_back(Placement({ 1, 1 }, L"O"));
-            placements.push_back(Placement({ 2, 2 }, L"L"));
-            placements.push_back(Placement({ 3, 8 }, L"A"));
+            placements.push_back(Placement({ 0, 0 }, "h"));
+            placements.push_back(Placement({ 1, 1 }, "o"));
+            placements.push_back(Placement({ 2, 2 }, "l"));
+            placements.push_back(Placement({ 3, 8 }, "a"));
         });
 
     Play play(board_);
@@ -190,10 +190,10 @@ TEST_F(PlayRulesTest, FirstMoveCenterValid)
         .Times(1)
         .WillOnce([](std::vector<Placement>& placements)
         {
-            placements.push_back(Placement({ 7, 6 }, L"H"));
-            placements.push_back(Placement({ 7, 7 }, L"O"));
-            placements.push_back(Placement({ 7, 8 }, L"L"));
-            placements.push_back(Placement({ 7, 9 }, L"A"));
+            placements.push_back(Placement({ 7, 6 }, "h"));
+            placements.push_back(Placement({ 7, 7 }, "o"));
+            placements.push_back(Placement({ 7, 8 }, "l"));
+            placements.push_back(Placement({ 7, 9 }, "a"));
         });
 
     EXPECT_CALL(board_, isSquareFree(BoardImpl::center_coords_))
@@ -212,10 +212,10 @@ TEST_F(PlayRulesTest, FirstMoveNotCenterValid)
         .Times(1)
         .WillOnce([](std::vector<Placement>& placements)
         {
-            placements.push_back(Placement({ 8, 6 }, L"H"));
-            placements.push_back(Placement({ 8, 7 }, L"O"));
-            placements.push_back(Placement({ 8, 8 }, L"L"));
-            placements.push_back(Placement({ 8, 9 }, L"A"));
+            placements.push_back(Placement({ 8, 6 }, "h"));
+            placements.push_back(Placement({ 8, 7 }, "o"));
+            placements.push_back(Placement({ 8, 8 }, "l"));
+            placements.push_back(Placement({ 8, 9 }, "a"));
         });
 
     EXPECT_CALL(board_, isSquareFree(BoardImpl::center_coords_))
@@ -234,10 +234,10 @@ TEST_F(PlayRulesTest, FirstMoveNotCenterInvalid)
         .Times(1)
         .WillOnce([](std::vector<Placement>& placements)
         {
-            placements.push_back(Placement({ 8, 6 }, L"H"));
-            placements.push_back(Placement({ 8, 7 }, L"O"));
-            placements.push_back(Placement({ 8, 8 }, L"L"));
-            placements.push_back(Placement({ 8, 9 }, L"A"));
+            placements.push_back(Placement({ 8, 6 }, "h"));
+            placements.push_back(Placement({ 8, 7 }, "o"));
+            placements.push_back(Placement({ 8, 8 }, "l"));
+            placements.push_back(Placement({ 8, 9 }, "a"));
         });
 
     EXPECT_CALL(board_, isSquareFree(BoardImpl::center_coords_))
@@ -256,19 +256,19 @@ TEST_F(PlayRulesTest, ConnectedStartValid)
         .Times(1)
         .WillOnce([](std::vector<Placement>& placements)
         {
-            placements.push_back(Placement({ 8, 7 }, L"O"));
-            placements.push_back(Placement({ 8, 7 }, L"L"));
-            placements.push_back(Placement({ 8, 9 }, L"A"));
+            placements.push_back(Placement({ 8, 7 }, "o"));
+            placements.push_back(Placement({ 8, 7 }, "l"));
+            placements.push_back(Placement({ 8, 9 }, "a"));
         });
 
     const Coords coords = { 8, 6 };
     // Order is important here, setting the broader expectation first
-    EXPECT_CALL(board_, getTileLetter(testing::_, testing::_))
+    EXPECT_CALL(board_, getTileLetterLowercase(testing::_, testing::_))
         .WillRepeatedly(testing::Return(false));
 
-    EXPECT_CALL(board_, getTileLetter(coords, testing::_))
+    EXPECT_CALL(board_, getTileLetterLowercase(coords, testing::_))
         .Times(1)
-        .WillRepeatedly(testing::DoAll(testing::SetArgReferee<1>(L"H"), testing::Return(true)));
+        .WillRepeatedly(testing::DoAll(testing::SetArgReferee<1>("h"), testing::Return(true)));
 
     Play play(board_);
     play.is_first = false;
@@ -276,7 +276,7 @@ TEST_F(PlayRulesTest, ConnectedStartValid)
 
     EXPECT_TRUE(connected.isValid(play, board_, reason_));
     EXPECT_TRUE(play.complete_map.contains(coords));
-    EXPECT_EQ(play.complete_map.at(coords), L"H");
+    EXPECT_EQ(play.complete_map.at(coords), "h");
 }
 
 TEST_F(PlayRulesTest, ConnectedEndValid)
@@ -285,19 +285,19 @@ TEST_F(PlayRulesTest, ConnectedEndValid)
         .Times(1)
         .WillOnce([](std::vector<Placement>& placements)
         {
-            placements.push_back(Placement({ 8, 6 }, L"H"));
-            placements.push_back(Placement({ 8, 7 }, L"O"));
-            placements.push_back(Placement({ 8, 8 }, L"L"));
+            placements.push_back(Placement({ 8, 6 }, "h"));
+            placements.push_back(Placement({ 8, 7 }, "o"));
+            placements.push_back(Placement({ 8, 8 }, "l"));
         });
 
     const Coords coords = { 8, 9 };
     // Order is important here, setting the broader expectation first
-    EXPECT_CALL(board_, getTileLetter(testing::_, testing::_))
+    EXPECT_CALL(board_, getTileLetterLowercase(testing::_, testing::_))
         .WillRepeatedly(testing::Return(false));
 
-    EXPECT_CALL(board_, getTileLetter(coords, testing::_))
+    EXPECT_CALL(board_, getTileLetterLowercase(coords, testing::_))
         .Times(1)
-        .WillRepeatedly(testing::DoAll(testing::SetArgReferee<1>(L"A"), testing::Return(true)));
+        .WillRepeatedly(testing::DoAll(testing::SetArgReferee<1>("a"), testing::Return(true)));
 
     Play play(board_);
     play.is_first = false;
@@ -305,7 +305,7 @@ TEST_F(PlayRulesTest, ConnectedEndValid)
 
     EXPECT_TRUE(connected.isValid(play, board_, reason_));
     EXPECT_TRUE(play.complete_map.contains(coords));
-    EXPECT_EQ(play.complete_map.at(coords), L"A");
+    EXPECT_EQ(play.complete_map.at(coords), "a");
 }
 
 TEST_F(PlayRulesTest, ConnectedMiddleValid)
@@ -314,20 +314,20 @@ TEST_F(PlayRulesTest, ConnectedMiddleValid)
         .Times(1)
         .WillOnce([](std::vector<Placement>& placements)
         {
-            placements.push_back(Placement({ 8, 6 }, L"H"));
-            placements.push_back(Placement({ 8, 7 }, L"O"));
-            placements.push_back(Placement({ 8, 9 }, L"A"));
+            placements.push_back(Placement({ 8, 6 }, "h"));
+            placements.push_back(Placement({ 8, 7 }, "o"));
+            placements.push_back(Placement({ 8, 9 }, "a"));
         });
 
     const Coords coords = { 8, 8 };
     // Order is important here, setting the broader expectation first
-    EXPECT_CALL(board_, getTileLetter(testing::_, testing::_))
+    EXPECT_CALL(board_, getTileLetterLowercase(testing::_, testing::_))
         .WillRepeatedly(testing::Return(false));
 
     // Called twice, once looking forward and another looking back
-    EXPECT_CALL(board_, getTileLetter(coords, testing::_))
+    EXPECT_CALL(board_, getTileLetterLowercase(coords, testing::_))
         .Times(2)
-        .WillRepeatedly(testing::DoAll(testing::SetArgReferee<1>(L"L"), testing::Return(true)));
+        .WillRepeatedly(testing::DoAll(testing::SetArgReferee<1>("l"), testing::Return(true)));
 
     Play play(board_);
     play.is_first = false;
@@ -335,7 +335,7 @@ TEST_F(PlayRulesTest, ConnectedMiddleValid)
 
     EXPECT_TRUE(connected.isValid(play, board_, reason_));
     EXPECT_TRUE(play.complete_map.contains(coords));
-    EXPECT_EQ(play.complete_map.at(coords), L"L");
+    EXPECT_EQ(play.complete_map.at(coords), "l");
 }
 
 TEST_F(PlayRulesTest, ConnectedMiddleVerticalValid)
@@ -344,20 +344,20 @@ TEST_F(PlayRulesTest, ConnectedMiddleVerticalValid)
         .Times(1)
         .WillOnce([](std::vector<Placement>& placements)
         {
-            placements.push_back(Placement({ 6, 8 }, L"H"));
-            placements.push_back(Placement({ 7, 8 }, L"O"));
-            placements.push_back(Placement({ 9, 8 }, L"A"));
+            placements.push_back(Placement({ 6, 8 }, "h"));
+            placements.push_back(Placement({ 7, 8 }, "o"));
+            placements.push_back(Placement({ 9, 8 }, "a"));
         });
 
     const Coords coords = { 8, 8 };
     // Order is important here, setting the broader expectation first
-    EXPECT_CALL(board_, getTileLetter(testing::_, testing::_))
+    EXPECT_CALL(board_, getTileLetterLowercase(testing::_, testing::_))
         .WillRepeatedly(testing::Return(false));
 
     // Called twice, once looking forward and another looking back
-    EXPECT_CALL(board_, getTileLetter(coords, testing::_))
+    EXPECT_CALL(board_, getTileLetterLowercase(coords, testing::_))
         .Times(2)
-        .WillRepeatedly(testing::DoAll(testing::SetArgReferee<1>(L"L"), testing::Return(true)));
+        .WillRepeatedly(testing::DoAll(testing::SetArgReferee<1>("l"), testing::Return(true)));
 
     Play play(board_);
     play.is_first = false;
@@ -365,7 +365,7 @@ TEST_F(PlayRulesTest, ConnectedMiddleVerticalValid)
 
     EXPECT_TRUE(connected.isValid(play, board_, reason_));
     EXPECT_TRUE(play.complete_map.contains(coords));
-    EXPECT_EQ(play.complete_map.at(coords), L"L");
+    EXPECT_EQ(play.complete_map.at(coords), "l");
 }
 
 TEST_F(PlayRulesTest, ConnectedInValid)
@@ -374,13 +374,13 @@ TEST_F(PlayRulesTest, ConnectedInValid)
         .Times(1)
         .WillOnce([](std::vector<Placement>& placements)
         {
-            placements.push_back(Placement({ 8, 6 }, L"H"));
-            placements.push_back(Placement({ 8, 7 }, L"O"));
-            placements.push_back(Placement({ 8, 8 }, L"L"));
-            placements.push_back(Placement({ 8, 9 }, L"A"));
+            placements.push_back(Placement({ 8, 6 }, "h"));
+            placements.push_back(Placement({ 8, 7 }, "o"));
+            placements.push_back(Placement({ 8, 8 }, "l"));
+            placements.push_back(Placement({ 8, 9 }, "a"));
         });
 
-    EXPECT_CALL(board_, getTileLetter(testing::_, testing::_))
+    EXPECT_CALL(board_, getTileLetterLowercase(testing::_, testing::_))
         .WillRepeatedly(testing::Return(false));
 
     Play play(board_);
@@ -396,13 +396,13 @@ TEST_F(PlayRulesTest, ConnectedFirstPlayValid)
         .Times(1)
         .WillOnce([](std::vector<Placement>& placements)
         {
-            placements.push_back(Placement({ 8, 6 }, L"H"));
-            placements.push_back(Placement({ 8, 7 }, L"O"));
-            placements.push_back(Placement({ 8, 8 }, L"L"));
-            placements.push_back(Placement({ 8, 9 }, L"A"));
+            placements.push_back(Placement({ 8, 6 }, "h"));
+            placements.push_back(Placement({ 8, 7 }, "o"));
+            placements.push_back(Placement({ 8, 8 }, "l"));
+            placements.push_back(Placement({ 8, 9 }, "a"));
         });
 
-    EXPECT_CALL(board_, getTileLetter(testing::_, testing::_))
+    EXPECT_CALL(board_, getTileLetterLowercase(testing::_, testing::_))
         .WillRepeatedly(testing::Return(false));
 
     Play play(board_);
@@ -418,10 +418,10 @@ TEST_F(PlayRulesTest, DictCheckSimpleValid)
         .Times(1)
         .WillOnce([](std::vector<Placement>& placements)
         {
-            placements.push_back(Placement({ 8, 6 }, L"H"));
-            placements.push_back(Placement({ 8, 7 }, L"O"));
-            placements.push_back(Placement({ 8, 8 }, L"L"));
-            placements.push_back(Placement({ 8, 9 }, L"A"));
+            placements.push_back(Placement({ 8, 6 }, "h"));
+            placements.push_back(Placement({ 8, 7 }, "o"));
+            placements.push_back(Placement({ 8, 8 }, "l"));
+            placements.push_back(Placement({ 8, 9 }, "a"));
         });
 
     Play play(board_);
@@ -440,15 +440,15 @@ TEST_F(PlayRulesTest, DictCheckSimpleConnectedValid)
         .Times(1)
         .WillOnce([](std::vector<Placement>& placements)
         {
-            placements.push_back(Placement({ 8, 6 }, L"H"));
-            placements.push_back(Placement({ 8, 7 }, L"O"));
-            placements.push_back(Placement({ 8, 9 }, L"A"));
+            placements.push_back(Placement({ 8, 6 }, "h"));
+            placements.push_back(Placement({ 8, 7 }, "o"));
+            placements.push_back(Placement({ 8, 9 }, "a"));
         });
 
     Play play(board_);
     play.is_first = true;
 
-    play.complete_map.emplace(Coords{ 8, 8 }, L"L");
+    play.complete_map.emplace(Coords{ 8, 8 }, "l");
 
     // I could (should?) mock Dict, but I actually prefer to check that the word is passed
     // in a format that matches how Dict reads the file
@@ -463,10 +463,10 @@ TEST_F(PlayRulesTest, DictCheckWideValid)
         .Times(1)
         .WillOnce([](std::vector<Placement>& placements)
         {
-            placements.push_back(Placement({ 8, 6 }, L"N"));
-            placements.push_back(Placement({ 8, 7 }, L"I"));
-            placements.push_back(Placement({ 8, 8 }, L"Ñ"));
-            placements.push_back(Placement({ 8, 9 }, L"O"));
+            placements.push_back(Placement({ 8, 6 }, "n"));
+            placements.push_back(Placement({ 8, 7 }, "i"));
+            placements.push_back(Placement({ 8, 8 }, "ñ"));
+            placements.push_back(Placement({ 8, 9 }, "o"));
         });
 
     Play play(board_);

@@ -49,14 +49,14 @@ TEST_F(PlayerTest, TakeAll)
 {
     auto& tiles = getTiles();
 
-    const std::array<std::wstring, 4> letters =
+    const std::array<Letter, 4> letters =
     {
         L"H", L"O", L"L", L"A"
     };
 
     // To check pointer address. We could also just check the letter,
     // but we're also making sure there are no copies
-    std::map<std::wstring, Tile*> pointers;
+    std::map<Letter, Tile*> pointers;
     std::vector<std::unique_ptr<Tile> > new_tiles;
     for (const auto& letter : letters)
     {

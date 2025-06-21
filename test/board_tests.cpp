@@ -79,12 +79,12 @@ TEST_F(BoardTest, GetTileLetterValid)
 {
     auto& squares = getSquares();
     auto tile = bag_.takeOne();
-    std::wstring letter_pre;
-    std::wstring letter_post;
-    tile->getLetter(letter_pre);
+    LetterLowercase letter_pre;
+    LetterLowercase letter_post;
+    tile->getLetterLowercase(letter_pre);
     squares[0][0].place(tile);
     squares[0][0].setTileTemp(false);
-    EXPECT_TRUE(board_.getTileLetter({0, 0}, letter_post));
+    EXPECT_TRUE(board_.getTileLetterLowercase({0, 0}, letter_post));
     EXPECT_EQ(letter_pre, letter_post);
 }
 
@@ -92,19 +92,19 @@ TEST_F(BoardTest, GetTileLetterInvalid)
 {
     auto& squares = getSquares();
     auto tile = bag_.takeOne();
-    std::wstring letter;
+    LetterLowercase letter;
     // unoccupied
-    EXPECT_FALSE(board_.getTileLetter({0, 0}, letter));
+    EXPECT_FALSE(board_.getTileLetterLowercase({0, 0}, letter));
 
     // invalid coords
-    EXPECT_FALSE(board_.getTileLetter({getSize() + 1, 0}, letter));
-    EXPECT_FALSE(board_.getTileLetter({0, getSize() + 1}, letter));
-    EXPECT_FALSE(board_.getTileLetter({-1, 0}, letter));
-    EXPECT_FALSE(board_.getTileLetter({0, -1}, letter));
+    EXPECT_FALSE(board_.getTileLetterLowercase({getSize() + 1, 0}, letter));
+    EXPECT_FALSE(board_.getTileLetterLowercase({0, getSize() + 1}, letter));
+    EXPECT_FALSE(board_.getTileLetterLowercase({-1, 0}, letter));
+    EXPECT_FALSE(board_.getTileLetterLowercase({0, -1}, letter));
 
     // occupied, but temp
     squares[0][0].place(tile);
-    EXPECT_FALSE(board_.getTileLetter({0, 0}, letter));
+    EXPECT_FALSE(board_.getTileLetterLowercase({0, 0}, letter));
 }
 
 TEST_F(BoardTest, GetTileBaseScoreValid)

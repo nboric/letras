@@ -102,7 +102,6 @@ void BoardImpl::placeTemp(const Coords coords, std::unique_ptr<Tile>& tile)
     }
 }
 
-
 void BoardImpl::getOccupied(std::vector<Placement>& placements, const bool temp) const
 {
     for (int i = 0; i < SIZE; i++)
@@ -111,8 +110,8 @@ void BoardImpl::getOccupied(std::vector<Placement>& placements, const bool temp)
         {
             if (squares_[i][j].isOccupied() && squares_[i][j].isTileTemp() == temp)
             {
-                std::wstring letter;
-                squares_[i][j].getLetter(letter);
+                std::string letter;
+                squares_[i][j].getLetterLowercase(letter);
                 placements.emplace_back(Placement({ i, j }, letter));
             }
         }
@@ -128,7 +127,6 @@ void BoardImpl::getOccupied(std::vector<Placement>& placements) const
 {
     getOccupied(placements, false);
 }
-
 
 void BoardImpl::acceptPlacements()
 {
@@ -157,7 +155,6 @@ bool BoardImpl::areCoordsValid(const Coords& coords)
     return true;
 }
 
-
 bool BoardImpl::isSquareFree(const Coords& coords) const
 {
     if (!areCoordsValid(coords))
@@ -168,14 +165,14 @@ bool BoardImpl::isSquareFree(const Coords& coords) const
     return !square.isOccupied() || square.isTileTemp();
 }
 
-bool BoardImpl::getTileLetter(const Coords& coords, std::wstring& letter) const
+bool BoardImpl::getTileLetterLowercase(const Coords& coords, std::string& letter) const
 {
     if (!areCoordsValid(coords) || isSquareFree(coords))
     {
         return false;
     }
     auto const& square = squares_[coords.first][coords.second];
-    return square.getLetter(letter);
+    return square.getLetterLowercase(letter);
 }
 
 bool BoardImpl::getTileBaseScore(const Coords& coords, int& score) const

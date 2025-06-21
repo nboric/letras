@@ -26,11 +26,11 @@ public:
     int fixed_coord_value{ 0 };
     std::set<int> moving_coord_values;
     bool is_first{ false };
-    int score { 0 };
+    int score{ 0 };
 
     std::vector<Placement> placements;
-    std::map<Coords, std::wstring> placement_map;
-    std::map<Coords, std::wstring> complete_map;
+    std::map<Coords, LetterLowercase> placement_map;
+    std::map<Coords, LetterLowercase> complete_map;
 };
 
 #endif //PLAY_H

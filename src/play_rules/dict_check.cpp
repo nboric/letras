@@ -7,6 +7,7 @@
 #include <set>
 #include <map>
 #include <algorithm>
+#include <utility>
 
 #include "../dict.h"
 
@@ -16,7 +17,7 @@ const std::string_view& DictCheck::getName() const
 }
 
 DictCheck::DictCheck(std::shared_ptr<const Dict> dict)
-    : dict_(dict)
+    : dict_(std::move(dict))
 {
 }
 
@@ -31,18 +32,7 @@ bool DictCheck::isValid(Play& play, const Board& board, std::optional<std::strin
         if (play.complete_map.contains(coords))
         {
             auto& letter = play.complete_map.at(coords);
-            /* letter is wstring only to support displaying Ñ correctly in SFML, we don't allow any other wide chars
-             * this also handles adding CH, LL, and RR, since we've always treated as a string of two letters
-             * Although still need special handling since tolower below is not working for Ñ
-             */
-            if (letter == L"Ñ")
-            {
-                word.append("ñ");
-            }
-            else
-            {
-                word.append(std::string(letter.begin(), letter.end()));
-            }
+            word.append(letter.begin(), letter.end());
         }
     }
     std::ranges::transform(word, word.begin(),

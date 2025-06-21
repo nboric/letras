@@ -20,9 +20,9 @@ bool Connected::isValid(Play& play, const Board& board, std::optional<std::strin
     {
         for (const auto dir : { -1, 1 })
         {
-            std::wstring letter;
+            LetterLowercase letter;
             Coords coords = buildCoords(play, moving_coord + dir);
-            if (board.getTileLetter(coords, letter))
+            if (board.getTileLetterLowercase(coords, letter))
             {
                 play.complete_map.emplace(coords, letter);
                 is_connected = true;

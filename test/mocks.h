@@ -20,11 +20,11 @@ public:
     MOCK_METHOD(void, getOccupied, (std::vector<Placement>& placements), (const, override));
     MOCK_METHOD(void, acceptPlacements, (), (override));
     MOCK_METHOD(bool, isSquareFree, (const Coords& coords), (const, override));
-    MOCK_METHOD(bool, getTileLetter, (const Coords& coords, std::wstring& letter), (const, override));
+    MOCK_METHOD(bool, getTileLetterLowercase, (const Coords& coords, LetterLowercase& letter), (const, override));
     MOCK_METHOD(bool, getTileBaseScore, (const Coords& coords, int& score), (const, override));
     MOCK_METHOD(std::optional<const SquareDefinition>, getSquareDefinition, (const Coords& coords), (const, override));
     MOCK_METHOD(void, returnPlacements, (std::vector<std::unique_ptr<Tile>>& tiles), (override));
-    MOCK_METHOD(void, assumeLetter, (const Coords& coords, const std::wstring& letter), (override));
+    MOCK_METHOD(void, assumeLetter, (const Coords& coords, const Letter& letter), (override));
 };
 
 #endif //MOCKS_H

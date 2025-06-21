@@ -6,22 +6,27 @@
 #define PIECE_H
 #include <map>
 
+#include "basic_types.h"
 #include "SFML/Graphics/Font.hpp"
 #include "SFML/Graphics/RenderWindow.hpp"
 
 class Tile
 {
-    static const std::map<std::wstring, int> base_scores_;
+    static const std::map<Letter, int> base_scores_;
 
     [[nodiscard]] int base_score() const;
 
     bool is_selected_{ false };
     sf::Rect<float> rect_;
-    std::wstring assumed_letter_;
+    Letter assumed_letter_;
+    std::string letter_lowercase_;
+
+    static std::string toLowerCase(const Letter& letter);
 
 public:
     static constexpr int SIZE{ 50 };
-    const std::wstring letter_;
+    // TODO: move to private
+    const Letter letter_;
     const int base_score_;
 
     explicit Tile(std::wstring letter);
@@ -36,8 +41,9 @@ public:
     [[nodiscard]] bool isSelected() const;
     void setSelected(bool selected);
     [[nodiscard]] bool isWildcard() const;
-    void setAssumedLetter(const std::wstring& letter);
-    void getLetter(std::wstring& letter) const;
+    void setAssumedLetter(const Letter& letter);
+    void getLetter(Letter& letter) const;
+    void getLetterLowercase(LetterLowercase& letter) const;
 };
 
 #endif // PIECE_H

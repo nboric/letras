@@ -6,7 +6,7 @@
 #include "SFML/Graphics/RectangleShape.hpp"
 #include "SFML/Graphics/Text.hpp"
 
-const std::map<std::wstring, int> Tile::base_scores_ = {
+const std::map<Letter, int> Tile::base_scores_ = {
     { L"", 0 },
     { L"A", 1 },
     { L"B", 3 },
@@ -38,10 +38,14 @@ const std::map<std::wstring, int> Tile::base_scores_ = {
     { L"Z", 10 },
 };
 
-Tile::Tile(std::wstring letter)
+Tile::Tile(Letter letter)
     : letter_(std::move(letter)),
       base_score_(base_score())
 {
+    if (!isWildcard())
+    {
+        letter_lowercase_ = toLowerCase(letter_);
+    }
 }
 
 void Tile::draw(sf::RenderWindow& window, const sf::Font& font, const sf::Vector2f base_pos, const bool show_score)
@@ -126,7 +130,7 @@ bool Tile::isWildcard() const
     return letter_.empty();
 }
 
-void Tile::getLetter(std::wstring& letter) const
+void Tile::getLetter(Letter& letter) const
 {
     if (isWildcard() && !assumed_letter_.empty())
     {
@@ -138,11 +142,37 @@ void Tile::getLetter(std::wstring& letter) const
     }
 }
 
-void Tile::setAssumedLetter(const std::wstring& letter)
+void Tile::getLetterLowercase(LetterLowercase& letter) const
+{
+    letter = letter_lowercase_;
+}
+
+void Tile::setAssumedLetter(const Letter& letter)
 {
     if (!isWildcard())
     {
         return;
     }
     assumed_letter_ = letter;
+    letter_lowercase_ = toLowerCase(assumed_letter_);
+}
+
+LetterLowercase Tile::toLowerCase(const Letter& letter)
+{
+    std::string letter_lowercase;
+    /* Letter is wstring only to support displaying Ñ correctly in SFML, we don't allow any other wide chars
+     * this also handles adding CH, LL, and RR, since we've always treated as a string of two letters
+     * Although still need special handling since tolower below is not working for Ñ
+     */
+    if (letter == L"Ñ")
+    {
+        letter_lowercase.append("ñ");
+    }
+    else
+    {
+        letter_lowercase.append(std::string(letter.begin(), letter.end()));
+    }
+    std::ranges::transform(letter_lowercase, letter_lowercase.begin(),
+        [](const unsigned char c) { return std::tolower(c); });
+    return letter_lowercase;
 }

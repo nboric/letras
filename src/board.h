@@ -25,11 +25,11 @@ public:
     virtual void getOccupied(std::vector<Placement>& vector) const = 0;
     virtual void acceptPlacements() = 0;
     [[nodiscard]] virtual bool isSquareFree(const Coords& coords) const = 0;
-    virtual bool getTileLetter(const Coords& coords, std::wstring& letter) const = 0;
+    virtual bool getTileLetterLowercase(const Coords& coords, LetterLowercase& letter) const = 0;
     virtual bool getTileBaseScore(const Coords& coords, int& score) const = 0;
     [[nodiscard]] virtual std::optional<const SquareDefinition> getSquareDefinition(const Coords& coords) const = 0;
-    virtual void returnPlacements(std::vector<std::unique_ptr<Tile>>& tiles) = 0;
-    virtual void assumeLetter(const Coords& coords, const std::wstring& letter) = 0;
+    virtual void returnPlacements(std::vector<std::unique_ptr<Tile> >& tiles) = 0;
+    virtual void assumeLetter(const Coords& coords, const Letter& letter) = 0;
 };
 
 class BoardImpl final : public Board
@@ -62,11 +62,11 @@ public:
     void getOccupied(std::vector<Placement>& placements) const override;
     void acceptPlacements() override;
     [[nodiscard]] bool isSquareFree(const Coords& coords) const override;
-    bool getTileLetter(const Coords& coords, std::wstring& letter) const override;
+    bool getTileLetterLowercase(const Coords& coords, LetterLowercase& letter) const override;
     bool getTileBaseScore(const Coords& coords, int& score) const override;
     [[nodiscard]] std::optional<const SquareDefinition> getSquareDefinition(const Coords& coords) const override;
-    void returnPlacements(std::vector<std::unique_ptr<Tile>>& tiles) override;
-    void assumeLetter(const Coords& coords, const std::wstring& letter) override;
+    void returnPlacements(std::vector<std::unique_ptr<Tile> >& tiles) override;
+    void assumeLetter(const Coords& coords, const Letter& letter) override;
 };
 
 #endif //BOARD_H

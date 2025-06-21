@@ -9,12 +9,14 @@
 #include <string>
 
 using Coords = std::pair<int, int>;
+using Letter = std::wstring;
+using LetterLowercase = std::string;
 
 class Placement
 {
 public:
     Coords coords_;
-    std::wstring letter_;
+    LetterLowercase letter_;
 };
 
 enum ClickEvent

@@ -40,11 +40,11 @@ public:
     [[nodiscard]] bool isOccupied() const;
     [[nodiscard]] bool isTileTemp() const;
     void setTileTemp(bool temp);
-    bool getLetter(std::wstring& letter) const;
+    bool getLetterLowercase(LetterLowercase& letter) const;
     void place(std::unique_ptr<Tile>& tile);
     bool getTileBaseScore(int& score) const;
     std::unique_ptr<Tile> removeTile();
-    void setTileAssumedLetter(const std::wstring& letter) const;
+    void setTileAssumedLetter(const Letter& letter) const;
 
     const SquareDefinition definition_;
 };

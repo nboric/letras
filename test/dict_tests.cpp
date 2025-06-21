@@ -32,3 +32,12 @@ TEST_F(ValidDictTest, NonExistingIsInvalid)
 {
     EXPECT_FALSE(dict_.is_valid("noexiste"));
 }
+
+TEST_F(ValidDictTest, FilterContaining)
+{
+    auto words = dict_.filterContaining("e");
+    EXPECT_FALSE(words.empty());
+    EXPECT_NE(words.find("elefante"), words.end());
+    EXPECT_NE(words.find("almirante"), words.end());
+    EXPECT_EQ(words.find("alimaña"), words.end());
+}

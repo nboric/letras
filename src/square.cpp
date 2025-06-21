@@ -66,11 +66,11 @@ bool Square::isTileTemp() const
     return tile_ != nullptr && tile_is_temp_;
 }
 
-bool Square::getLetter(std::wstring& letter) const
+bool Square::getLetterLowercase(LetterLowercase& letter) const
 {
     if (tile_ != nullptr)
     {
-        tile_->getLetter(letter);
+        tile_->getLetterLowercase(letter);
         return true;
     }
     return false;
@@ -102,7 +102,7 @@ std::unique_ptr<Tile> Square::removeTile()
     return { std::move(tile_) };
 }
 
-void Square::setTileAssumedLetter(const std::wstring& letter) const
+void Square::setTileAssumedLetter(const Letter& letter) const
 {
     if (tile_ == nullptr)
     {
