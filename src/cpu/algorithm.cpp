@@ -5,62 +5,110 @@
 #include "algorithm.h"
 
 #include <algorithm>
+#include <iostream>
 #include <numeric>
+#include <ranges>
 
 #include "../play_rules/play.h"
 #include "../play_rules/play_builder.h"
 
-Algorithm::Algorithm(const std::shared_ptr<const Dict>& dict): dict_(dict), play_builder_(dict_)
+Algorithm::Algorithm(const std::shared_ptr<Dict>& dict)
+    : dict_(dict), play_builder_(dict_)
 {
-
 }
 
-// TODO: a more optimal approach will be: for every occupied tile, get all possible words from dict that contain
-// that letter are equal or shorter length than current n_tiles, then filter if the word can be formed with the tiles
-// available, which will specify in which position the occupied tile must be used, then test if those fit in the board
-// (pass rules)
-// creating som JIT caches inside the dict
-void Algorithm::findAvailablePlays(Board& board, std::vector<Tile>& tiles) const
+void Algorithm::findBestPlay(Board& board, std::vector<std::unique_ptr<Tile> >& tiles) const
 {
-    // TODO: also need to iterate over number of tiles picked
-    auto n_tiles = tiles.size();
+    auto total_tiles = tiles.size();
     std::vector<Placement> occupied_tiles;
     board.getOccupied(occupied_tiles);
-    std::vector<int> starting_positions;
-    getStartPositions(starting_positions, n_tiles);
-    for (const auto& placement : occupied_tiles)
+    std::vector<LetterLowercase> player_letters;
+    for (const auto& tile : tiles)
     {
-        for (auto direction: {HORIZONTAL, VERTICAL})
-        {
-            for (auto starting_position : starting_positions)
-            {
-                std::vector<int> indices;
-                std::iota(indices.begin(), indices.end(), 0);
-                do { // for each permutation of tiles
-                    std::vector<Coords> coords_list;
-                    getCoords(coords_list, direction, placement.coords_, starting_position, n_tiles);
-                    for (int pos = 0; pos < n_tiles; ++pos)
-                    {
-                        auto tile = tiles[indices[pos]];
-                        // board.placeTemp(coords, tile);
-                        //                   std::vector<std::unique_ptr<Tile> > tiles;
-                        // board_.returnPlacements(tiles);
-                        // players_[current_player_]->takeAll(tiles);
-                    }
-                } while (std::ranges::next_permutation(indices).found);
+        LetterLowercase letter;
+        tile->getLetterLowercase(letter);
+        player_letters.push_back(letter);
+    }
 
+    std::unordered_set<std::string_view> checked_words;
+
+    int n_tried_words{ 0 };
+    int n_tried_plays{ 0 };
+    int n_valid_plays{ 0 };
+    int max_score{ 0 };
+    for (const auto& occupied_tile : occupied_tiles)
+    {
+        auto all_words = dict_->filterContaining(occupied_tile.letter_);
+        std::cout << "Occupied tile: " << occupied_tile << std::endl;
+        for (const auto direction : { HORIZONTAL, VERTICAL })
+        {
+            const auto n_available_squares = getMaxAvailableSquaresAround(board, occupied_tile.coords_, direction,
+                total_tiles);
+            std::cout << "Direction: " << direction << ", max available squares: " << n_available_squares << std::endl;
+            unsigned char selection_mask = 1;
+            while (selection_mask < (1 << total_tiles))
+            {
+                int n_used_letters = 0;
+                for (auto i = 0; i < Player::MAX_TILES; ++i)
+                {
+                    if (selection_mask & (1 << i))
+                    {
+                        ++n_used_letters;
+                    }
+                }
+                for (auto word : all_words | std::views::filter(FilterContainingAll{
+                                     occupied_tile.letter_, player_letters, n_used_letters, selection_mask
+                                 }))
+                {
+                    if (checked_words.contains(word))
+                    {
+                        continue;
+                    }
+                    checked_words.insert(word);
+                    std::cout << "Word: " << word << std::endl;
+
+                    n_tried_words++;
+                    for (auto occupied_tile_pos = word.find(occupied_tile.letter_, 0);
+                         occupied_tile_pos != std::string::npos;
+                         occupied_tile_pos = word.find(occupied_tile.letter_,
+                             occupied_tile_pos + 1))
+                    {
+                        n_tried_plays++;
+                        std::cout << "Occupied pos: " << occupied_tile_pos << std::endl;
+                        auto placements = generatePlacements(occupied_tile, occupied_tile_pos, word, direction,
+                            player_letters, selection_mask);
+                        int placement_pos = 0;
+                        for (auto i = 0; i < Player::MAX_TILES; ++i)
+                        {
+                            if (selection_mask & (1 << i))
+                            {
+                                std::unique_ptr<Tile> selected = std::move(tiles[i]);
+                                // note we don't erase, we will put it back, and want to keep the same position
+                                board.placeTemp(placements[placement_pos].coords_, selected);
+                                placement_pos++;
+                            }
+                        }
+                        Play play(placements);
+                        // purposely empty (can't use std::nullopt since it's const)
+                        // TODO: we actually want the reason
+                        std::optional<std::string> rule, reason;
+                        // Failing in CalcScore because it assumes the tiles are placed in the board
+                        if (!play_builder_.build(play, board, rule, reason))
+                        {
+                            std::cout << "Invalid" << std::endl;
+                            continue;
+                        }
+                        std::cout << "Score: " << play.score << std::endl;
+                        if (play.score > max_score)
+                        {
+                            max_score = play.score;
+                        }
+                        n_valid_plays++;
+                        board.returnPlacements(tiles, placements, selection_mask);
+                    }
+                }
+                selection_mask++;
             }
         }
-
-        board.isSquareFree(placement.coords_);
-        // board.placeTemp();
-        Play play(board);
-        std::optional<std::string> rule, reason; // purposely empty (can't use std::nullopt since it's const)
-        if (!play_builder_.build(play, board, rule, reason))
-        {
-
-        }
-        // Play play;
-        placement.coords_;
     }
 }

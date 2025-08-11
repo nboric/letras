@@ -4,11 +4,10 @@
 
 #include "play.h"
 
-Play::Play(const Board& board)
+void Play::initialize()
 {
-    board.getPlacements(placements);
     // set is ordered, we use it to form word in right order
-    for (const auto& [coords, letter] : placements)
+    for (const auto& [coords, letter] : placements_)
     {
         all_i.insert(coords.first);
         all_j.insert(coords.second);
@@ -35,3 +34,17 @@ Play::Play(const Board& board)
     }
     is_valid_ = true;
 }
+
+
+Play::Play(const Board& board)
+{
+    board.getPlacements(placements_);
+    initialize();
+}
+
+Play::Play(const std::vector<Placement>& placements)
+{
+    placements_ = placements;
+    initialize();
+}
+

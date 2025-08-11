@@ -17,11 +17,6 @@ protected:
         return player_.tiles_;
     }
 
-    static int getMaxTiles()
-    {
-        return HumanPlayer::MAX_TILES;
-    }
-
     [[nodiscard]] int getScore() const
     {
         return player_.score_.score_;
@@ -42,7 +37,7 @@ TEST_F(PlayerTest, Replenish)
     auto& tiles = getTiles();
     EXPECT_EQ(tiles.size(), 0);
     player_.replenish(bag_);
-    EXPECT_EQ(tiles.size(), getMaxTiles());
+    EXPECT_EQ(tiles.size(), Player::MAX_TILES);
 }
 
 TEST_F(PlayerTest, TakeAll)
@@ -96,7 +91,7 @@ TEST_F(PlayerTest, Exchange)
 
     player_.exchange(bag_);
 
-    EXPECT_EQ(tiles.size(), getMaxTiles());
+    EXPECT_EQ(tiles.size(), Player::MAX_TILES);
 
     for (auto& pTile : selected)
     {
@@ -145,7 +140,7 @@ TEST_F(PlayerTest, GetSelectedTile)
     pSelected->setSelected(true);
 
     auto selected = player_.getSelectedTile();
-    EXPECT_EQ(tiles.size(), getMaxTiles() - 1);
+    EXPECT_EQ(tiles.size(), Player::MAX_TILES - 1);
 
     auto t = std::ranges::find_if(tiles, [&](const std::unique_ptr<Tile>& tile)
     {

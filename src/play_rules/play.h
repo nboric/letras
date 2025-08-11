@@ -14,9 +14,11 @@
 class Play
 {
     bool is_valid_{ false };
+    void initialize();
 
 public:
     explicit Play(const Board& board);
+    explicit Play(const std::vector<Placement>& placements);
 
     Direction direction{ HORIZONTAL };
 
@@ -28,7 +30,7 @@ public:
     bool is_first{ false };
     int score{ 0 };
 
-    std::vector<Placement> placements;
+    std::vector<Placement> placements_;
     std::map<Coords, LetterLowercase> placement_map;
     std::map<Coords, LetterLowercase> complete_map;
 };

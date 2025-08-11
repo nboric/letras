@@ -17,11 +17,11 @@
 class Player
 {
 protected:
-    static constexpr int MAX_TILES{ 7 };
     std::vector<std::unique_ptr<Tile> > tiles_;
     Score score_;
 
 public:
+    static constexpr int MAX_TILES{ 7 };
     virtual ~Player() = default;
     virtual void replenish(Bag& bag);
     virtual void draw(sf::RenderWindow& window, const sf::Font& font, bool is_active, sf::Vector2f base_pos) const = 0;

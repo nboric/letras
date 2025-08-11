@@ -4,6 +4,7 @@
 
 #include "board.h"
 
+#include "player.h"
 #include "square.h"
 #include "tile.h"
 #include "SFML/Graphics/RectangleShape.hpp"
@@ -110,7 +111,7 @@ void BoardImpl::getOccupied(std::vector<Placement>& placements, const bool temp)
         {
             if (squares_[i][j].isOccupied() && squares_[i][j].isTileTemp() == temp)
             {
-                std::string letter;
+                LetterLowercase letter;
                 squares_[i][j].getLetterLowercase(letter);
                 placements.emplace_back(Placement({ i, j }, letter));
             }
@@ -210,6 +211,26 @@ void BoardImpl::returnPlacements(std::vector<std::unique_ptr<Tile> >& tiles)
                 squares_[i][j].setTileAssumedLetter(L"");
                 tiles.push_back(std::move(squares_[i][j].removeTile()));
             }
+        }
+    }
+}
+
+void BoardImpl::returnPlacements(std::vector<std::unique_ptr<Tile> >& tiles, const std::vector<Placement>& placements,
+    const unsigned char selection_mask)
+{
+    int placement_pos = 0;
+    for (auto i = 0; i < Player::MAX_TILES; ++i)
+    {
+        if (selection_mask & (1 << i))
+        {
+            auto& square = squares_[placements[placement_pos].coords_.first][placements[placement_pos].coords_.second];
+            if (!square.isOccupied() || !square.isTileTemp())
+            {
+                continue;
+            }
+            auto tile = square.removeTile();
+            tiles[i] = std::move(tile);
+            placement_pos++;
         }
     }
 }

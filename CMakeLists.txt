@@ -55,6 +55,7 @@ add_executable(letras src/main.cpp
         src/cpu/cpu_player.h
         src/cpu/algorithm.cpp
         src/cpu/algorithm.h
+        src/basic_types.cpp
 )
 
 target_link_libraries(letras PRIVATE SFML::Graphics)
@@ -105,6 +106,7 @@ add_executable(letras_tests
         test/player_tests.cpp
         test/board_tests.cpp
         test/algorithm_tests.cpp
+        src/basic_types.cpp
 )
 
 target_link_libraries(letras_tests PRIVATE SFML::Graphics gmock gtest gtest_main)

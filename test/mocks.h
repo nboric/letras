@@ -24,6 +24,9 @@ public:
     MOCK_METHOD(bool, getTileBaseScore, (const Coords& coords, int& score), (const, override));
     MOCK_METHOD(std::optional<const SquareDefinition>, getSquareDefinition, (const Coords& coords), (const, override));
     MOCK_METHOD(void, returnPlacements, (std::vector<std::unique_ptr<Tile>>& tiles), (override));
+    MOCK_METHOD(void, returnPlacements,
+        (std::vector<std::unique_ptr<Tile>>& tiles, const std::vector<Placement>& placements, unsigned char
+            selection_mask), (override));
     MOCK_METHOD(void, assumeLetter, (const Coords& coords, const Letter& letter), (override));
 };
 

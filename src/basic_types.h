@@ -17,7 +17,11 @@ class Placement
 public:
     Coords coords_;
     LetterLowercase letter_;
+
+    friend std::ostream& operator<<(std::ostream& os, const Placement& obj);
 };
+
+std::ostream& operator<<(std::ostream& os, const Coords& obj);
 
 enum ClickEvent
 {

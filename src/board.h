@@ -29,6 +29,8 @@ public:
     virtual bool getTileBaseScore(const Coords& coords, int& score) const = 0;
     [[nodiscard]] virtual std::optional<const SquareDefinition> getSquareDefinition(const Coords& coords) const = 0;
     virtual void returnPlacements(std::vector<std::unique_ptr<Tile> >& tiles) = 0;
+    virtual void returnPlacements(std::vector<std::unique_ptr<Tile> >& tiles, const std::vector<Placement>& placements,
+        unsigned char selection_mask) = 0;
     virtual void assumeLetter(const Coords& coords, const Letter& letter) = 0;
 };
 
@@ -66,6 +68,8 @@ public:
     bool getTileBaseScore(const Coords& coords, int& score) const override;
     [[nodiscard]] std::optional<const SquareDefinition> getSquareDefinition(const Coords& coords) const override;
     void returnPlacements(std::vector<std::unique_ptr<Tile> >& tiles) override;
+    void returnPlacements(std::vector<std::unique_ptr<Tile> >& tiles, const std::vector<Placement>& placements,
+        unsigned char selection_mask) override;
     void assumeLetter(const Coords& coords, const Letter& letter) override;
 };
 
