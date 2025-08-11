@@ -21,7 +21,7 @@ class Algorithm
 
 public:
     explicit Algorithm(const std::shared_ptr<Dict>& dict);
-    void findBestPlay(Board& board, std::vector<std::unique_ptr<Tile> >& tiles) const;
+    std::string_view findBestPlay(Board& board, std::vector<std::unique_ptr<Tile> >& tiles) const;
 
     static void getStartPositions(std::vector<int>& starting_positions, int n_tiles);
     static void getCoords(std::vector<Coords>& coords_list, Direction direction, const Coords& existing_tile_coords,

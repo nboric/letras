@@ -17,12 +17,13 @@ Algorithm::Algorithm(const std::shared_ptr<Dict>& dict)
 {
 }
 
-void Algorithm::findBestPlay(Board& board, std::vector<std::unique_ptr<Tile> >& tiles) const
+std::string_view Algorithm::findBestPlay(Board& board, std::vector<std::unique_ptr<Tile> >& tiles) const
 {
     auto total_tiles = tiles.size();
     std::vector<Placement> occupied_tiles;
     board.getOccupied(occupied_tiles);
     std::vector<LetterLowercase> player_letters;
+    std::string_view winner{};
     for (const auto& tile : tiles)
     {
         LetterLowercase letter;
@@ -102,6 +103,7 @@ void Algorithm::findBestPlay(Board& board, std::vector<std::unique_ptr<Tile> >& 
                         if (play.score > max_score)
                         {
                             max_score = play.score;
+                            winner = word;
                         }
                         n_valid_plays++;
                         board.returnPlacements(tiles, placements, selection_mask);
@@ -111,4 +113,7 @@ void Algorithm::findBestPlay(Board& board, std::vector<std::unique_ptr<Tile> >& 
             }
         }
     }
+    std::cout << "Tried " << n_tried_words << " words, winner is \"" << winner << "\" with score " << max_score <<
+        std::endl;
+    return winner;
 }

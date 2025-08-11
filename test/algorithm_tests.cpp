@@ -165,15 +165,13 @@ TEST_F(AlgorithmTest, FilterContainingAllWildcard)
     auto all_words = getDict()->filterContaining(occupied_letter);
 
     FilterContainingAll all_4{ occupied_letter, player_letters, 4, selection_mask_all };
-    EXPECT_TRUE(all_4("plaza"));
-    EXPECT_TRUE(all_4("plana"));
-    EXPECT_FALSE(all_4("plena"));
+    ASSERT_TRUE(all_4("plaza"));
+    ASSERT_TRUE(all_4("plana"));
+    ASSERT_FALSE(all_4("plena"));
 }
 
 TEST_F(AlgorithmTest, FindAvailablePlays)
 {
-    // TODO: just a placeholder to be able to call method
-    
     std::vector<std::unique_ptr<Tile> > player_tiles;
     player_tiles.emplace_back(std::make_unique<Tile>(L"B"));
     player_tiles.emplace_back(std::make_unique<Tile>(L"A"));
@@ -187,5 +185,5 @@ TEST_F(AlgorithmTest, FindAvailablePlays)
     board_.placeTemp(Coords{ 7, 7 }, tile);
     board_.acceptPlacements();
 
-    algorithm_.findBestPlay(board_, player_tiles);
+    ASSERT_EQ(algorithm_.findBestPlay(board_, player_tiles), "abandera");
 }
