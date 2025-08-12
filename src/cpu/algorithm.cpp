@@ -31,8 +31,6 @@ std::string_view Algorithm::findBestPlay(Board& board, std::vector<std::unique_p
         player_letters.push_back(letter);
     }
 
-    std::unordered_set<std::string_view> checked_words;
-
     int n_tried_words{ 0 };
     int n_tried_plays{ 0 };
     int n_valid_plays{ 0 };
@@ -43,6 +41,8 @@ std::string_view Algorithm::findBestPlay(Board& board, std::vector<std::unique_p
         std::cout << "Occupied tile: " << occupied_tile << std::endl;
         for (const auto direction : { HORIZONTAL, VERTICAL })
         {
+            std::unordered_set<std::string_view> checked_words;
+
             const auto n_available_squares = getMaxAvailableSquaresAround(board, occupied_tile.coords_, direction,
                 total_tiles);
             std::cout << "Direction: " << direction << ", max available squares: " << n_available_squares << std::endl;
