@@ -21,6 +21,8 @@ public:
     [[nodiscard]] virtual bool canTakeTile(sf::Vector2i pos) const = 0;
     virtual void placeTemp(sf::Vector2i pos, std::unique_ptr<Tile>& tile) = 0;
     virtual void placeTemp(Coords coords, std::unique_ptr<Tile>& tile) = 0;
+    virtual void placeTemp(std::vector<std::unique_ptr<Tile> >& tiles, std::vector<Placement>& placements,
+        unsigned char selection_mask) = 0;
     virtual void getPlacements(std::vector<Placement>& placements) const = 0;
     virtual void getOccupied(std::vector<Placement>& vector) const = 0;
     virtual void acceptPlacements() = 0;
@@ -60,6 +62,8 @@ public:
     [[nodiscard]] bool canTakeTile(sf::Vector2i pos) const override;
     void placeTemp(sf::Vector2i pos, std::unique_ptr<Tile>& tile) override;
     void placeTemp(Coords coords, std::unique_ptr<Tile>& tile) override;
+    void placeTemp(std::vector<std::unique_ptr<Tile> >& tiles, std::vector<Placement>& placements,
+        unsigned char selection_mask) override;
     void getPlacements(std::vector<Placement>& placements) const override;
     void getOccupied(std::vector<Placement>& placements) const override;
     void acceptPlacements() override;

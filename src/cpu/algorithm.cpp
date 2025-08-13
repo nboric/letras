@@ -17,9 +17,10 @@ Algorithm::Algorithm(const std::shared_ptr<Dict>& dict)
 {
 }
 
-std::string_view Algorithm::findBestPlay(Board& board, std::vector<std::unique_ptr<Tile> >& tiles) const
+std::string_view Algorithm::findBestPlay(Board& board, std::vector<std::unique_ptr<Tile> >& tiles,
+    std::vector<Placement>& winning_placements, unsigned char& winning_selection_mask) const
 {
-    auto total_tiles = tiles.size();
+    auto n_player_tiles = tiles.size();
     std::vector<Placement> occupied_tiles;
     board.getOccupied(occupied_tiles);
     std::vector<LetterLowercase> player_letters;
@@ -37,25 +38,50 @@ std::string_view Algorithm::findBestPlay(Board& board, std::vector<std::unique_p
     int max_score{ 0 };
     for (const auto& occupied_tile : occupied_tiles)
     {
-        auto all_words = dict_->filterContaining(occupied_tile.letter_);
         std::cout << "Occupied tile: " << occupied_tile << std::endl;
+        auto all_words = dict_->filterContaining(occupied_tile.letter_);
         for (const auto direction : { HORIZONTAL, VERTICAL })
         {
             std::unordered_set<std::string_view> checked_words;
 
             const auto n_available_squares = getMaxAvailableSquaresAround(board, occupied_tile.coords_, direction,
-                total_tiles);
+                n_player_tiles);
             std::cout << "Direction: " << direction << ", max available squares: " << n_available_squares << std::endl;
-            unsigned char selection_mask = 1;
-            while (selection_mask < (1 << total_tiles))
+            if (n_available_squares == 0)
+            {
+                continue;
+            }
+
+            // we want to flip all bits in the mask, so we add up to 2^n_player_tiles,
+            // even if it's more than available squares, we discard those below
+            for (unsigned char selection_mask = 1; selection_mask < (1 << n_player_tiles); selection_mask++)
             {
                 int n_used_letters = 0;
+                int n_wildcards = 0;
                 for (auto i = 0; i < Player::MAX_TILES; ++i)
                 {
                     if (selection_mask & (1 << i))
                     {
                         ++n_used_letters;
+                        if (player_letters[i].empty())
+                        {
+                            ++n_wildcards;
+                        }
                     }
+                }
+                if (n_used_letters > n_available_squares)
+                {
+                    continue;
+                }
+                // TODO: we have bugs with single letter plays
+                if (n_used_letters == 1)
+                {
+                    continue;
+                }
+                // TODO: implement wildcard
+                if (n_wildcards > 0)
+                {
+                    continue;
                 }
                 for (auto word : all_words | std::views::filter(FilterContainingAll{
                                      occupied_tile.letter_, player_letters, n_used_letters, selection_mask
@@ -78,17 +104,7 @@ std::string_view Algorithm::findBestPlay(Board& board, std::vector<std::unique_p
                         std::cout << "Occupied pos: " << occupied_tile_pos << std::endl;
                         auto placements = generatePlacements(occupied_tile, occupied_tile_pos, word, direction,
                             player_letters, selection_mask);
-                        int placement_pos = 0;
-                        for (auto i = 0; i < Player::MAX_TILES; ++i)
-                        {
-                            if (selection_mask & (1 << i))
-                            {
-                                std::unique_ptr<Tile> selected = std::move(tiles[i]);
-                                // note we don't erase, we will put it back, and want to keep the same position
-                                board.placeTemp(placements[placement_pos].coords_, selected);
-                                placement_pos++;
-                            }
-                        }
+                        board.placeTemp(tiles, placements, selection_mask);
                         Play play(placements);
                         // purposely empty (can't use std::nullopt since it's const)
                         // TODO: we actually want the reason
@@ -104,12 +120,14 @@ std::string_view Algorithm::findBestPlay(Board& board, std::vector<std::unique_p
                         {
                             max_score = play.score;
                             winner = word;
+                            winning_selection_mask = selection_mask;
+                            // copies all elements
+                            winning_placements = placements;
                         }
                         n_valid_plays++;
                         board.returnPlacements(tiles, placements, selection_mask);
                     }
                 }
-                selection_mask++;
             }
         }
     }

@@ -30,7 +30,7 @@ class Game
     Button cancel_button_;
     Button exchange_start_button_;
 
-    std::shared_ptr<const Dict> dict_;
+    std::shared_ptr<Dict> dict_;
 
     PlayBuilder play_builder_;
 

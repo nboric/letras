@@ -7,6 +7,7 @@
 #include <iostream>
 
 #include "human_player.h"
+#include "cpu/cpu_player.h"
 #include "play_rules/play.h"
 
 Game::Game(const int n_players)
@@ -22,7 +23,15 @@ Game::Game(const int n_players)
     }
     for (int i = 0; i < n_players; i++)
     {
-        players_.push_back(std::make_unique<HumanPlayer>());
+        if (i == n_players - 1)
+        {
+            players_.push_back(std::make_unique<CpuPlayer>(dict_));
+            // players_.push_back(std::make_unique<HumanPlayer>());
+        }
+        else
+        {
+            players_.push_back(std::make_unique<HumanPlayer>());
+        }
     }
 }
 
@@ -61,8 +70,8 @@ void Game::handleClick(const sf::Vector2i pos, const ClickEvent event)
             if (event == CLICK_END)
             {
                 Play play(board_);
-                std::optional<std::string> rule{""};
-                std::optional<std::string> reason{""};
+                std::optional<std::string> rule{ "" };
+                std::optional<std::string> reason{ "" };
                 if (!play_builder_.build(play, board_, rule, reason))
                 {
                     std::cout << "Failed rule " << *rule << ", reason: " << *reason << std::endl;
@@ -145,7 +154,27 @@ void Game::handleClick(const sf::Vector2i pos, const ClickEvent event)
     {
         switch (players_[current_player_]->getAction(board_))
         {
-        default: ;
+        case PLAY:
+        {
+            players_[current_player_]->generatePlacements(board_);
+            Play play(board_);
+            std::optional<std::string> rule{ "" };
+            std::optional<std::string> reason{ "" };
+            if (!play_builder_.build(play, board_, rule, reason))
+            {
+                std::cout << "Failed rule " << *rule << ", reason: " << *reason << std::endl;
+            }
+            else
+            {
+                board_.acceptPlacements();
+                players_[current_player_]->addScore(play.score);
+                players_[current_player_]->replenish(bag_);
+                nextPlayer();
+            }
+            break;
+        }
+        default:
+            break;
         }
     }
 }

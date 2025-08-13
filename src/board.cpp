@@ -95,6 +95,20 @@ void BoardImpl::placeTemp(const sf::Vector2i pos, std::unique_ptr<Tile>& tile)
     placeTemp(coords, tile);
 }
 
+void BoardImpl::placeTemp(std::vector<std::unique_ptr<Tile> >& tiles, std::vector<Placement>& placements, const unsigned char selection_mask)
+{
+    int placement_pos = 0;
+    for (auto i = 0; i < Player::MAX_TILES; ++i)
+    {
+        if (selection_mask & (1 << i))
+        {
+            std::unique_ptr<Tile> selected = std::move(tiles[i]);
+            placeTemp(placements[placement_pos].coords_, selected);
+            placement_pos++;
+        }
+    }
+}
+
 void BoardImpl::placeTemp(const Coords coords, std::unique_ptr<Tile>& tile)
 {
     if (areCoordsValid(coords))

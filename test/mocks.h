@@ -16,6 +16,9 @@ public:
     MOCK_METHOD(bool, canTakeTile, (sf::Vector2i pos), (const, override));
     MOCK_METHOD(void, placeTemp, (sf::Vector2i pos, std::unique_ptr<Tile>& tile), (override));
     MOCK_METHOD(void, placeTemp, (Coords coords, std::unique_ptr<Tile>& tile), (override));
+    MOCK_METHOD(void, placeTemp,
+        (std::vector<std::unique_ptr<Tile> >& tiles, std::vector<Placement>& placements, unsigned char selection_mask),
+        (override));
     MOCK_METHOD(void, getPlacements, (std::vector<Placement>& placements), (const, override));
     MOCK_METHOD(void, getOccupied, (std::vector<Placement>& placements), (const, override));
     MOCK_METHOD(void, acceptPlacements, (), (override));

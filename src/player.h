@@ -33,6 +33,8 @@ public:
     virtual void exchange(Bag& bag) = 0;
     [[nodiscard]] virtual Action getAction(const Board& board) const { return NONE; }
     [[nodiscard]] virtual bool isInteractive() const = 0;
+    virtual void generatePlacements(Board& board) = 0;
+
 };
 
 #endif //PLAYER_H

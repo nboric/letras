@@ -99,8 +99,6 @@ TEST_F(AlgorithmTest, FilterContainingAll)
 {
     const LetterLowercase occupied_letter = "a";
     std::vector<LetterLowercase> player_letters = { "b", "a", "n", "d", "e", "r", "a" };
-    std::vector indices_all = { 0, 1, 2, 3, 4, 5, 6 };
-    std::vector indices_few = { 5, 4 };
 
     // FilterContainingAll uses least signifigcant bits first;
     unsigned char selection_mask_all = 0b1111111;
@@ -156,6 +154,20 @@ TEST_F(AlgorithmTest, FilterContainingAll)
         }));
 }
 
+TEST_F(AlgorithmTest, FilterContainingAllBug)
+{
+    const LetterLowercase occupied_letter = "r";
+    std::vector<LetterLowercase> player_letters = { "s", "e", "o", "l", "e", "d", "d" };
+
+    // FilterContainingAll uses least signifigcant bits first;
+    unsigned char selection_mask = 18;
+
+    auto all_words = getDict()->filterContaining(occupied_letter);
+
+    FilterContainingAll filter{ occupied_letter, player_letters, 2, selection_mask };
+    EXPECT_FALSE(filter("red"));
+}
+
 TEST_F(AlgorithmTest, FilterContainingAllWildcard)
 {
     const LetterLowercase occupied_letter = "a";
@@ -185,5 +197,8 @@ TEST_F(AlgorithmTest, FindAvailablePlays)
     board_.placeTemp(Coords{ 7, 7 }, tile);
     board_.acceptPlacements();
 
-    ASSERT_EQ(algorithm_.findBestPlay(board_, player_tiles), "abandera");
+    std::vector<Placement> placements;
+    unsigned char selection_mask;
+
+    ASSERT_EQ(algorithm_.findBestPlay(board_, player_tiles,placements,selection_mask), "abandera");
 }

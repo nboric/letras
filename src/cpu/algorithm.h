@@ -21,7 +21,8 @@ class Algorithm
 
 public:
     explicit Algorithm(const std::shared_ptr<Dict>& dict);
-    std::string_view findBestPlay(Board& board, std::vector<std::unique_ptr<Tile> >& tiles) const;
+    std::string_view findBestPlay(Board& board, std::vector<std::unique_ptr<Tile> >& tiles, std::vector<Placement>& winning_placements, unsigned char&
+        winning_selection_mask) const;
 
     static void getStartPositions(std::vector<int>& starting_positions, int n_tiles);
     static void getCoords(std::vector<Coords>& coords_list, Direction direction, const Coords& existing_tile_coords,
@@ -49,6 +50,17 @@ inline int Algorithm::getMaxAvailableSquaresAround(const Board& board, const Coo
     const Direction direction,
     const size_t n_player_tiles)
 {
+    // we won't add to existing words, for now
+    // TODO: consider consider case when there are more tiles after a space
+    for (const auto sign : { -1, 1 })
+    {
+        Coords coords = deltaCoords(occupied_tile_coords, sign, direction);
+        if (!board.isSquareFree(coords))
+        {
+            return 0;
+        }
+    }
+
     int n_available_tiles = 0;
     for (int i = 0; i < n_player_tiles; ++i)
     {
@@ -124,6 +136,7 @@ inline std::vector<Placement> Algorithm::generatePlacements(const Placement& occ
                 placement.coords_ = deltaCoords(occupied_tile.coords_, delta_pos, direction);
                 placements.push_back(placement);
                 used_positions.insert(pos);
+                break;
             }
         }
     }
@@ -143,36 +156,43 @@ struct FilterContainingAll
         {
             return false;
         }
-        int n_repeated = 0;
+        int n_wildcards = 0;
         for (auto i = 0; i < Player::MAX_TILES; ++i)
         {
             if (selection_mask & 1 << i)
             {
                 // TODO: encapsulate this (maybe get the tiles?)
-                if (!player_letters_[i].empty())
+                if (player_letters_[i].empty())
                 {
-                    if (word.find(player_letters_[i]) == std::string_view::npos)
-                    {
-                        return false;
-                    }
-                    if (player_letters_[i] == occupied_letter)
-                    {
-                        ++n_repeated;
-                    }
+                    ++n_wildcards;
                 }
             }
         }
-        if (n_repeated > 0)
+        std::unordered_set<size_t> used_positions;
+        used_positions.insert(word.find(occupied_letter, 0));
+        int n_found = 0;
+        for (auto i = 0; i < Player::MAX_TILES; ++i)
         {
-            int count = 0;
-            for (size_t pos = word.find(occupied_letter); pos != std::string_view::npos; pos = word.find(
-                         occupied_letter, pos + occupied_letter.length()))
+            if (selection_mask & (1 << i))
             {
-                ++count;
+                if (player_letters_[i].empty())
+                {
+                    continue;
+                }
+                for (auto pos = word.find(player_letters_[i], 0); pos != std::string::npos;
+                     pos = word.find(player_letters_[i], pos + 1))
+                {
+                    if (used_positions.contains(pos))
+                    {
+                        continue;
+                    }
+                    n_found++;
+                    used_positions.insert(pos);
+                    break;
+                }
             }
-            return count == n_repeated + 1;
         }
-        return true;
+        return n_found + n_wildcards == n_player_letters_;
     }
 };
 

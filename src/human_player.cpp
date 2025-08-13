@@ -83,3 +83,8 @@ void HumanPlayer::exchange(Bag& bag)
         bag.putBack(tile);
     }
 }
+
+void HumanPlayer::generatePlacements(Board& board)
+{
+
+}

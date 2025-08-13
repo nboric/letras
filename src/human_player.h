@@ -19,6 +19,7 @@ public:
      void unselectAll() const override;
      void exchange(Bag& bag) override;
      [[nodiscard]] bool isInteractive() const override;
+     void generatePlacements(Board& board) override;
 };
 
 #endif //HUMAN_PLAYER_H
