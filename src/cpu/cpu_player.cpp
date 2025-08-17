@@ -4,11 +4,10 @@
 
 #include "cpu_player.h"
 
-CpuPlayer::CpuPlayer(const std::shared_ptr<Dict>& dict): algorithm_(dict)
+CpuPlayer::CpuPlayer(const std::shared_ptr<Dict>& dict)
+    : algorithm_(dict)
 {
-
 }
-
 
 bool CpuPlayer::isInteractive() const
 {
@@ -20,7 +19,7 @@ Action CpuPlayer::getAction(const Board& board) const
     return PLAY;
 }
 
-void CpuPlayer::draw(sf::RenderWindow& window, const sf::Font& font, bool is_active, sf::Vector2f base_pos) const
+void CpuPlayer::draw(sf::RenderWindow& window, const sf::Font& font, bool is_active, const sf::Vector2f base_pos) const
 {
     score_.draw(window, font, base_pos + sf::Vector2f{ 0, Tile::SIZE + 10 });
 }
@@ -45,8 +44,12 @@ void CpuPlayer::exchange(Bag& bag)
 void CpuPlayer::generatePlacements(Board& board)
 {
     std::vector<Placement> placements;
+    std::string winner{};
     unsigned char selection_mask;
-    auto word = algorithm_.findBestPlay(board, tiles_, placements, selection_mask);
+    if (!algorithm_.findBestPlay(board, tiles_, winner, placements, selection_mask))
+    {
+        return;
+    }
 
     board.placeTemp(tiles_, placements, selection_mask);
     for (auto it = tiles_.begin(); it != tiles_.end();)

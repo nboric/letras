@@ -6,7 +6,6 @@
 
 #include <algorithm>
 #include <iostream>
-#include <numeric>
 #include <ranges>
 
 #include "../play_rules/play.h"
@@ -17,14 +16,13 @@ Algorithm::Algorithm(const std::shared_ptr<Dict>& dict)
 {
 }
 
-std::string_view Algorithm::findBestPlay(Board& board, std::vector<std::unique_ptr<Tile> >& tiles,
+bool Algorithm::findBestPlay(Board& board, std::vector<std::unique_ptr<Tile> >& tiles, std::string& winner,
     std::vector<Placement>& winning_placements, unsigned char& winning_selection_mask) const
 {
     auto n_player_tiles = tiles.size();
     std::vector<Placement> occupied_tiles;
     board.getOccupied(occupied_tiles);
     std::vector<LetterLowercase> player_letters;
-    std::string_view winner{};
     for (const auto& tile : tiles)
     {
         LetterLowercase letter;
@@ -54,13 +52,13 @@ std::string_view Algorithm::findBestPlay(Board& board, std::vector<std::unique_p
 
             // we want to flip all bits in the mask, so we add up to 2^n_player_tiles,
             // even if it's more than available squares, we discard those below
-            for (unsigned char selection_mask = 1; selection_mask < (1 << n_player_tiles); selection_mask++)
+            for (unsigned char selection_mask = 1; selection_mask < 1 << n_player_tiles; selection_mask++)
             {
                 int n_used_letters = 0;
                 int n_wildcards = 0;
                 for (auto i = 0; i < Player::MAX_TILES; ++i)
                 {
-                    if (selection_mask & (1 << i))
+                    if (selection_mask & 1 << i)
                     {
                         ++n_used_letters;
                         if (player_letters[i].empty())
@@ -133,5 +131,5 @@ std::string_view Algorithm::findBestPlay(Board& board, std::vector<std::unique_p
     }
     std::cout << "Tried " << n_tried_words << " words, winner is \"" << winner << "\" with score " << max_score <<
         std::endl;
-    return winner;
+    return n_valid_plays > 0;
 }

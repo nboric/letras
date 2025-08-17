@@ -7,7 +7,7 @@
 #include "algorithm.h"
 #include "../player.h"
 
-class CpuPlayer : public Player
+class CpuPlayer final : public Player
 {
     Algorithm algorithm_;
 

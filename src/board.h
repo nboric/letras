@@ -26,6 +26,7 @@ public:
     virtual void getPlacements(std::vector<Placement>& placements) const = 0;
     virtual void getOccupied(std::vector<Placement>& vector) const = 0;
     virtual void acceptPlacements() = 0;
+    [[nodiscard]] virtual bool areCoordsValid(const Coords& coords) const = 0;
     [[nodiscard]] virtual bool isSquareFree(const Coords& coords) const = 0;
     virtual bool getTileLetterLowercase(const Coords& coords, LetterLowercase& letter) const = 0;
     virtual bool getTileBaseScore(const Coords& coords, int& score) const = 0;
@@ -49,7 +50,6 @@ class BoardImpl final : public Board
 
     friend class BoardTest;
 
-    static inline bool areCoordsValid(const Coords& coords);
     void getOccupied(std::vector<Placement>& placements, bool temp) const;
 
 public:
@@ -67,6 +67,7 @@ public:
     void getPlacements(std::vector<Placement>& placements) const override;
     void getOccupied(std::vector<Placement>& placements) const override;
     void acceptPlacements() override;
+    [[nodiscard]] bool areCoordsValid(const Coords& coords) const override;
     [[nodiscard]] bool isSquareFree(const Coords& coords) const override;
     bool getTileLetterLowercase(const Coords& coords, LetterLowercase& letter) const override;
     bool getTileBaseScore(const Coords& coords, int& score) const override;

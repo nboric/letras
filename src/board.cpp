@@ -95,12 +95,13 @@ void BoardImpl::placeTemp(const sf::Vector2i pos, std::unique_ptr<Tile>& tile)
     placeTemp(coords, tile);
 }
 
-void BoardImpl::placeTemp(std::vector<std::unique_ptr<Tile> >& tiles, std::vector<Placement>& placements, const unsigned char selection_mask)
+void BoardImpl::placeTemp(std::vector<std::unique_ptr<Tile> >& tiles, std::vector<Placement>& placements,
+    const unsigned char selection_mask)
 {
     int placement_pos = 0;
     for (auto i = 0; i < Player::MAX_TILES; ++i)
     {
-        if (selection_mask & (1 << i))
+        if (selection_mask & 1 << i)
         {
             std::unique_ptr<Tile> selected = std::move(tiles[i]);
             placeTemp(placements[placement_pos].coords_, selected);
@@ -161,7 +162,7 @@ void BoardImpl::acceptPlacements()
     }
 }
 
-bool BoardImpl::areCoordsValid(const Coords& coords)
+bool BoardImpl::areCoordsValid(const Coords& coords) const
 {
     if (coords.first < 0 || coords.first >= SIZE || coords.second < 0 || coords.second >= SIZE)
     {
@@ -235,7 +236,7 @@ void BoardImpl::returnPlacements(std::vector<std::unique_ptr<Tile> >& tiles, con
     int placement_pos = 0;
     for (auto i = 0; i < Player::MAX_TILES; ++i)
     {
-        if (selection_mask & (1 << i))
+        if (selection_mask & 1 << i)
         {
             auto& square = squares_[placements[placement_pos].coords_.first][placements[placement_pos].coords_.second];
             if (!square.isOccupied() || !square.isTileTemp())
