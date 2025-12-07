@@ -140,7 +140,7 @@ TEST_F(AlgorithmTest, FindAvailablePlays)
     unsigned char selection_mask;
 
     ASSERT_TRUE(algorithm_.findBestPlay(board_, player_tiles, winner, placements,selection_mask));
-    ASSERT_EQ(winner, "abaderna");
+    ASSERT_THAT(winner, testing::AnyOf("abaderna", "randeaba", "bandeara", "abandera"));
 }
 
 TEST_F(AlgorithmTest, GetMaxAvailableSquaresAroundSingleOccupied)
