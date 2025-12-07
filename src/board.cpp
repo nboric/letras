@@ -95,10 +95,28 @@ void BoardImpl::placeTemp(const sf::Vector2i pos, std::unique_ptr<Tile>& tile)
     placeTemp(coords, tile);
 }
 
-void BoardImpl::placeTemp(std::vector<std::unique_ptr<Tile> >& tiles, std::vector<Placement>& placements,
+bool BoardImpl::placeTemp(std::vector<std::unique_ptr<Tile> >& tiles, std::vector<Placement>& placements,
     const unsigned char selection_mask)
 {
+    bool all_valid = true;
     int placement_pos = 0;
+    for (auto i = 0; i < Player::MAX_TILES; ++i)
+    {
+        if (selection_mask & 1 << i)
+        {
+            if (!isSquareFree(placements[placement_pos].coords_))
+            {
+                all_valid = false;
+                break;
+            }
+            placement_pos++;
+        }
+    }
+    if (!all_valid)
+    {
+        return false;
+    }
+    placement_pos = 0;
     for (auto i = 0; i < Player::MAX_TILES; ++i)
     {
         if (selection_mask & 1 << i)
@@ -108,6 +126,7 @@ void BoardImpl::placeTemp(std::vector<std::unique_ptr<Tile> >& tiles, std::vecto
             placement_pos++;
         }
     }
+    return true;
 }
 
 void BoardImpl::placeTemp(const Coords coords, std::unique_ptr<Tile>& tile)

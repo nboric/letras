@@ -102,27 +102,32 @@ bool Algorithm::findBestPlay(Board& board, std::vector<std::unique_ptr<Tile> >& 
                         std::cout << "Occupied pos: " << occupied_tile_pos << std::endl;
                         auto placements = generatePlacements(occupied_tile, occupied_tile_pos, word, direction,
                             player_letters, selection_mask);
-                        board.placeTemp(tiles, placements, selection_mask);
+                        if (!board.placeTemp(tiles, placements, selection_mask))
+                        {
+                            std::cout << "Doesn't fit" << std::endl;
+                            continue;
+                        }
                         Play play(placements);
                         // purposely empty (can't use std::nullopt since it's const)
                         // TODO: we actually want the reason
                         std::optional<std::string> rule, reason;
-                        // Failing in CalcScore because it assumes the tiles are placed in the board
-                        if (!play_builder_.build(play, board, rule, reason))
+                        if (play_builder_.build(play, board, rule, reason))
+                        {
+                            std::cout << "Score: " << play.score << std::endl;
+                            if (play.score > max_score)
+                            {
+                                max_score = play.score;
+                                winner = word;
+                                winning_selection_mask = selection_mask;
+                                // copies all elements
+                                winning_placements = placements;
+                            }
+                            n_valid_plays++;
+                        }
+                        else
                         {
                             std::cout << "Invalid" << std::endl;
-                            continue;
                         }
-                        std::cout << "Score: " << play.score << std::endl;
-                        if (play.score > max_score)
-                        {
-                            max_score = play.score;
-                            winner = word;
-                            winning_selection_mask = selection_mask;
-                            // copies all elements
-                            winning_placements = placements;
-                        }
-                        n_valid_plays++;
                         board.returnPlacements(tiles, placements, selection_mask);
                     }
                 }

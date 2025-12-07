@@ -1,3 +1,6 @@
+- Avoid forming words in other direction
+- CPU handle wildcards
+- CPU handle single letter plays
 - Better way to implement Restriction::getName
 - Check available when exchanging tile
 - Separate UI and models, MVC style
