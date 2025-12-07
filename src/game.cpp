@@ -67,88 +67,76 @@ void Game::handleClick(const sf::Vector2i pos, const ClickEvent event)
     {
         if (!is_exchanging_ && play_button_.handleClick(pos, event))
         {
-            if (event == CLICK_END)
+            Play play(board_);
+            std::optional<std::string> rule{ "" };
+            std::optional<std::string> reason{ "" };
+            if (!play_builder_.build(play, board_, rule, reason))
             {
-                Play play(board_);
-                std::optional<std::string> rule{ "" };
-                std::optional<std::string> reason{ "" };
-                if (!play_builder_.build(play, board_, rule, reason))
-                {
-                    std::cout << "Failed rule " << *rule << ", reason: " << *reason << std::endl;
-                }
-                else
-                {
-                    board_.acceptPlacements();
-                    players_[current_player_]->addScore(play.score);
-                    players_[current_player_]->replenish(bag_);
-                    nextPlayer();
-                }
+                std::cout << "Failed rule " << *rule << ", reason: " << *reason << std::endl;
+            }
+            else
+            {
+                board_.acceptPlacements();
+                players_[current_player_]->addScore(play.score);
+                players_[current_player_]->replenish(bag_);
+                nextPlayer();
             }
         }
         if (exchange_start_button_.handleClick(pos, event))
         {
-            if (event == CLICK_END)
+            if (is_exchanging_)
             {
-                if (is_exchanging_)
-                {
-                    players_[current_player_]->exchange(bag_);
-                    nextPlayer();
-                }
-                is_exchanging_ = !is_exchanging_;
+                players_[current_player_]->exchange(bag_);
+                nextPlayer();
             }
+            is_exchanging_ = !is_exchanging_;
         }
         if (cancel_button_.handleClick(pos, event))
         {
-            if (event == CLICK_END)
+            if (is_exchanging_)
             {
-                if (is_exchanging_)
-                {
-                    is_exchanging_ = false;
-                    players_[current_player_]->unselectAll();
-                }
-                else
-                {
-                    std::vector<std::unique_ptr<Tile> > tiles;
-                    board_.returnPlacements(tiles);
-                    players_[current_player_]->takeAll(tiles);
-                }
+                is_exchanging_ = false;
+                players_[current_player_]->unselectAll();
+            }
+            else
+            {
+                std::vector<std::unique_ptr<Tile> > tiles;
+                board_.returnPlacements(tiles);
+                players_[current_player_]->takeAll(tiles);
             }
         }
-        if (event == CLICK_START)
+        if (is_picking_wildcard_ && wildcard_picker_.handleClick(pos, event))
         {
-            if (is_picking_wildcard_ && wildcard_picker_.handleClick(pos, event))
+            if (const auto letter = wildcard_picker_.handleClick(pos, event); letter.has_value())
             {
-                if (const auto letter = wildcard_picker_.handleClick(pos, event); letter.has_value())
-                {
-                    board_.assumeLetter(pending_wildcard_.value(), letter.value());
-                    pending_wildcard_.reset();
-                    is_picking_wildcard_ = false;
-                    return;
-                }
+                board_.assumeLetter(pending_wildcard_.value(), letter.value());
+                pending_wildcard_.reset();
+                is_picking_wildcard_ = false;
+                return;
             }
-            if (!is_exchanging_)
+        }
+        if (!is_exchanging_)
+        {
+            if (const auto coords = board_.shouldHandleClick(pos); coords.has_value())
             {
-                if (const auto coords = board_.shouldHandleClick(pos); coords.has_value())
+                if (board_.canTakeTile(pos))
                 {
-                    if (board_.canTakeTile(pos))
+                    if (std::unique_ptr<Tile> selected;
+                        (selected = players_[current_player_]->getSelectedTile()) != nullptr)
                     {
-                        if (std::unique_ptr<Tile> selected;
-                            (selected = players_[current_player_]->getSelectedTile()) != nullptr)
+                        const bool is_wildcard = selected->isWildcard();
+                        board_.placeTemp(pos, selected);
+                        if (is_wildcard)
                         {
-                            const bool is_wildcard = selected->isWildcard();
-                            board_.placeTemp(pos, selected);
-                            if (is_wildcard)
-                            {
-                                pending_wildcard_ = coords;
-                                is_picking_wildcard_ = true;
-                            }
+                            pending_wildcard_ = coords;
+                            is_picking_wildcard_ = true;
                         }
                     }
-                    return;
                 }
+                return;
             }
-            players_[current_player_]->handleClick(pos, is_exchanging_);
         }
+        players_[current_player_]->handleClick(pos, is_exchanging_);
     }
     else
     {
