@@ -15,7 +15,7 @@ Dict::Dict(const std::string& path)
     while (std::getline(dict_file, line))
     {
         line.erase(line.find_last_not_of('\r') + 1);
-        words_.insert(line);
+        words_.insert(std::move(line));
     }
     assert(!words_.empty());
 }
@@ -27,17 +27,20 @@ bool Dict::is_valid(const std::string& word) const
 
 std::unordered_set<std::string_view>& Dict::filterContaining(const LetterLowercase& letter)
 {
-    if (!letter_filter_cache_.contains(letter))
+    if (const auto it = letter_filter_cache_.find(letter); it != letter_filter_cache_.end())
     {
-        std::unordered_set<std::string_view> filtered_words;
-        for (const auto& word : words_)
-        {
-            if (word.find(letter) != std::string::npos)
-            {
-                filtered_words.insert(word);
-            }
-        }
-        letter_filter_cache_.insert({ letter, filtered_words });
+        return it->second;
     }
-    return letter_filter_cache_.at(letter);
+
+    std::unordered_set<std::string_view> filtered_words;
+    for (const auto& word : words_)
+    {
+        if (word.find(letter) != std::string::npos)
+        {
+            filtered_words.insert(word);
+        }
+    }
+    
+    auto [it, inserted] = letter_filter_cache_.emplace(letter, std::move(filtered_words));
+    return it->second;
 }
