@@ -13,20 +13,17 @@ int main()
 
     while (window.isOpen())
     {
-        window.handleEvents(
-            [&](const sf::Event::Closed&)
+        if (const std::optional<sf::Event> event = window.waitEvent())
+        {
+            if (event->is<sf::Event::Closed>())
             {
                 window.close();
-            },
-            [&](const sf::Event::MouseButtonReleased& mouse_event)
-            {
-                if (mouse_event.button == sf::Mouse::Button::Left)
-                {
-                    game.handleClick(mouse_event.position, CLICK_END);
-                }
             }
-        );
-
+            else if (const auto* button_released_event = event->getIf<sf::Event::MouseButtonReleased>())
+            {
+                game.handleClick(button_released_event->position, CLICK_END);
+            }
+        }
         window.clear(sf::Color::White);
         game.draw(window, font);
         window.display();
