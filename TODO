@@ -1,4 +1,4 @@
-- Avoid forming words in other direction
+- Prevent (or better, implement) continuing words
 - CPU handle wildcards
 - CPU handle single letter plays
 - Better way to implement Restriction::getName

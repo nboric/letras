@@ -4,6 +4,8 @@
 
 #include "connected.h"
 
+#include <unordered_set>
+
 const std::string_view& Connected::getName() const
 {
     return NAME;
@@ -15,7 +17,7 @@ bool Connected::isValid(Play& play, const Board& board, std::optional<std::strin
     {
         return true;
     }
-    bool is_connected = false;
+    std::unordered_set<int> connected_coords;
     for (auto const& moving_coord : play.moving_coord_values)
     {
         for (const auto dir : { -1, 1 })
@@ -25,13 +27,23 @@ bool Connected::isValid(Play& play, const Board& board, std::optional<std::strin
             if (board.getTileLetterLowercase(coords, letter))
             {
                 play.complete_map.emplace(coords, letter);
-                is_connected = true;
+                connected_coords.emplace(moving_coord + dir);
             }
         }
     }
-    if (!is_connected && reason)
+    if (connected_coords.empty())
     {
-        *reason = "Play doesn't use existing tiles";
+        if (reason)
+        {
+            *reason = "Play doesn't use existing tiles";
+        }
+        return false;
     }
-    return is_connected;
+    if (connected_coords.size() > 1)
+    {
+        // TODO: is this always a problem?
+        *reason = "Connected to more than one tile";
+        return false;
+    }
+    return true;
 }

@@ -9,12 +9,14 @@
 #include "contiguous.h"
 #include "dict_check.h"
 #include "first_move.h"
+#include "non_overlapping.h"
 
 PlayBuilder::PlayBuilder(const std::shared_ptr<const Dict>& dict)
 {
     rules_.push_back(std::make_unique<Contiguous>());
     rules_.push_back(std::make_unique<FirstMove>());
     rules_.push_back(std::make_unique<Connected>());
+    rules_.push_back(std::make_unique<NonOverlapping>());
     rules_.push_back(std::make_unique<DictCheck>(dict));
     rules_.push_back(std::make_unique<CalcScore>());
 }

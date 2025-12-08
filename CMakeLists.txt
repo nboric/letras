@@ -46,6 +46,8 @@ add_executable(letras src/main.cpp
         src/play_rules/play_builder.h
         src/play_rules/calc_score.cpp
         src/play_rules/calc_score.h
+        src/play_rules/non_overlapping.cpp
+        src/play_rules/non_overlapping.h
         src/wildcard_picker.cpp
         src/wildcard_picker.h
         src/player.cpp
@@ -100,6 +102,8 @@ add_executable(letras_tests
         src/play_rules/dict_check.cpp
         src/play_rules/calc_score.cpp
         src/play_rules/play_builder.cpp
+        src/play_rules/non_overlapping.cpp
+        src/play_rules/non_overlapping.h
         src/cpu/algorithm.cpp
         test/dict_tests.cpp
         test/play_rules_tests.cpp

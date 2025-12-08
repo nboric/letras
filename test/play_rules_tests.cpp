@@ -9,6 +9,7 @@
 #include "../src/play_rules/first_move.h"
 #include "../src/play_rules/connected.h"
 #include "../src/play_rules/dict_check.h"
+#include "../src/play_rules/non_overlapping.h"
 #include "gtest/gtest.h"
 
 class PlayRulesTest : public testing::Test
@@ -368,7 +369,7 @@ TEST_F(PlayRulesTest, ConnectedMiddleVerticalValid)
     EXPECT_EQ(play.complete_map.at(coords), "l");
 }
 
-TEST_F(PlayRulesTest, ConnectedInValid)
+TEST_F(PlayRulesTest, NotConnectedInvalid)
 {
     EXPECT_CALL(board_, getPlacements)
         .Times(1)
@@ -388,6 +389,61 @@ TEST_F(PlayRulesTest, ConnectedInValid)
     Connected connected;
 
     EXPECT_FALSE(connected.isValid(play, board_, reason_));
+}
+
+TEST_F(PlayRulesTest, ConnectedTwiceInvalid)
+{
+    EXPECT_CALL(board_, getPlacements)
+        .Times(1)
+        .WillOnce([](std::vector<Placement>& placements)
+        {
+            placements.push_back(Placement({ 8, 7 }, "o"));
+            placements.push_back(Placement({ 8, 8 }, "l"));
+        });
+
+    // Order is important here, setting the broader expectation first
+    EXPECT_CALL(board_, getTileLetterLowercase(testing::_, testing::_))
+        .WillRepeatedly(testing::Return(false));
+
+    EXPECT_CALL(board_, getTileLetterLowercase(Coords{ 8, 9 }, testing::_))
+        .Times(1)
+        .WillRepeatedly(testing::DoAll(testing::SetArgReferee<1>("a"), testing::Return(true)));
+
+    EXPECT_CALL(board_, getTileLetterLowercase(Coords{ 8, 6 }, testing::_))
+        .Times(1)
+        .WillRepeatedly(testing::DoAll(testing::SetArgReferee<1>("h"), testing::Return(true)));
+
+    Play play(board_);
+    play.is_first = false;
+    Connected connected;
+
+    EXPECT_FALSE(connected.isValid(play, board_, reason_));
+}
+
+TEST_F(PlayRulesTest, ConnectedTwoDirectionsInvalid)
+{
+    EXPECT_CALL(board_, getPlacements)
+        .Times(1)
+        .WillOnce([](std::vector<Placement>& placements)
+        {
+            placements.push_back(Placement({ 8, 6 }, "h"));
+            placements.push_back(Placement({ 8, 7 }, "o"));
+            placements.push_back(Placement({ 8, 8 }, "l"));
+        });
+
+    // Order is important here, setting the broader expectation first
+    EXPECT_CALL(board_, getTileLetterLowercase(testing::_, testing::_))
+        .WillRepeatedly(testing::Return(false));
+
+    EXPECT_CALL(board_, getTileLetterLowercase(Coords{ 7, 6 }, testing::_))
+        .Times(1)
+        .WillRepeatedly(testing::DoAll(testing::SetArgReferee<1>("z"), testing::Return(true)));
+
+    Play play(board_);
+    play.is_first = false;
+    NonOverlapping non_overlapping;
+
+    EXPECT_FALSE(non_overlapping.isValid(play, board_, reason_));
 }
 
 TEST_F(PlayRulesTest, ConnectedFirstPlayValid)
