@@ -93,6 +93,7 @@ bool Algorithm::findBestPlay(Board& board, std::vector<std::unique_ptr<Tile> >& 
                     std::cout << "Word: " << word << std::endl;
 
                     n_tried_words++;
+                    std::vector<Placement> placements;
                     for (auto occupied_tile_pos = word.find(occupied_tile.letter_, 0);
                          occupied_tile_pos != std::string::npos;
                          occupied_tile_pos = word.find(occupied_tile.letter_,
@@ -100,7 +101,7 @@ bool Algorithm::findBestPlay(Board& board, std::vector<std::unique_ptr<Tile> >& 
                     {
                         n_tried_plays++;
                         std::cout << "Occupied pos: " << occupied_tile_pos << std::endl;
-                        auto placements = generatePlacements(occupied_tile, occupied_tile_pos, word, direction,
+                        generatePlacements(placements, occupied_tile, occupied_tile_pos, word, direction,
                             player_letters, selection_mask);
                         if (!board.placeTemp(tiles, placements, selection_mask))
                         {

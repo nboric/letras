@@ -24,7 +24,7 @@ public:
     static int getMaxAvailableSquaresAround(const Board& board, const Coords& occupied_tile_coords, Direction direction,
         size_t n_player_tiles);
 
-    static std::vector<Placement> generatePlacements(const Placement& occupied_tile, size_t occupied_tile_pos,
+    static void generatePlacements(std::vector<Placement>& placements, const Placement& occupied_tile, size_t occupied_tile_pos,
         std::string_view word, Direction direction, const std::vector<std::string>& player_letters,
         unsigned char selection_mask);
 
@@ -96,12 +96,12 @@ inline int Algorithm::getMaxAvailableSquaresAround(const Board& board, const Coo
     return n_available_tiles;
 }
 
-inline std::vector<Placement> Algorithm::generatePlacements(const Placement& occupied_tile,
+inline void Algorithm::generatePlacements(std::vector<Placement>& placements, const Placement& occupied_tile,
     const size_t occupied_tile_pos,
     std::string_view word, const Direction direction, const std::vector<std::string>& player_letters,
     const unsigned char selection_mask)
 {
-    std::vector<Placement> placements;
+    placements.clear();
     std::unordered_set<size_t> used_positions;
     used_positions.insert(occupied_tile_pos);
     for (auto i = 0; i < Player::MAX_TILES; ++i)
@@ -125,7 +125,6 @@ inline std::vector<Placement> Algorithm::generatePlacements(const Placement& occ
             }
         }
     }
-    return placements;
 }
 
 // Use Functor to pass to std::views::filter for testability
