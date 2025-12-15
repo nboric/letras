@@ -1,4 +1,6 @@
 - Prevent (or better, implement) continuing words
+- Do not allow CH, RR with two tiles
+- Handle not enough in bag
 - CPU handle wildcards
 - CPU handle single letter plays
 - Better way to implement Restriction::getName

@@ -42,7 +42,10 @@ bool Connected::isValid(Play& play, const Board& board, std::optional<std::strin
     if (connected_coords.size() > 1)
     {
         // TODO: is this always a problem?
-        *reason = "Connected to more than one tile";
+        if (reason)
+        {
+            *reason = "Connected to more than one tile";
+        }
         return false;
     }
     return true;
