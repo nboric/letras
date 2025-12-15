@@ -120,7 +120,7 @@ TEST_F(AlgorithmTest, FilterContainingAllWildcard)
     ASSERT_FALSE(all_4("plena"));
 }
 
-TEST_F(AlgorithmTest, FindAvailablePlays)
+TEST_F(AlgorithmTest, FindeBestPlay)
 {
     std::vector<std::unique_ptr<Tile> > player_tiles;
     player_tiles.emplace_back(std::make_unique<Tile>(L"B"));
@@ -130,6 +130,13 @@ TEST_F(AlgorithmTest, FindAvailablePlays)
     player_tiles.emplace_back(std::make_unique<Tile>(L"E"));
     player_tiles.emplace_back(std::make_unique<Tile>(L"R"));
     player_tiles.emplace_back(std::make_unique<Tile>(L"A"));
+
+    std::array<Tile*, 7> tile_ptrs{};
+
+    for (int i = 0; i < 7; i++)
+    {
+        tile_ptrs[i] = player_tiles[i].get();
+    }
 
     auto tile = std::make_unique<Tile>(L"A");
     board_.placeTemp(Coords{ 7, 7 }, tile);
@@ -141,6 +148,130 @@ TEST_F(AlgorithmTest, FindAvailablePlays)
 
     ASSERT_TRUE(algorithm_.findBestPlay(board_, player_tiles, winner, placements,selection_mask));
     ASSERT_THAT(winner, testing::AnyOf("abaderna", "randeaba", "bandeara", "abandera"));
+
+    // Check that all tiles were returned, and in same order
+    for (int i = 0; i < 7; i++)
+    {
+        ASSERT_EQ(player_tiles[i].get(), tile_ptrs[i]);
+    }
+}
+
+TEST_F(AlgorithmTest, FindBestPlaySomeDontFit)
+{
+    std::vector<std::unique_ptr<Tile> > player_tiles;
+    player_tiles.emplace_back(std::make_unique<Tile>(L"E"));
+    player_tiles.emplace_back(std::make_unique<Tile>(L"L"));
+    player_tiles.emplace_back(std::make_unique<Tile>(L"E"));
+    player_tiles.emplace_back(std::make_unique<Tile>(L"F"));
+    player_tiles.emplace_back(std::make_unique<Tile>(L"A"));
+    player_tiles.emplace_back(std::make_unique<Tile>(L"T"));
+    player_tiles.emplace_back(std::make_unique<Tile>(L"E"));
+
+    std::array<Tile*, 7> tile_ptrs{};
+
+    for (int i = 0; i < 7; i++)
+    {
+        tile_ptrs[i] = player_tiles[i].get();
+    }
+
+    auto tile = std::make_unique<Tile>(L"N");
+    board_.placeTemp(Coords{ 7, 13 }, tile);
+    board_.acceptPlacements();
+
+    std::string winner{};
+    std::vector<Placement> placements;
+    unsigned char selection_mask;
+
+    // "elefante would be better, but doesn't fit
+    ASSERT_TRUE(algorithm_.findBestPlay(board_, player_tiles, winner, placements,selection_mask));
+    ASSERT_THAT(winner, testing::AnyOf("fletean"));
+
+    // Check that all tiles were returned, and in same order
+    for (int i = 0; i < 7; i++)
+    {
+        ASSERT_EQ(player_tiles[i].get(), tile_ptrs[i]);
+    }
+}
+
+TEST_F(AlgorithmTest, FindBestNoSpace)
+{
+    std::vector<std::unique_ptr<Tile> > player_tiles;
+    player_tiles.emplace_back(std::make_unique<Tile>(L"M"));
+    player_tiles.emplace_back(std::make_unique<Tile>(L"S"));
+    player_tiles.emplace_back(std::make_unique<Tile>(L"L"));
+    player_tiles.emplace_back(std::make_unique<Tile>(L"N"));
+    player_tiles.emplace_back(std::make_unique<Tile>(L"R"));
+    player_tiles.emplace_back(std::make_unique<Tile>(L"B"));
+    player_tiles.emplace_back(std::make_unique<Tile>(L"L"));
+
+    std::array<Tile*, 7> tile_ptrs{};
+
+    for (int i = 0; i < 7; i++)
+    {
+        tile_ptrs[i] = player_tiles[i].get();
+    }
+
+    auto tile = std::make_unique<Tile>(L"A");
+    board_.placeTemp(Coords{ 0, 13 }, tile);
+    tile = std::make_unique<Tile>(L"E");
+    board_.placeTemp(Coords{ 0, 11 }, tile);
+    tile = std::make_unique<Tile>(L"I");
+    board_.placeTemp(Coords{ 2, 11 }, tile);
+    tile = std::make_unique<Tile>(L"O");
+    board_.placeTemp(Coords{ 2, 13 }, tile);
+    board_.acceptPlacements();
+
+    std::string winner{};
+    std::vector<Placement> placements;
+    unsigned char selection_mask;
+
+    // "elefante would be better, but doesn't fit
+    ASSERT_FALSE(algorithm_.findBestPlay(board_, player_tiles, winner, placements,selection_mask));
+    ASSERT_TRUE(winner.empty());
+
+    // Check that all tiles were returned, and in same order
+    for (int i = 0; i < 7; i++)
+    {
+        ASSERT_EQ(player_tiles[i].get(), tile_ptrs[i]);
+    }
+}
+
+TEST_F(AlgorithmTest, FindBestWildcardsNotSUpported)
+{
+    std::vector<std::unique_ptr<Tile> > player_tiles;
+    player_tiles.emplace_back(std::make_unique<Tile>(L"E"));
+    player_tiles.emplace_back(std::make_unique<Tile>(L"L"));
+    player_tiles.emplace_back(std::make_unique<Tile>(L"E"));
+    player_tiles.emplace_back(std::make_unique<Tile>(L"F"));
+    player_tiles.emplace_back(std::make_unique<Tile>(L"A"));
+    player_tiles.emplace_back(std::make_unique<Tile>(L"N"));
+    player_tiles.emplace_back(std::make_unique<Tile>(L""));
+
+    std::array<Tile*, 7> tile_ptrs{};
+
+    for (int i = 0; i < 7; i++)
+    {
+        tile_ptrs[i] = player_tiles[i].get();
+    }
+
+    auto tile = std::make_unique<Tile>(L"E");
+    board_.placeTemp(Coords{ 7, 7 }, tile);
+    board_.acceptPlacements();
+
+    std::string winner{};
+    std::vector<Placement> placements;
+    unsigned char selection_mask;
+
+    // "elefante would be better, but doesn't fit
+    ASSERT_TRUE(algorithm_.findBestPlay(board_, player_tiles, winner, placements,selection_mask));
+    ASSERT_THAT(winner, testing::AnyOf("faene"));
+    ASSERT_FALSE(selection_mask & 1<<6);
+
+    // Check that all tiles were returned, and in same order
+    for (int i = 0; i < 7; i++)
+    {
+        ASSERT_EQ(player_tiles[i].get(), tile_ptrs[i]);
+    }
 }
 
 TEST_F(AlgorithmTest, GetMaxAvailableSquaresAroundSingleOccupied)
