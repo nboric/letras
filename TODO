@@ -5,4 +5,6 @@
 - CPU handle single letter plays
 - Better way to implement Restriction::getName
 - Check available when exchanging tile
+- Show CPU thinking, do not block main thread
+- Show CPU move
 - Separate UI and models, MVC style
